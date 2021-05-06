@@ -1,0 +1,11 @@
+---
+Category: "pipeline"
+Description: "a nf pipeline for genotying somatic SV"
+Maintainers: "Boutros Lab Infrastructure"
+Contributors: ["Yu Pan", "Ghouse Mohammed"]
+Languages: ["Nextflow", "Docker"]
+Dependencies: ["Java", "Nextflow", "Docker"]
+References: "https://uclahs.box.com/s/qfzr99sc8ntmfddn30ii62wx4273utoz"
+Tools: ["delly:v0.8.7", "bcftools:v1.11"]
+Engineering_Owner: ["Yu Pan"]
+Scientific_Owner: ["Takafumi Yamaguchi"]

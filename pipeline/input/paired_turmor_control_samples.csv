@@ -1,0 +1,2 @@
+tumor_sample_name,tumor_sample_bam,control_sample_name,control_sample_bam
+S2_v1.1.5,/hot/users/ybugh/A-mini/0/output/S2.T-0.bam,HG002.N,/hot/users/ybugh/A-mini/0/output/HG002.N-0.bam
