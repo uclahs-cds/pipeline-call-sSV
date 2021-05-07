@@ -13,7 +13,6 @@ Current Configuration:
     input_bams_bcfs: "${params.input_bams}"
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
-    reference_prefix: "${params.reference_prefix}"
     exclusion_file: "${params.exclusion_file}"
 
 - output:
@@ -26,7 +25,6 @@ Current Configuration:
 
 - tools:
     delly: ${params.delly_version}
-    bcftools: ${params.bcftools_version}
 
 ------------------------------------
 Starting workflow...
@@ -36,7 +34,7 @@ Starting workflow...
 
 include { validate_file } from './modules/validation'
 include { delly_call_NT; delly_regenotype_NT; delly_filter_NT as delly_filter_NT_pass1; delly_filter_NT as delly_filter_NT_pass2 } from './modules/delly'
-
+include { generate_sha512 } from './modules/sha512'
 
 /**
 * Check the params
@@ -60,10 +58,11 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 * S2_v1.1.5,/hot/users/ybugh/A-mini/0/output/S2.T-0.bam,HG002.N,/hot/users/ybugh/A-mini/0/output/HG002.N-0.bam
 *
 * Later, calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
+* sample_name   sample_type
 * HG002.N	control
 * S2_v1.1.5	tumor	/hot/users/ybugh/A-mini/0/output/S2.T-0.bam
 * 
-* The pipeline will create such samples.tsv from the "paired_turmor_control_samples.csv" on the fly.
+* The pipeline will create such samples.tsv from the "paired_turmor_control_samples.csv" per row on the fly.
 *
 * Also calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam control1.bam ... controlN.bam" needs all the control samples, 
 * which will be collected from the "paired_turmor_control_samples.csv" too.
@@ -71,7 +70,6 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 
 /**
 * Create validation_channel to validate the input bams
-* tumor_sample_name,tumor_sample_bam,control_sample_name,control_sample_bam
 */
 validation_channel = Channel
     .fromPath(params.input_bams, checkIfExists:true)
@@ -86,6 +84,9 @@ validation_channel = Channel
 
 //validation_channel.view()
 
+/**
+* Create input_bams_ch to get the paired turmor sample and control sample
+*/
 input_bams_ch = Channel
     .fromPath(params.input_bams, checkIfExists:true)
     .splitCsv(header:true)
@@ -103,13 +104,27 @@ input_bams_ch = Channel
 //input_bams_ch.view()
 
 /**
-* input_sv_bcfs_ch contains the list of original SV bcfs that will be merged to get the unified sites.
+* Create tumor_bams_ch to only get the turmor samples. 
+* I tried to reuse input_bams_ch, however, in that way, I have to filter out the paired control sample out of the all_control_samples_bams_list,
+* otherwise, nextflow compains a same input is declared twice.
 */
+tumor_bams_ch = Channel
+    .fromPath(params.input_bams, checkIfExists:true)
+    .splitCsv(header:true)
+    .map {
+        row -> tuple(
+            row.tumor_sample_name,
+            row.tumor_sample_bam,
+            "${row.tumor_sample_bam}.bai"
+            )
+        }
 
-/*
-input_sv_bcfs_ch_toList = input_sv_bcfs_ch.toList()
+tumor_bams_ch.view()
+
+/**
+* Create all_control_samples_bams_bais_ch.
+* this is used to declare these files in dockers. 
 */
-
 all_control_samples_bams_bais_ch = Channel
     .fromPath(params.input_bams, checkIfExists:true)
     .splitCsv(header:true)
@@ -123,6 +138,10 @@ all_control_samples_bams_bais_ch = Channel
 
 all_control_samples_bams_bais_ch.view()
 
+/**
+* Create all_control_samples_bams_list.
+* this is used for listing the control samples in "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam control1.bam ... controlN.bam". 
+*/
 all_control_samples_bams_list = Channel
     .fromPath(params.input_bams, checkIfExists:true)
     .splitCsv(header:true)
@@ -133,11 +152,39 @@ all_control_samples_bams_list.view()
 
 
 workflow {
+    /**
+    * Validate the input bams
+    */
     validate_file(validation_channel)
-    delly_call_NT(input_bams_ch, params.reference_fasta, reference_fasta_index, params.exclusion_file)
-    delly_filter_NT_pass1(delly_call_NT.out.samples, delly_call_NT.out.nt_call_bcf, delly_call_NT.out.nt_call_bcf_csi, "pass1")
-    delly_regenotype_NT(
+
+    /**
+    * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam" per paired (tumor sample, control sample)
+    * The sv are stored in delly_call_NT.out.nt_call_bcf
+    * also create delly_call_NT.out.samples per paired (tumor sample, control sample)
+    */    
+    delly_call_NT(
         input_bams_ch, 
+        params.reference_fasta, 
+        reference_fasta_index, 
+        params.exclusion_file
+        )
+
+    /**
+    * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf" 
+    * by using the delly_call_NT.out.samples and delly_call_NT.out.nt_call_bcf
+    */ 
+    delly_filter_NT_pass1(
+        delly_call_NT.out.samples, 
+        delly_call_NT.out.nt_call_bcf, 
+        delly_call_NT.out.nt_call_bcf_csi, 
+        params.SINGLE_CTRL_SAMPLE)
+
+    /**
+    * Genotype pre-filtered somatic sites across a larger panel of control samples. 
+    * If something is being seen in all samples then it's more probable that it's a false positive
+    */ 
+    delly_regenotype_NT(
+        tumor_bams_ch, 
         params.reference_fasta, 
         reference_fasta_index, 
         params.exclusion_file, 
@@ -145,5 +192,19 @@ workflow {
         all_control_samples_bams_list, 
         delly_filter_NT_pass1.out.filtered_somatic_bcf
         )
-    delly_filter_NT_pass2(delly_call_NT.out.samples, delly_regenotype_NT.out.nt_regenotype_bcf, delly_regenotype_NT.out.nt_regenotype_bcf_csi, "pass2")
+
+    /**
+    * Call delly_filter_NT again to filter out germline SVs.
+    */ 
+    delly_filter_NT_pass2(
+        delly_call_NT.out.samples, 
+        delly_regenotype_NT.out.nt_regenotype_bcf, 
+        delly_regenotype_NT.out.nt_regenotype_bcf_csi, 
+        params.ALL_CTRL_SAMPLES
+        )
+
+    /**
+    * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
+    */ 
+    generate_sha512(delly_filter_NT_pass2.out.filtered_somatic_bcf)
     } 

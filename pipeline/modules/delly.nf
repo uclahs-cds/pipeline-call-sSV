@@ -72,13 +72,13 @@ process delly_regenotype_NT {
         saveAs: { "delly_regenotype/log${file(it).getName()}" }
 
     input:
-        tuple(val(tumor_sample_name), path(tumor_sample_bam), path(tumor_sample_bai), val(control_sample_name), path(control_sample_bam), path(control_sample_bai))
+        tuple(val(tumor_sample_name), path(tumor_sample_bam), path(tumor_sample_bai))
         path reference_fasta
         path reference_fasta_fai
         path exclusion_file
         path control_samples_bams_bais
         val control_samples_bams_list
-        val somatic_sites
+        path somatic_sites
 
     output:
         path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_all_control_samples.bcf", emit: nt_regenotype_bcf
@@ -104,7 +104,7 @@ process delly_filter_NT {
 
     publishDir params.output_dir,
         enabled: params.save_intermediate_files,
-        pattern: "${tag}_filtered_somatic.bcf*",
+        pattern: "filtered_somatic_${tag}.bcf*",
         mode: "copy",
         saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
 
@@ -120,13 +120,13 @@ process delly_filter_NT {
         val tag
 
     output:
-        path "${tag}_filtered_somatic.bcf", emit: filtered_somatic_bcf
-        path "${tag}_filtered_somatic.bcf.csi"
+        path "filtered_somatic_${tag}.bcf", emit: filtered_somatic_bcf
+        path "filtered_somatic_${tag}.bcf.csi"
         path ".command.*"
  
     script:    
         """
         set -euo pipefail
-        delly filter -f somatic -s ${samples} -o ${tag}_filtered_somatic.bcf "$input_bcf"
+        delly filter -f somatic -s ${samples} -o filtered_somatic_${tag}.bcf "$input_bcf"
         """
     }
