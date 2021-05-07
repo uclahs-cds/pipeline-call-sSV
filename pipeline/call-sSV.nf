@@ -35,8 +35,8 @@ Starting workflow...
 .stripIndent()
 
 include { validate_file } from './modules/validation'
-include { delly_call_NT } from './modules/delly'
-//include { delly_call_sv; delly_filter_sv } from './modules/delly'
+include { delly_call_NT; delly_regenotype_NT; delly_filter_NT as delly_filter_NT_pass1; delly_filter_NT as delly_filter_NT_pass2 } from './modules/delly'
+
 
 /**
 * Check the params
@@ -84,7 +84,7 @@ validation_channel = Channel
         }
     .flatten()
 
-validation_channel.view()
+//validation_channel.view()
 
 input_bams_ch = Channel
     .fromPath(params.input_bams, checkIfExists:true)
@@ -100,16 +100,50 @@ input_bams_ch = Channel
             )
         }
 
-input_bams_ch.view()
+//input_bams_ch.view()
 
 /**
 * input_sv_bcfs_ch contains the list of original SV bcfs that will be merged to get the unified sites.
 */
+
 /*
 input_sv_bcfs_ch_toList = input_sv_bcfs_ch.toList()
 */
 
+all_control_samples_bams_bais_ch = Channel
+    .fromPath(params.input_bams, checkIfExists:true)
+    .splitCsv(header:true)
+    .map {
+        row -> [
+            row.control_sample_bam,
+            "${row.control_sample_bam}.bai"
+            ]
+        }
+    .flatten()
+
+all_control_samples_bams_bais_ch.view()
+
+all_control_samples_bams_list = Channel
+    .fromPath(params.input_bams, checkIfExists:true)
+    .splitCsv(header:true)
+    .map { row -> row.control_sample_bam }
+    .toList()
+
+all_control_samples_bams_list.view()
+
+
 workflow {
     validate_file(validation_channel)
-    delly_call_NT(input_bams_ch, params.reference_fasta, reference_fasta_index, params.exclusion_file, params.SINGLE_CTRL_SAMPLE)
+    delly_call_NT(input_bams_ch, params.reference_fasta, reference_fasta_index, params.exclusion_file)
+    delly_filter_NT_pass1(delly_call_NT.out.samples, delly_call_NT.out.nt_call_bcf, delly_call_NT.out.nt_call_bcf_csi, "pass1")
+    delly_regenotype_NT(
+        input_bams_ch, 
+        params.reference_fasta, 
+        reference_fasta_index, 
+        params.exclusion_file, 
+        all_control_samples_bams_bais_ch, 
+        all_control_samples_bams_list, 
+        delly_filter_NT_pass1.out.filtered_somatic_bcf
+        )
+    delly_filter_NT_pass2(delly_call_NT.out.samples, delly_regenotype_NT.out.nt_regenotype_bcf, delly_regenotype_NT.out.nt_regenotype_bcf_csi, "pass2")
     } 
