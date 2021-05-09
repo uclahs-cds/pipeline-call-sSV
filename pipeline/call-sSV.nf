@@ -139,20 +139,6 @@ all_control_samples_bams_bais_list = Channel
 
 all_control_samples_bams_bais_list.view()
 
-/**
-* Create all_control_samples_bams_list.
-* this is used for listing the control samples in "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam control1.bam ... controlN.bam". 
-*/
-/*
-all_control_samples_bams_list = Channel
-    .fromPath(params.input_bams, checkIfExists:true)
-    .splitCsv(header:true)
-    .map { row -> row.control_sample_bam }
-    .toList()
-*/
-//all_control_samples_bams_list.view()
-
-
 workflow {
     /**
     * Validate the input bams
@@ -191,7 +177,6 @@ workflow {
         reference_fasta_index, 
         params.exclusion_file, 
         all_control_samples_bams_bais_list, 
-        /*all_control_samples_bams_list, */
         delly_filter_NT_pass1.out.filtered_somatic_bcf
         )
 

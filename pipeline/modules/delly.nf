@@ -77,7 +77,6 @@ process delly_regenotype_NT {
         path reference_fasta_fai
         path exclusion_file
         path control_samples_bams_bais_list
-        //val control_samples_bams_list
         path somatic_sites
 
     output:
@@ -86,9 +85,7 @@ process delly_regenotype_NT {
         path ".command.*"
 
     script:
-        //control_samples_bams_concat_string = control_samples_bams_list.join(' ')
         control_samples_bams_concat_string = control_samples_bams_bais_list.findAll{!it.toString().contains("bai")}.join(' ')
-        log.info("control_samples_bams_concat_string: $control_samples_bams_concat_string")
         """
         set -euo pipefail
         delly call \
