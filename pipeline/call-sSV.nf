@@ -165,7 +165,8 @@ workflow {
         delly_call_NT.out.samples, 
         delly_call_NT.out.nt_call_bcf, 
         delly_call_NT.out.nt_call_bcf_csi, 
-        params.SINGLE_CTRL_SAMPLE)
+        params.SINGLE_CTRL_SAMPLE
+        )
 
     /**
     * Genotype pre-filtered somatic sites across a larger panel of control samples. 
