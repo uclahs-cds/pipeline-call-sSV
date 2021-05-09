@@ -40,12 +40,12 @@ include { generate_sha512 } from './modules/sha512'
 * Check the params
 */
 
-if (!params.reference_fasta) {
+if (!params.reference_fasta){
     // error out - must provide a reference FASTA file
     error "***Error: You must specify a reference FASTA file***"
     }
 
-if (!params.exclusion_file) {
+if (!params.exclusion_file){
     // error out - must provide exclusion file
     error "*** Error: You must provide an exclusion file***"
     }
@@ -90,7 +90,7 @@ validation_channel = Channel
 input_bams_ch = Channel
     .fromPath(params.input_bams, checkIfExists:true)
     .splitCsv(header:true)
-    .map {
+    .map{
         row -> tuple(
             row.tumor_sample_name,
             row.tumor_sample_bam,
@@ -111,7 +111,7 @@ input_bams_ch = Channel
 tumor_bams_ch = Channel
     .fromPath(params.input_bams, checkIfExists:true)
     .splitCsv(header:true)
-    .map {
+    .map{
         row -> tuple(
             row.tumor_sample_name,
             row.tumor_sample_bam,
@@ -128,7 +128,7 @@ tumor_bams_ch = Channel
 all_control_samples_bams_bais_list = Channel
     .fromPath(params.input_bams, checkIfExists:true)
     .splitCsv(header:true)
-    .map {
+    .map{
         row -> [
             row.control_sample_bam,
             "${row.control_sample_bam}.bai"
@@ -139,7 +139,7 @@ all_control_samples_bams_bais_list = Channel
 
 all_control_samples_bams_bais_list.view()
 
-workflow {
+workflow{
     /**
     * Validate the input bams
     */
