@@ -40,7 +40,7 @@ process delly_call_NT{
         path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_${control_sample_name}.bcf", emit: nt_call_bcf
         path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_${control_sample_name}.bcf.csi", emit: nt_call_bcf_csi
         path ".command.*"
-        path "${tumor_sample_name}_samples.tsv", emit: samples
+        path "${tumor_sample_name}_${control_sample_name}_samples.tsv", emit: samples
 
     script:
         """
@@ -52,8 +52,8 @@ process delly_call_NT{
             "$tumor_sample_bam" \
             "$control_sample_bam"
 
-        echo -e "${control_sample_name}\tcontrol" > "${tumor_sample_name}_samples.tsv"
-        echo -e "${tumor_sample_name}\ttumor" >> "${tumor_sample_name}_samples.tsv"
+        echo -e "${control_sample_name}\tcontrol" > "${tumor_sample_name}_${control_sample_name}_samples.tsv"
+        echo -e "${tumor_sample_name}\ttumor" >> "${tumor_sample_name}_${control_sample_name}_samples.tsv"
         """
     }
 
