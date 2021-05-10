@@ -60,7 +60,7 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 * Later, calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
 * sample_name   sample_type
 * HG002.N	control
-* S2_v1.1.5	tumor	/hot/users/ybugh/A-mini/0/output/S2.T-0.bam
+* S2_v1.1.5	tumor
 * 
 * The pipeline will create such samples.tsv from the "paired_turmor_control_samples.csv" per row on the fly.
 *
@@ -105,8 +105,8 @@ input_bams_ch = Channel
 
 /**
 * Create tumor_bams_ch to only get the turmor samples. 
-* I tried to reuse input_bams_ch, however, in that way, I have to filter out the paired control sample out of the all_control_samples_bams_list,
-* otherwise, nextflow compains a same input is declared twice.
+* I tried to reuse input_bams_ch, however, in that way, I have to filter the paired control sample out of the all_control_samples_bams_list,
+* otherwise, nextflow complains a same control sample is declared twice.
 */
 tumor_bams_ch = Channel
     .fromPath(params.input_bams, checkIfExists:true)
