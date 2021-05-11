@@ -1,7 +1,7 @@
 ---
 Category: "pipeline"
 Description: "a Nextflow pipeline for calling somatic SV"
-Maintainers: "Boutros Lab Infrastructure"
+Maintainers: "yupan@mednet.ucla.edu"
 Contributors: ["Yu Pan", "Ghouse Mohammed"]
 Languages: ["Nextflow", "Docker"]
 Dependencies: ["Java", "Nextflow", "Docker"]

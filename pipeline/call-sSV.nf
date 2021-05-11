@@ -33,7 +33,7 @@ Starting workflow...
 .stripIndent()
 
 include { validate_file } from './modules/validation'
-include { delly_call_NT; delly_regenotype_NT; delly_filter_NT as delly_filter_NT_pass1; delly_filter_NT as delly_filter_NT_pass2 } from './modules/delly'
+include { call_sSV_Delly; regenotype_sSV_Delly; filter_sSV_Delly as filter_sSV_Delly_pass1; filter_sSV_Delly as filter_sSV_Delly_pass2 } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
 
 /**
@@ -147,24 +147,24 @@ workflow{
 
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam" per paired (tumor sample, control sample)
-    * The sv are stored in delly_call_NT.out.nt_call_bcf
-    * also create delly_call_NT.out.samples per paired (tumor sample, control sample)
+    * The sv are stored in call_sSV_Delly.out.nt_call_bcf
+    * also create call_sSV_Delly.out.samples per paired (tumor sample, control sample)
     */    
-    delly_call_NT(
-        input_bams_ch, 
-        params.reference_fasta, 
-        reference_fasta_index, 
+    call_sSV_Delly(
+        input_bams_ch,
+        params.reference_fasta,
+        reference_fasta_index,
         params.exclusion_file
         )
 
     /**
     * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf" 
-    * by using the delly_call_NT.out.samples and delly_call_NT.out.nt_call_bcf
+    * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
     */ 
-    delly_filter_NT_pass1(
-        delly_call_NT.out.samples, 
-        delly_call_NT.out.nt_call_bcf, 
-        delly_call_NT.out.nt_call_bcf_csi, 
+    filter_sSV_Delly_pass1(
+        call_sSV_Delly.out.samples,
+        call_sSV_Delly.out.nt_call_bcf,
+        call_sSV_Delly.out.nt_call_bcf_csi,
         params.SINGLE_CTRL_SAMPLE
         )
 
@@ -172,27 +172,27 @@ workflow{
     * Genotype pre-filtered somatic sites across a larger panel of control samples. 
     * If something is being seen in all samples then it's more probable that it's a false positive
     */ 
-    delly_regenotype_NT(
-        tumor_bams_ch, 
-        params.reference_fasta, 
-        reference_fasta_index, 
-        params.exclusion_file, 
-        all_control_samples_bams_bais_list, 
-        delly_filter_NT_pass1.out.filtered_somatic_bcf
+    regenotype_sSV_Delly(
+        tumor_bams_ch,
+        params.reference_fasta,
+        reference_fasta_index,
+        params.exclusion_file,
+        all_control_samples_bams_bais_list,
+        filter_sSV_Delly_pass1.out.filtered_somatic_bcf
         )
 
     /**
-    * Call delly_filter_NT again to filter out germline SVs.
+    * Call filter_sSV_Delly again to filter out germline SVs.
     */ 
-    delly_filter_NT_pass2(
-        delly_call_NT.out.samples, 
-        delly_regenotype_NT.out.nt_regenotype_bcf, 
-        delly_regenotype_NT.out.nt_regenotype_bcf_csi, 
+    filter_sSV_Delly_pass2(
+        call_sSV_Delly.out.samples,
+        regenotype_sSV_Delly.out.nt_regenotype_bcf,
+        regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
         params.ALL_CTRL_SAMPLES
         )
 
     /**
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
     */ 
-    generate_sha512(delly_filter_NT_pass2.out.filtered_somatic_bcf)
+    generate_sha512(filter_sSV_Delly_pass2.out.filtered_somatic_bcf)
     } 

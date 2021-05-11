@@ -10,7 +10,7 @@ Docker Images:
 - docker_image_delly:   ${docker_image_delly}
 """
 
-process delly_call_NT{
+process call_sSV_Delly{
     container docker_image_delly
 
     publishDir params.output_dir,
@@ -57,7 +57,7 @@ process delly_call_NT{
         """
     }
 
-process delly_regenotype_NT{
+process regenotype_sSV_Delly{
     container docker_image_delly
 
     publishDir params.output_dir,
@@ -98,7 +98,7 @@ process delly_regenotype_NT{
         """
     }
 
-process delly_filter_NT{
+process filter_sSV_Delly{
     container docker_image_delly
 
     publishDir params.output_dir,
