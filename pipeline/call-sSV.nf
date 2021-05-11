@@ -4,7 +4,7 @@ nextflow.enable.dsl=2
 
 log.info """\
 ======================================
-C A L L - G S V   N F  P I P E L I N E
+C A L L - S S V   N F  P I P E L I N E
 ======================================
 Boutros Lab
 
