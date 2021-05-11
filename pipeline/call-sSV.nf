@@ -10,7 +10,7 @@ Boutros Lab
 
 Current Configuration:
 - input:
-    input_bams_bcfs: "${params.input_bams}"
+    input_bams: "${params.input_bams}"
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
     exclusion_file: "${params.exclusion_file}"

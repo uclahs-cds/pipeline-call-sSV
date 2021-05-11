@@ -1,6 +1,6 @@
 ---
 Category: "pipeline"
-Description: "a nf pipeline for calling somatic SV"
+Description: "a Nextflow pipeline for calling somatic SV"
 Maintainers: "Boutros Lab Infrastructure"
 Contributors: ["Yu Pan", "Ghouse Mohammed"]
 Languages: ["Nextflow", "Docker"]
