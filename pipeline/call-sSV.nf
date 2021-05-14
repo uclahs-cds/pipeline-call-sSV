@@ -33,7 +33,7 @@ Starting workflow...
 .stripIndent()
 
 include { validate_file } from './modules/validation'
-include { call_sSV_Delly; regenotype_sSV_Delly; filter_sSV_Delly as filter_sSV_Delly_pass1; filter_sSV_Delly as filter_sSV_Delly_pass2 } from './modules/delly'
+include { call_sSV_Delly; regenotype_sSV_Delly; filter_sSV_Delly as filter_sSV_Delly_initialCall; filter_sSV_Delly as filter_sSV_Delly_regenotyped } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
 
 /**
@@ -161,7 +161,7 @@ workflow{
     * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf" 
     * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
     */ 
-    filter_sSV_Delly_pass1(
+    filter_sSV_Delly_initialCall(
         call_sSV_Delly.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.nt_call_bcf_csi,
@@ -178,13 +178,13 @@ workflow{
         reference_fasta_index,
         params.exclusion_file,
         all_control_samples_bams_bais_list,
-        filter_sSV_Delly_pass1.out.filtered_somatic_bcf
+        filter_sSV_Delly_initialCall.out.filtered_somatic_bcf
         )
 
     /**
     * Call filter_sSV_Delly again to filter out germline SVs.
     */ 
-    filter_sSV_Delly_pass2(
+    filter_sSV_Delly_regenotyped(
         call_sSV_Delly.out.samples,
         regenotype_sSV_Delly.out.nt_regenotype_bcf,
         regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
@@ -194,5 +194,5 @@ workflow{
     /**
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
     */ 
-    generate_sha512(filter_sSV_Delly_pass2.out.filtered_somatic_bcf)
+    generate_sha512(filter_sSV_Delly_regenotyped.out.filtered_somatic_bcf)
     } 
