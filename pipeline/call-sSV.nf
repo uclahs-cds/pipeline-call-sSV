@@ -168,28 +168,30 @@ workflow{
         params.SINGLE_CTRL_SAMPLE
         )
 
-    /**
-    * Genotype pre-filtered somatic sites across a larger panel of control samples. 
-    * If something is being seen in all samples then it's more probable that it's a false positive
-    */ 
-    regenotype_sSV_Delly(
-        tumor_bams_ch,
-        params.reference_fasta,
-        reference_fasta_index,
-        params.exclusion_file,
-        all_control_samples_bams_bais_list,
-        filter_sSV_Delly_initialCall.out.filtered_somatic_bcf
+    if (!params.skip_regenotype) {
+        /**
+        * Genotype pre-filtered somatic sites across a larger panel of control samples. 
+        * If something is being seen in all samples then it's more probable that it's a false positive
+        */ 
+        regenotype_sSV_Delly(
+            tumor_bams_ch,
+            params.reference_fasta,
+            reference_fasta_index,
+            params.exclusion_file,
+            all_control_samples_bams_bais_list,
+            filter_sSV_Delly_initialCall.out.filtered_somatic_bcf
         )
 
-    /**
-    * Call filter_sSV_Delly again to filter out germline SVs.
-    */ 
-    filter_sSV_Delly_regenotyped(
-        call_sSV_Delly.out.samples,
-        regenotype_sSV_Delly.out.nt_regenotype_bcf,
-        regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
-        params.ALL_CTRL_SAMPLES
-        )
+        /**
+        * Call filter_sSV_Delly again to filter out germline SVs.
+        */ 
+        filter_sSV_Delly_regenotyped(
+            call_sSV_Delly.out.samples,
+            regenotype_sSV_Delly.out.nt_regenotype_bcf,
+            regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
+            params.ALL_CTRL_SAMPLES
+            )
+    }
 
     /**
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
