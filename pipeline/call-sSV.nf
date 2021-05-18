@@ -171,7 +171,7 @@ workflow{
     if (!params.skip_regenotype) {
         /**
         * Genotype pre-filtered somatic sites across a larger panel of control samples. 
-        * If something is being seen in all samples then it's more probable that it's a false positive
+        * If something is being seen in all samples then it's more probable that it's a false positive.
         */ 
         regenotype_sSV_Delly(
             tumor_bams_ch,
