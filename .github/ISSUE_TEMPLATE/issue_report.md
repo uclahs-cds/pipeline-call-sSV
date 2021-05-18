@@ -1,14 +1,14 @@
 ---
-name: Bug report
+name: Issue report
 about: Create a report to help us improve our pipelines
-title: "[]"
+title: ""
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is. Please include the following in your bug report along with any explicit errors observed
+**Describe the issue**
+A clear and concise description of what the issue is. Please include the following in your issue report along with any explicit errors observed
 * Pipeline release version
 * Cluster you are using (SGE/Slurm-Dev/Slurm-Test)
 * Node type (F2s (lowmem) / F72s (midmem) / M64s (execute))
