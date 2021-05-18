@@ -51,6 +51,7 @@ process call_sSV_Delly{
             --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_${control_sample_name}.bcf" \
             "$tumor_sample_bam" \
             "$control_sample_bam"
+
         echo -e "${control_sample_name}\tcontrol" > "${tumor_sample_name}_${control_sample_name}_samples.tsv"
         echo -e "${tumor_sample_name}\ttumor" >> "${tumor_sample_name}_${control_sample_name}_samples.tsv"
         """

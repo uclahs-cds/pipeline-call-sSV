@@ -7,20 +7,25 @@ log.info """\
 C A L L - S S V   N F  P I P E L I N E
 ======================================
 Boutros Lab
+
 Current Configuration:
 - input:
     input_bams: "${params.input_bams}"
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
     exclusion_file: "${params.exclusion_file}"
+
 - output:
     output_dir: "${params.output_dir}"
     output_log_dir: "${params.output_log_dir}"
     temp_dir: "${params.temp_dir}"
+
 - options:
     save_intermediate_files: ${params.save_intermediate_files}
+
 - tools:
     delly: ${params.delly_version}
+
 ------------------------------------
 Starting workflow...
 ------------------------------------
@@ -193,4 +198,3 @@ workflow{
     */ 
     generate_sha512(filter_sSV_Delly_regenotyped.out.filtered_somatic_bcf)
     } 
-

@@ -33,6 +33,7 @@ process vcftools_validator {
 
     """
     set -euo pipefail
+
     vcf-validator -d -u $vcf_sv_file > DELLY-${params.delly_version}_${params.dataset_id}_${bam_sample_name}_validation.txt;
     """
     }
