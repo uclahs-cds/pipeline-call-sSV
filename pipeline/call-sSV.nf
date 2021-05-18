@@ -21,6 +21,10 @@ Current Configuration:
     save_intermediate_files: ${params.save_intermediate_files}
 - tools:
     delly: ${params.delly_version}
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 ------------------------------------
 Starting workflow...
 ------------------------------------
@@ -131,9 +135,15 @@ all_control_samples_bams_bais_list = Channel
         }
     .flatten()
     .toList()
+<<<<<<< HEAD
 
 all_control_samples_bams_bais_list.view()
 
+=======
+
+all_control_samples_bams_bais_list.view()
+
+>>>>>>> dev
 workflow{
     /**
     * Validate the input bams
@@ -192,4 +202,8 @@ workflow{
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
     */ 
     generate_sha512(filter_sSV_Delly_regenotyped.out.filtered_somatic_bcf)
+<<<<<<< HEAD
     } 
+=======
+    } 
+>>>>>>> dev

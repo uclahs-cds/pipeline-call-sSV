@@ -1,0 +1,19 @@
+# nextflow
+work/
+.nextflow/
+*.nextflow.log*
+*.log
+*.error
+
+# system
+.DS_Store
+*.swp
+
+# python
+.pytest_cache/
+__pycache__/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+*.py[cod]
+*$py.class
