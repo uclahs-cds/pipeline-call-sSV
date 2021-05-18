@@ -40,4 +40,4 @@ process generate_sha512 {
         set -euo pipefail
         sha512sum "$input_checksum_file" > "${input_checksum_file}.sha512"
         """
-}
+    }

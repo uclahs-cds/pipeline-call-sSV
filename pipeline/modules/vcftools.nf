@@ -24,16 +24,16 @@ process vcftools_validator {
         saveAs: { "vcftools_validator/log${file(it).getName()}" }
 
     input:
-    path vcf_sv_file
-    val bam_sample_name
+        path vcf_sv_file
+        val bam_sample_name
 
     output:
-    path "DELLY-${params.delly_version}_${params.dataset_id}_${bam_sample_name}_validation.txt"
-    path ".command.*"
+        path "DELLY-${params.delly_version}_${params.dataset_id}_${bam_sample_name}_validation.txt"
+        path ".command.*"
 
-    """
-    set -euo pipefail
-
-    vcf-validator -d -u $vcf_sv_file > DELLY-${params.delly_version}_${params.dataset_id}_${bam_sample_name}_validation.txt;
-    """
+    script:
+        """
+        set -euo pipefail
+        vcf-validator -d -u $vcf_sv_file > DELLY-${params.delly_version}_${params.dataset_id}_${bam_sample_name}_validation.txt;
+        """
     }
