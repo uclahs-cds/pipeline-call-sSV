@@ -104,7 +104,7 @@ input_bams_ch = Channel
 //input_bams_ch.view()
 
 /**
-* Create tumor_bams_ch to only get the turmor samples. 
+* Create tumor_bams_ch to only get the turmor samples.
 * I tried to reuse input_bams_ch, however, in that way, I have to filter the paired control sample out of the all_control_samples_bams_list,
 * otherwise, nextflow complains a same control sample is declared twice.
 */
@@ -123,7 +123,7 @@ tumor_bams_ch = Channel
 
 /**
 * Create all_control_samples_bams_bais_ch.
-* this is used to declare these files in dockers. 
+* this is used to declare these files in dockers.
 */
 all_control_samples_bams_bais_list = Channel
     .fromPath(params.input_bams, checkIfExists:true)
@@ -149,7 +149,7 @@ workflow{
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam" per paired (tumor sample, control sample)
     * The sv are stored in call_sSV_Delly.out.nt_call_bcf
     * also create call_sSV_Delly.out.samples per paired (tumor sample, control sample)
-    */    
+    */
     call_sSV_Delly(
         input_bams_ch,
         params.reference_fasta,
@@ -158,9 +158,9 @@ workflow{
         )
 
     /**
-    * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf" 
+    * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf"
     * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
-    */ 
+    */
     filter_sSV_Delly_initialCall(
         call_sSV_Delly.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
@@ -170,9 +170,9 @@ workflow{
 
     if (!params.skip_regenotype) {
         /**
-        * Genotype pre-filtered somatic sites across a larger panel of control samples. 
-        * If something is being seen in all samples then it's more probable that it's a false positive
-        */ 
+        * Genotype pre-filtered somatic sites across a larger panel of control samples.
+        * If something is being seen in all samples then it's more probable that it's a false positive.
+        */
         regenotype_sSV_Delly(
             tumor_bams_ch,
             params.reference_fasta,
@@ -184,7 +184,7 @@ workflow{
 
         /**
         * Call filter_sSV_Delly again to filter out germline SVs.
-        */ 
+        */
         filter_sSV_Delly_regenotyped(
             call_sSV_Delly.out.samples,
             regenotype_sSV_Delly.out.nt_regenotype_bcf,
@@ -195,6 +195,6 @@ workflow{
 
     /**
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
-    */ 
+    */
     generate_sha512(filter_sSV_Delly_regenotyped.out.filtered_somatic_bcf)
-    } 
+    }
