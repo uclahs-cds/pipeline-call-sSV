@@ -123,7 +123,7 @@ process filter_sSV_Delly{
         path "filtered_somatic_${tag}.bcf.csi"
         path ".command.*"
  
-    script:    
+    script:
         """
         set -euo pipefail
         delly filter -f somatic -s ${samples} -o filtered_somatic_${tag}.bcf "$input_bcf"
