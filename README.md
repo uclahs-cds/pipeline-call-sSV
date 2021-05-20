@@ -28,7 +28,7 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 ### Regenotype gSV:
 
-![](https://github.com/uclahs-cds/pipeline-regenotype-gSV/blob/dev-documentation-ghouse/Regenotype-gSV-workflow.PNG)
+![]https://github.com/uclahs-cds/pipeline-call-sSV/blob/dev-doc-ghouse/call-sSV-workflow.PNG)
 
 ## Pipeline Steps:
 
