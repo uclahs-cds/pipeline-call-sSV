@@ -51,7 +51,7 @@ The input CSV should have all columns below and in the same order. An example of
 | Field |	Type |	Description |
 |--- | --- | --- |
 |tumor_sample_name |	string |	The tumor sample name to be passed to the Delly call.No white space allowed. |
-|tumoe_sample_bam	| string	| Absolute path to the tumor sample .BAM file. |
+|tumor_sample_bam	| string	| Absolute path to the tumor sample .BAM file. |
 |control_sample_name	| string	| The control sample name to be passed. No white space allowed. |
 |control_sample_bam |	string	| Absolute path to the control sample .BAM file |
 
@@ -60,24 +60,24 @@ The input CSV should have all columns below and in the same order. An example of
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros lab dataset id |
 | blcds_registered_dataset	| yes |	Boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
-| sge_scheduler	| yes	| Boolean	| Affirms whether job will be executed on the SGE cluster. Default value is false. |
+| sge_scheduler	| yes	| boolean	| Affirms whether job will be executed on the SGE cluster. Default value is false. |
 | input_bams |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
-| reference_fasta	| yes |	Path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
-| exclusion_file |	yes	| Path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. On Slurm/SGE , an HG38 exclusion file is located at /[hot\|data]/ref/hg38/delly/human.hg38.excl.tsv
-| save_intermediate_files |	yes	| Boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
-| output_dir |	Yes |	Path |	Absolute path to the directory where the output files to be saved. |
-| temp_dir	| Yes	| Path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
+| exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. On Slurm/SGE , an HG38 exclusion file is located at /[hot\|data]/ref/hg38/delly/human.hg38.excl.tsv
+| save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
+| output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
+| temp_dir	| yes	| path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
 | skip_regenotype |	yes |	Boolean	| Paramter to conform whether Regenotype step should be carried out or not|
 
 ## Outputs
 
 | Output |	Output type |	Description |
 | ---- | ----- | -------- |
-| .bcf |	Final	| Binary VCF output format with somatic structural variants if found. |
-| .bcf.csi	| Final	| CSI-format index for BCF files |
+| .bcf |	final	| Binary VCF output format with somatic structural variants if found. |
+| .bcf.csi	| final	| CSI-format index for BCF files |
 | report.html, timeline.html and trace.txt	| Log |	A Nextflow report, timeline and trace files. |
-| \*.log.command.*	| Log |	Process and sample specific logging files created by nextflow. |
-| *.sha512 |	Checksum |	Generates SHA-512 hash to validate file integrity. |
+| \*.log.command.*	| log |	Process and sample specific logging files created by nextflow. |
+| *.sha512 |	checksum |	Generates SHA-512 hash to validate file integrity. |
 
 
 ## Testing and Validation
