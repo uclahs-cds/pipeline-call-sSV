@@ -9,6 +9,10 @@ C A L L - S S V   N F  P I P E L I N E
 Boutros Lab
 
 Current Configuration:
+- pipeline:
+    mainScript: ${workflow.manifest.mainScript}
+    version: ${workflow.manifest.version}
+
 - input:
     input_bams: "${params.input_bams}"
     reference_fasta: "${params.reference_fasta}"
