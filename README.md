@@ -4,7 +4,7 @@
 * [How To Run](#How-To-Run)
 * [Flow Diagram](#flow-diagram)
 * [Pipeline Steps](#pipeline-steps)
-    1. [Calling Structural Variants](#somatic-sv)
+    1. [Calling Somatic Structural Variants](#call-somatic-structural-variants)
 * [Inputs](#Inputs)
 * [Outputs](#outputs)
 * [Testing and Validation](#testing-and-validation)
@@ -14,8 +14,8 @@
 
 
 ## Overview:
-The call-sSV pipeline calls structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
-This pipeline is developed using Nextflow , docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE). Additionally, it has been validated with the SMC-HET dataset.
+The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
+This pipeline is developed using Nextflow , docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE).
 
 ## How to Run:
 
@@ -29,6 +29,8 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 ![](https://github.com/uclahs-cds/pipeline-call-sSV/blob/dev-doc-ghouse/call-sSV-workflow.PNG)
 
 ## Pipeline Steps:
+
+### Call Somatic Structural Variants:
 
 #### 1. Calling Single Sample Somatic Structural Variants
 The first step of the pipeline requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
@@ -84,12 +86,10 @@ The input CSV should have all columns below and in the same order. An example of
 
 ### Test Data Set
 
-Testing was performed leveraging aligned and sorted bams generated using bwa-mem2-2.1 against reference GRCh38 (SMC-HET was aligned against hs37d5):
+Testing was performed leveraging aligned and sorted bams generated using bwa-mem2-2.1 against reference GRCh38:
 
-* A-mini: BWA-MEM2-2.1_TEST0000000_TWGSAMIN000001-T001-S01-F.bam and bai
-* A-partial: BWA-MEM2-2.1_TEST0000000_TWGSAPRT000001-T001-S01-F.bam and bai
-* A-full: a-full-CPCG0196-B1.bam and bai
-* SMC-HET: HG002.N.bam and bai
+* A-mini: S2.T-0.bam and bai (tumor sample)
+* SMC-HET: HG002.N.bam and bai (control sample)
 
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
 
@@ -99,7 +99,7 @@ Testing was performed leveraging aligned and sorted bams generated using bwa-mem
 
 ## Performance Validation
 
-Testing was performed primarily in the Boutros Lab SLURM Development cluster and the SLURM Covid cluster. Metrics below will be updated where relevant with additional testing and tuning outputs.
+Testing was performed primarily in the Boutros Lab SLURM Development cluster. Metrics below will be updated where relevant with additional testing and tuning outputs.
 
 |Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
 |----- | -------| --------| ----------| ---------| --------|
@@ -109,3 +109,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster and
 
 Included is a template for validating your input files. For more information on the tool checkout:
 https://github.com/uclahs-cds/tool-validate-nf
+
+## References
+
+* [Delly Structural Variant Calling](https://github.com/dellytools/delly)
