@@ -21,7 +21,7 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 1.	Make sure the pipeline is already downloaded to your machine. You can either download the stable release or the dev version by cloning the repo.
 2.	Update the nextflow.config file for input, output, and parameters. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
-3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/paired_turmor_control_samples.csv).
+3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/a04ad31a309a4db746d726ee8ab40b2389b9a98f/pipeline/input/paired_turmor_control_samples.csv).
 4.	See the submission script, [here](https://github.com/uclahs-cds/tool-submit-nf), to submit your pipeline
 
 ## Flow Diagram:
@@ -48,7 +48,7 @@ Post-filter for somatic SVs using all control samples
 
 ### Input CSV
 
-The input CSV should have all columns below and in the same order. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/paired_turmor_control_samples.csv).
+The input CSV should have all columns below and in the same order. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/a04ad31a309a4db746d726ee8ab40b2389b9a98f/pipeline/input/paired_turmor_control_samples.csv).
 
 | Field |	Type |	Description |
 |--- | --- | --- |
