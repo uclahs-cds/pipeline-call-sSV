@@ -36,7 +36,7 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 The first step of the pipeline requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
 
 #### 2. Pre-filter Somatic Structural Variants
-The second step of the pipeline applies soamtic pre-filtering to filter out any germline variants from the .bcf file generated in Step 1.
+The second step of the pipeline applies somatic pre-filtering to filter out any germline variants from the .bcf file generated in Step 1.
 
 #### 3. Genotype pre-filtered somatic sites
 For each tumor sample, genotype pre-filtered somatic sites across a larger panel of control samples to efficiently filter false postives and germline SVs. For performance reasons, this can be run in parallel for each sample of the control panel and you may want to combine multiple pre-filtered somatic site lists from multiple tumor samples.
