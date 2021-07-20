@@ -86,10 +86,11 @@ The input CSV should have all columns below and in the same order. An example of
 
 ### Test Data Set
 
-Testing was performed leveraging aligned and sorted bams generated using bwa-mem2-2.1 against reference GRCh38:
+Testing was performed leveraging aligned and sorted bams (A-mini) generated using bwa-mem2-2.1 against reference GRCh38:
 
-* A-mini: S2.T-0.bam and bai (tumor sample)
-* SMC-HET: HG002.N.bam and bai (control sample)
+| Name (normal) | Name (tumour) |
+| ------ | ------- |
+| S2.T-0.bam | HG002.N-0.bam |
 
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
 
