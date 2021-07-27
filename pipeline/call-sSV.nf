@@ -62,19 +62,12 @@ if (!params.exclusion_file){
 reference_fasta_index = "${params.reference_fasta}.fai"
 
 /**
-* The input file "paired_turmor_control_samples.csv" looks as below:
-* tumor_sample_bam,control_sample_bam
-* /hot/users/ybugh/A-mini/0/output/S2.T-0.bam,/hot/users/ybugh/A-mini/0/output/HG002.N-0.bam
-*
-* Later, calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
-* sample_name   sample_type
-* HG002.N	control
-* S2_v1.1.5	tumor
-* 
-* The pipeline will create such samples.tsv from the "paired_turmor_control_samples.csv" per row on the fly.
+* The input file params.input_paired_bams looks as below:
+* control_sample_bam, tumor_sample_bam
+* /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
 *
 * Also calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam control1.bam ... controlN.bam" needs all the control samples, 
-* which will be collected from the "paired_turmor_control_samples.csv" too.
+* which will be collected from params.input_control_bams.
 */
 
 /**
@@ -167,6 +160,11 @@ workflow{
         )
 
     /**
+    * calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
+    * sample_name   sample_type
+    * S2_v1.1.5	tumor
+    * HG002.N	control
+    * 
     * Use bcftools query -l to get the sample names out of filter_sSV_Delly_initialCall.out.filtered_somatic_bcf
     * Further generate ${control_sample_bam_name}_${tumor_sample_bam_name}_samples.tsv which will be used by delly filter
     * the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of sample in delly call.
