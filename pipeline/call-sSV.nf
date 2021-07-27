@@ -66,7 +66,7 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 * control_sample_bam, tumor_sample_bam
 * /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
 *
-* Also calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam control1.bam ... controlN.bam" needs all the control samples, 
+* Later, calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam control1.bam ... controlN.bam" needs all the control samples, 
 * which will be collected from params.input_control_bams.
 */
 
@@ -165,10 +165,10 @@ workflow{
     * S2_v1.1.5	tumor
     * HG002.N	control
     * 
-    * Use bcftools query -l to get the sample names out of filter_sSV_Delly_initialCall.out.filtered_somatic_bcf
+    * Use bcftools query -l to get the sample names out of call_sSV_Delly.out.nt_call_bcf
     * Further generate ${control_sample_bam_name}_${tumor_sample_bam_name}_samples.tsv which will be used by delly filter
-    * the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of sample in delly call.
-    * for example, 
+    * Note, the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of samples in delly call.
+    * For example, 
     *    delly call \
     *    -g /tmp/ref/genome/genome.fa \
     *    -x /tmp/ref/delly/human.hg38.excl.tsv \
