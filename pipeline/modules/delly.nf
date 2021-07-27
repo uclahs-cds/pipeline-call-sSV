@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-def docker_image_delly = "blcdsdockerregistry/call-gsv:delly-${params.delly_version}"
+def docker_image_delly = "blcdsdockerregistry/delly:${params.delly_version}"
 
 log.info """\
 ------------------------------------
@@ -26,21 +26,21 @@ process call_sSV_Delly{
 
     publishDir params.output_dir,
         enabled: params.save_intermediate_files,
-        pattern: "*_samples.tsv",
+        pattern: "${tumor_sample_bam_name}_${control_sample_bam_name}_samples",
         mode: "copy",
         saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
 
     input:
-        tuple(val(tumor_sample_name), path(tumor_sample_bam), path(tumor_sample_bai), val(control_sample_name), path(control_sample_bam), path(control_sample_bai))
+        tuple(val(tumor_sample_bam_name), path(tumor_sample_bam), path(tumor_sample_bai), val(control_sample_bam_name), path(control_sample_bam), path(control_sample_bai))
         path reference_fasta
         path reference_fasta_fai
         path exclusion_file
 
     output:
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_${control_sample_name}.bcf", emit: nt_call_bcf
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_${control_sample_name}.bcf.csi", emit: nt_call_bcf_csi
+        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}_${control_sample_bam_name}.bcf", emit: nt_call_bcf
+        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}_${control_sample_bam_name}.bcf.csi", emit: nt_call_bcf_csi
+        path "${tumor_sample_bam_name}_${control_sample_bam_name}_samples", emit: samples
         path ".command.*"
-        path "${tumor_sample_name}_${control_sample_name}_samples.tsv", emit: samples
 
     script:
         """
@@ -48,12 +48,11 @@ process call_sSV_Delly{
         delly call \
             --genome "$reference_fasta" \
             --exclude "$exclusion_file" \
-            --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_${control_sample_name}.bcf" \
+            --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}_${control_sample_bam_name}.bcf" \
             "$tumor_sample_bam" \
             "$control_sample_bam"
 
-        echo -e "${control_sample_name}\tcontrol" > "${tumor_sample_name}_${control_sample_name}_samples.tsv"
-        echo -e "${tumor_sample_name}\ttumor" >> "${tumor_sample_name}_${control_sample_name}_samples.tsv"
+        touch "${tumor_sample_bam_name}_${control_sample_bam_name}_samples"
         """
     }
 
@@ -86,6 +85,7 @@ process regenotype_sSV_Delly{
 
     script:
         control_samples_bams_concat_string = control_samples_bams_bais_list.findAll{!it.toString().contains("bai")}.join(' ')
+        all_bams = tumor_sample_bam+" "+control_samples_bams_concat_string
         """
         set -euo pipefail
         delly call \
@@ -93,8 +93,7 @@ process regenotype_sSV_Delly{
             --genome $reference_fasta \
             --exclude $exclusion_file \
             --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_all_control_samples.bcf" \
-            "$tumor_sample_bam" \
-            "$control_samples_bams_concat_string"
+            $all_bams
         """
     }
 
