@@ -123,24 +123,6 @@ tumor_bams_ch = Channel
 
 tumor_bams_ch.view()
 
-/**
-* Create all_control_samples_bams_bais_ch.
-* this is used to declare these files in dockers.
-*/
-all_control_samples_bams_bais_list = Channel
-    .fromPath(params.input_control_bams, checkIfExists:true)
-    .splitCsv(header:true)
-    .map{
-        row -> [
-            row.control_sample_bam,
-            "${row.control_sample_bam}.bai"
-            ]
-        }
-    .flatten()
-    .toList()
-
-all_control_samples_bams_bais_list.view()
-
 workflow{
     /**
     * Validate the input bams
@@ -201,6 +183,24 @@ workflow{
 
     if (!params.skip_regenotype) {
         /**
+        * Create all_control_samples_bams_bais_ch.
+        * this is used to declare these files in dockers.
+        */
+        all_control_samples_bams_bais_list = Channel
+            .fromPath(params.input_control_bams, checkIfExists:true)
+            .splitCsv(header:true)
+            .map{
+                row -> [
+                    row.control_sample_bam,
+                    "${row.control_sample_bam}.bai"
+                    ]
+                }
+            .flatten()
+            .toList()
+
+        all_control_samples_bams_bais_list.view()
+
+        /**
         * Genotype pre-filtered somatic sites across a larger panel of control samples.
         * If something is being seen in all samples then it's more probable that it's a false positive.
         */
@@ -222,7 +222,7 @@ workflow{
             regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
             params.ALL_CTRL_SAMPLES
             )
-    }
+        }
 
     /**
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
