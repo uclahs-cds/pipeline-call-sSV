@@ -42,7 +42,7 @@ Starting workflow...
 
 include { validate_file } from './modules/validation'
 include { query_sample_name_Bcftools } from './modules/bcftools'
-include { call_sSV_Delly; regenotype_sSV_Delly; filter_sSV_Delly as filter_sSV_Delly_initialCall; filter_sSV_Delly as filter_sSV_Delly_regenotyped } from './modules/delly'
+include { call_sSV_Delly; regenotype_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly; filter_sSV_Delly as filter_RegenotypedsSV_Delly } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
 
 /**
@@ -123,6 +123,20 @@ tumor_bams_ch = Channel
 
 tumor_bams_ch.view()
 
+process create_auxiliary_sample_type_file {
+    publishDir params.output_dir,
+        pattern: "samples_type.txt",
+        mode: "copy"
+
+    output:
+        path "samples_type.txt", emit: auxiliary_sample_type_file
+
+    script:
+        """
+        echo -e "tumor\ncontrol" > samples_type.txt
+        """
+}
+
 workflow{
     /**
     * Validate the input bams
@@ -140,6 +154,11 @@ workflow{
         reference_fasta_index,
         params.exclusion_file
         )
+
+    /**
+    * Create the sample_type_file that will be used by the following query_sample_name_Bcftools to create the samples.tsv
+    */
+    create_auxiliary_sample_type_file()
 
     /**
     * calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
@@ -167,14 +186,14 @@ workflow{
     query_sample_name_Bcftools(
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.samples,
-        params.sample_types
+        create_auxiliary_sample_type_file.out.auxiliary_sample_type_file
     )
 
     /**
     * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf"
     * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
     */
-    filter_sSV_Delly_initialCall(
+    filter_RawsSV_Delly(
         query_sample_name_Bcftools.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.nt_call_bcf_csi,
@@ -210,13 +229,13 @@ workflow{
             reference_fasta_index,
             params.exclusion_file,
             all_control_samples_bams_bais_list,
-            filter_sSV_Delly_initialCall.out.filtered_somatic_bcf
+            filter_RawsSV_Delly.out.filtered_somatic_bcf
         )
 
         /**
         * Call filter_sSV_Delly again to filter out germline SVs.
         */
-        filter_sSV_Delly_regenotyped(
+        filter_RegenotypedsSV_Delly(
             query_sample_name_Bcftools.out.samples,
             regenotype_sSV_Delly.out.nt_regenotype_bcf,
             regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
@@ -227,5 +246,5 @@ workflow{
     /**
     * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
     */
-    generate_sha512(filter_sSV_Delly_regenotyped.out.filtered_somatic_bcf)
+    generate_sha512(filter_RegenotypedsSV_Delly.out.filtered_somatic_bcf)
     }
