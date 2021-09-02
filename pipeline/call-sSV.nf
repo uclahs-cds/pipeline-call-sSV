@@ -2,7 +2,7 @@
 
 nextflow.enable.dsl=2
 
-import java.nio.file.Paths;
+import java.nio.file.Paths
 
 log.info """\
 ======================================
@@ -17,8 +17,6 @@ Current Configuration:
 
 - input:
     input_paired_bams: "${params.input_paired_bams}"
-    input_control_bams = "${params.input_control_bams}"
-    sample_types = "${params.sample_types}"
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
     exclusion_file: "${params.exclusion_file}"
@@ -42,12 +40,17 @@ Starting workflow...
 
 include { validate_file } from './modules/validation'
 include { query_sample_name_Bcftools } from './modules/bcftools'
-include { call_sSV_Delly; regenotype_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly; filter_sSV_Delly as filter_RegenotypedsSV_Delly } from './modules/delly'
-include { generate_sha512 } from './modules/sha512'
+include { call_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly } from './modules/delly'
+include { generate_sha512 as generate_sha512_ins_1; generate_sha512 as generate_sha512_ins_2; generate_sha512 as generate_sha512_ins_3; generate_sha512 as generate_sha512_ins_4 } from './modules/sha512'
 
 /**
 * Check the params
 */
+
+if (!params.input_paired_bams){
+    // error out - must provide an input_paired_bams file
+    error "***Error: You must specify an input_paired_bams file***"
+    }
 
 if (!params.reference_fasta){
     // error out - must provide a reference FASTA file
@@ -84,7 +87,9 @@ validation_channel = Channel
         }
     .flatten()
 
-//validation_channel.view()
+if (params.view_channels){
+    validation_channel.view()
+}
 
 /**
 * Create input_paired_bams_ch to get the paired turmor sample and control sample
@@ -103,7 +108,9 @@ input_paired_bams_ch = Channel
             )
         }
 
-input_paired_bams_ch.view()
+if (params.view_channels){
+    input_paired_bams_ch.view()
+}
 
 /**
 * Create tumor_bams_ch to only get the turmor samples.
@@ -121,7 +128,9 @@ tumor_bams_ch = Channel
             )
         }
 
-tumor_bams_ch.view()
+if (params.view_channels){
+    tumor_bams_ch.view()
+}
 
 process create_auxiliary_sample_type_file {
     publishDir params.output_dir,
@@ -200,51 +209,11 @@ workflow{
         params.SINGLE_CTRL_SAMPLE
         )
 
-    if (!params.skip_regenotype) {
-        /**
-        * Create all_control_samples_bams_bais_ch.
-        * this is used to declare these files in dockers.
-        */
-        all_control_samples_bams_bais_list = Channel
-            .fromPath(params.input_control_bams, checkIfExists:true)
-            .splitCsv(header:true)
-            .map{
-                row -> [
-                    row.control_sample_bam,
-                    "${row.control_sample_bam}.bai"
-                    ]
-                }
-            .flatten()
-            .toList()
-
-        all_control_samples_bams_bais_list.view()
-
-        /**
-        * Genotype pre-filtered somatic sites across a larger panel of control samples.
-        * If something is being seen in all samples then it's more probable that it's a false positive.
-        */
-        regenotype_sSV_Delly(
-            tumor_bams_ch,
-            params.reference_fasta,
-            reference_fasta_index,
-            params.exclusion_file,
-            all_control_samples_bams_bais_list,
-            filter_RawsSV_Delly.out.filtered_somatic_bcf
-        )
-
-        /**
-        * Call filter_sSV_Delly again to filter out germline SVs.
-        */
-        filter_RegenotypedsSV_Delly(
-            query_sample_name_Bcftools.out.samples,
-            regenotype_sSV_Delly.out.nt_regenotype_bcf,
-            regenotype_sSV_Delly.out.nt_regenotype_bcf_csi,
-            params.ALL_CTRL_SAMPLES
-            )
-        }
-
     /**
-    * Generate sha512 checksum for the filtered_somatic_AllCtrlSamples.bcf.
+    * Generate sha512 checksum for each output file.
     */
-    generate_sha512(filter_RegenotypedsSV_Delly.out.filtered_somatic_bcf)
+    generate_sha512_ins_1(call_sSV_Delly.out.nt_call_bcf)
+    generate_sha512_ins_2(call_sSV_Delly.out.nt_call_bcf_csi)
+    generate_sha512_ins_3(filter_RawsSV_Delly.out.filtered_somatic_bcf)
+    generate_sha512_ins_4(filter_RawsSV_Delly.out.filtered_somatic_bcf_csi)
     }

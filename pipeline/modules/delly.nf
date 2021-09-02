@@ -56,47 +56,6 @@ process call_sSV_Delly{
         """
     }
 
-process regenotype_sSV_Delly{
-    container docker_image_delly
-
-    publishDir params.output_dir,
-        enabled: params.save_intermediate_files,
-        pattern: "*.bcf*",
-        mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
-
-    publishDir params.output_log_dir,
-        pattern: ".command.*",
-        mode: "copy",
-        saveAs: { "delly_regenotype/log${file(it).getName()}" }
-
-    input:
-        tuple(val(tumor_sample_name), path(tumor_sample_bam), path(tumor_sample_bai))
-        path reference_fasta
-        path reference_fasta_fai
-        path exclusion_file
-        path control_samples_bams_bais_list
-        path somatic_sites
-
-    output:
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_all_control_samples.bcf", emit: nt_regenotype_bcf
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_all_control_samples.bcf.csi", emit: nt_regenotype_bcf_csi
-        path ".command.*"
-
-    script:
-        control_samples_bams_concat_string = control_samples_bams_bais_list.findAll{!it.toString().contains("bai")}.join(' ')
-        all_bams = tumor_sample_bam+" "+control_samples_bams_concat_string
-        """
-        set -euo pipefail
-        delly call \
-            -v $somatic_sites \
-            --genome $reference_fasta \
-            --exclude $exclusion_file \
-            --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}_all_control_samples.bcf" \
-            $all_bams
-        """
-    }
-
 process filter_sSV_Delly{
     container docker_image_delly
 
@@ -119,7 +78,7 @@ process filter_sSV_Delly{
 
     output:
         path "filtered_somatic_${tag}.bcf", emit: filtered_somatic_bcf
-        path "filtered_somatic_${tag}.bcf.csi"
+        path "filtered_somatic_${tag}.bcf.csi", emit: filtered_somatic_bcf_csi
         path ".command.*"
  
     script:
