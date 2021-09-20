@@ -22,11 +22,11 @@ process call_sSV_Delly{
     publishDir params.output_log_dir,
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "delly_call/log${file(it).getName()}" }
+        saveAs: { "call_sSV_Delly/log${file(it).getName()}" }
 
     publishDir params.output_dir,
         enabled: params.save_intermediate_files,
-        pattern: "${tumor_sample_bam_name}_${control_sample_bam_name}_samples",
+        pattern: "${tumor_sample_bam_name}_samples",
         mode: "copy",
         saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
 
@@ -37,9 +37,9 @@ process call_sSV_Delly{
         path exclusion_file
 
     output:
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}_${control_sample_bam_name}.bcf", emit: nt_call_bcf
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}_${control_sample_bam_name}.bcf.csi", emit: nt_call_bcf_csi
-        path "${tumor_sample_bam_name}_${control_sample_bam_name}_samples", emit: samples
+        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}.bcf", emit: nt_call_bcf
+        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}.bcf.csi", emit: nt_call_bcf_csi
+        path "${tumor_sample_bam_name}_samples", emit: samples
         path ".command.*"
 
     script:
@@ -48,11 +48,11 @@ process call_sSV_Delly{
         delly call \
             --genome "$reference_fasta" \
             --exclude "$exclusion_file" \
-            --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}_${control_sample_bam_name}.bcf" \
+            --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_bam_name}.bcf" \
             "$tumor_sample_bam" \
             "$control_sample_bam"
 
-        touch "${tumor_sample_bam_name}_${control_sample_bam_name}_samples"
+        touch "${tumor_sample_bam_name}_samples"
         """
     }
 
@@ -61,29 +61,28 @@ process filter_sSV_Delly{
 
     publishDir params.output_dir,
         enabled: params.save_intermediate_files,
-        pattern: "filtered_somatic_${tag}.bcf*",
+        pattern: "filtered_somatic.bcf*",
         mode: "copy",
         saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
 
     publishDir params.output_log_dir,
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "delly_filter_NT_${tag}/log${file(it).getName()}" }
+        saveAs: { "filter_sSV_Delly/log${file(it).getName()}" }
 
     input:
         path samples
         path input_bcf
         path input_bcf_csi
-        val tag
 
     output:
-        path "filtered_somatic_${tag}.bcf", emit: filtered_somatic_bcf
-        path "filtered_somatic_${tag}.bcf.csi", emit: filtered_somatic_bcf_csi
+        path "filtered_somatic.bcf", emit: filtered_somatic_bcf
+        path "filtered_somatic.bcf.csi", emit: filtered_somatic_bcf_csi
         path ".command.*"
  
     script:
         """
         set -euo pipefail
-        delly filter -f somatic -s ${samples} -o filtered_somatic_${tag}.bcf "$input_bcf"
+        delly filter -f somatic -s ${samples} -o filtered_somatic.bcf "$input_bcf"
         """
     }

@@ -205,8 +205,7 @@ workflow{
     filter_RawsSV_Delly(
         query_sample_name_Bcftools.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
-        call_sSV_Delly.out.nt_call_bcf_csi,
-        params.SINGLE_CTRL_SAMPLE
+        call_sSV_Delly.out.nt_call_bcf_csi
         )
 
     /**

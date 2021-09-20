@@ -22,7 +22,7 @@ process query_sample_name_Bcftools {
     publishDir params.output_log_dir,
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "bcftools_query/log${file(it).getName()}" }
+        saveAs: { "query_sample_name_Bcftools/log${file(it).getName()}" }
 
     input:
         path input_bcf
