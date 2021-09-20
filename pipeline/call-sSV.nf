@@ -87,7 +87,7 @@ validation_channel = Channel
         }
     .flatten()
 
-if (params.view_channels){
+if (params.verbose){
     validation_channel.view()
 }
 
@@ -108,7 +108,7 @@ input_paired_bams_ch = Channel
             )
         }
 
-if (params.view_channels){
+if (params.verbose){
     input_paired_bams_ch.view()
 }
 
@@ -128,7 +128,7 @@ tumor_bams_ch = Channel
             )
         }
 
-if (params.view_channels){
+if (params.verbose){
     tumor_bams_ch.view()
 }
 
