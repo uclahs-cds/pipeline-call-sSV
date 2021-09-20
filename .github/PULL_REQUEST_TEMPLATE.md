@@ -13,23 +13,23 @@ already, or do not wish to be listed. (*This acknowledgement is optional.*)
 
 - [ ] I have updated the version number in the `metadata.yaml` and config file following [semver](https://semver.org/), or the version number has already been updated. (*Leave it unchecked if you are unsure about new version number and discuss it with the infrastructure team in this PR.*)
 
-- [ ] I have tested the pipeline on at least one A-mini sample. The paths to the test config files and output directories were attached below.
+- [ ] I have tested the pipeline on at least one DNA A-mini sample. The paths to the test config files and output directories were attached below.
 
 <!--- Briefly describe the changes included in this pull request and the paths to the test cases below
  !--- starting with 'Closes #...' if appropriate --->
 
-Closes #7
+Closes #...
 
 **Test Results**
 
-- SMC-HET A-mini
+- DNA A-mini
 	- sample:    <!-- e.g. A-mini S2.T-0, HG002.N-0 -->
 	- input:     <!-- /hot/pipelines/development/slurm/call-sSV/input/tumor_control_pair_0.csv -->
 	- config:    <!-- /hot/pipelines/development/slurm/call-sSV/config/nextflow_amini.config -->
 	- output:    <!-- /hot/pipelines/development/slurm/call-sSV/output_amini --> 
 
-- Rupert's test
+- DNA A-partial
 	- sample:    <!-- e.g. ILHNLNEV000001-T001-P01-F, ILHNLNEV000001-N001-B01-F -->
-	- input:     <!-- /hot/pipelines/development/slurm/call-sSV/input/tumor_control_pair_rupert_full.csv -->
-	- config:    <!-- /hot/pipelines/development/slurm/call-sSV/config/nextflow_rupert.config -->
-	- output:    <!-- /hot/pipelines/development/slurm/call-sSV/output_rupert --> 
+	- input:     <!-- /hot/pipelines/development/slurm/call-sSV/input/tumor_control_pair_apartial.csv -->
+	- config:    <!-- /hot/pipelines/development/slurm/call-sSV/config/nextflow_apartial.config -->
+	- output:    <!-- /hot/pipelines/development/slurm/call-sSV/output_apartial --> 
