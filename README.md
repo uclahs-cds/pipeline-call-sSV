@@ -20,29 +20,31 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 ## How to Run:
 
 1.	Make sure the pipeline is already downloaded to your machine. You can either download the stable release or the dev version by cloning the repo.
-2.	Update the nextflow.config file for input, output, and parameters. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
-3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/a04ad31a309a4db746d726ee8ab40b2389b9a98f/pipeline/input/paired_turmor_control_samples.csv).
+2.	Update the nextflow.config file for input, output, and parameters. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-dev/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
+3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-dev/pipeline/input/tumor_control_pair_0.csv).
 4.	See the submission script, [here](https://github.com/uclahs-cds/tool-submit-nf), to submit your pipeline
 
 ## Flow Diagram:
 
-![](https://github.com/uclahs-cds/pipeline-call-sSV/blob/dev-doc-ghouse/call-sSV-workflow.PNG)
+![](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-documentation/call-sSV-workflow.svg)
 
 ## Pipeline Steps:
 
 ### Call Somatic Structural Variants:
 
 #### 1. Calling Single Sample Somatic Structural Variants
-The first step of the pipeline requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
+```script
+delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam
+```
+The first step requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
 
-#### 2. Pre-filter Somatic Structural Variants
-The second step of the pipeline applies somatic pre-filtering to filter out any germline variants from the .bcf file generated in Step 1.
 
-#### 3. Genotype pre-filtered somatic sites
-For each tumor sample, genotype pre-filtered somatic sites across a larger panel of control samples to efficiently filter false postives and germline SVs. For performance reasons, this can be run in parallel for each sample of the control panel and you may want to combine multiple pre-filtered somatic site lists from multiple tumor samples.
+#### 2. Somatic Filtering
+```script
+delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
+```
+The second step applies somatic filtering against the .bcf file generated in Step 1.
 
-#### 4. Post-filter 
-Post-filter for somatic SVs using all control samples
 
 ## Inputs
 
@@ -52,10 +54,8 @@ The input CSV should have all columns below and in the same order. An example of
 
 | Field |	Type |	Description |
 |--- | --- | --- |
-|tumor_sample_name |	string |	The tumor sample name to be passed to the Delly call.No white space allowed. |
-|tumor_sample_bam	| string	| Absolute path to the tumor sample .BAM file. |
-|control_sample_name	| string	| The control sample name to be passed. No white space allowed. |
 |control_sample_bam |	string	| Absolute path to the control sample .BAM file |
+|tumor_sample_bam	| string	| Absolute path to the tumor sample .BAM file. |
 
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
@@ -63,13 +63,13 @@ The input CSV should have all columns below and in the same order. An example of
 | dataset_id |	yes	| string |	Boutros lab dataset id |
 | blcds_registered_dataset	| yes |	Boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
 | sge_scheduler	| yes	| boolean	| Affirms whether job will be executed on the SGE cluster. Default value is false. |
-| input_bams |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
+| input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
-| exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. On Slurm/SGE , an HG38 exclusion file is located at /[hot\|data]/ref/hg38/delly/human.hg38.excl.tsv
+| exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | temp_dir	| yes	| path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
-| skip_regenotype |	yes |	Boolean	| Paramter to conform whether Regenotype step should be carried out or not|
+| verbose |	false |	Boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
 
 ## Outputs
 
@@ -86,17 +86,18 @@ The input CSV should have all columns below and in the same order. An example of
 
 ### Test Data Set
 
-Testing was performed leveraging aligned and sorted bams (A-mini) generated using bwa-mem2-2.1 against reference GRCh38:
+| Data Set | Run Configuration | Output Dir | Control Sample | Tumor Sample |  
+| ------ | ------ | ------- |
+| A-mini | /hot/pipelines/development/slurm/call-sSV/config/nextflow_amini.config | /hot/pipelines/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 | /hot/resources/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resources/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
+| A-full | /hot/pipelines/development/slurm/call-sSV/config/nextflow_afull.config | /hot/pipelines/development/slurm/call-sSV/output_rupert_WGS_real_sample/call-sSV-20210920-153803/ | /hot/resources/SMC-HET/normal/bams/HG002.N.bam | /hot/pipelines/development/slurm/call-sSV/input/T5.T.sorted_py.bam |
+| Rupert_WGS_real_sample | /hot/pipelines/development/slurm/call-sSV/config/nextflow_rupert_WGS_real_sample.config | /hot/pipelines/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam | 
 
-| Name (normal) | Name (tumour) |
-| ------ | ------- |
-| S2.T-0.bam | HG002.N-0.bam |
 
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
 
-* reference_fasta: /hot/ref/hg38/genome/genome.fa
-* reference_fasta_index: /hot/ref/hg38/genome/genome.fa.fai
-* exclusion_file: /hot/ref/hg38/delly/human.hg38.excl.tsv
+* reference_fasta: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta
+* reference_fasta_index: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai
+* exclusion_file: /hot/ref/tool-specific-input/Delly/GRCh38/human.hg38.excl.tsv
 
 ## Performance Validation
 
@@ -104,12 +105,14 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 
 |Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
 |----- | -------| --------| ----------| ---------| --------|
-|A-mini	| 2021-05-12 |	F2 |	27m 47s	| 0.5h	| 1.8 GB |
+|A-mini	| 2021-09-20 |	F2 |	16m 24s	| 16m 1s	| 1.7 GB |
+|A-full	| 2021-09-20 |	F72 |	19h 54m 5s | 19h 53m 56s | 15.1 GB |
+|Rupert_WGS_real_sample	| 2021-09-20 |	F72 |	22h 30m 16s | 22h 30m 6s | 4.5 GB |
 
 ## Validation Tool
 
 Included is a template for validating your input files. For more information on the tool checkout:
-https://github.com/uclahs-cds/tool-validate-nf
+https://github.com/uclahs-cds/public-tool-PipeVal
 
 ## References
 
