@@ -87,7 +87,7 @@ The input CSV should have all columns below and in the same order. An example of
 ### Test Data Set
 
 | Data Set | Run Configuration | Output Dir | Control Sample | Tumor Sample |  
-| ------ | ------ | ------- |
+| ------ | ------ | ------- | ------ | ------- |
 | A-mini | /hot/pipelines/development/slurm/call-sSV/config/nextflow_amini.config | /hot/pipelines/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 | /hot/resources/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resources/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
 | A-full | /hot/pipelines/development/slurm/call-sSV/config/nextflow_afull.config | /hot/pipelines/development/slurm/call-sSV/output_rupert_WGS_real_sample/call-sSV-20210920-153803/ | /hot/resources/SMC-HET/normal/bams/HG002.N.bam | /hot/pipelines/development/slurm/call-sSV/input/T5.T.sorted_py.bam |
 | Rupert_WGS_real_sample | /hot/pipelines/development/slurm/call-sSV/config/nextflow_rupert_WGS_real_sample.config | /hot/pipelines/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam | 
