@@ -132,20 +132,6 @@ if (params.verbose){
     tumor_bams_ch.view()
 }
 
-process create_auxiliary_sample_type_file {
-    publishDir params.output_dir,
-        pattern: "samples_type.txt",
-        mode: "copy"
-
-    output:
-        path "samples_type.txt", emit: auxiliary_sample_type_file
-
-    script:
-        """
-        echo -e "tumor\ncontrol" > samples_type.txt
-        """
-}
-
 workflow{
     /**
     * Validate the input bams
@@ -163,11 +149,6 @@ workflow{
         reference_fasta_index,
         params.exclusion_file
         )
-
-    /**
-    * Create the sample_type_file that will be used by the following query_sample_name_Bcftools to create the samples.tsv
-    */
-    create_auxiliary_sample_type_file()
 
     /**
     * calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
@@ -194,8 +175,7 @@ workflow{
     */
     query_sample_name_Bcftools(
         call_sSV_Delly.out.nt_call_bcf,
-        call_sSV_Delly.out.samples,
-        create_auxiliary_sample_type_file.out.auxiliary_sample_type_file
+        call_sSV_Delly.out.samples
     )
 
     /**

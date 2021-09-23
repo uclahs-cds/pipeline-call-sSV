@@ -27,7 +27,6 @@ process query_sample_name_Bcftools {
     input:
         path input_bcf
         path tmp_samples
-        path sample_types
 
     output:
         path ".command.*"
@@ -37,8 +36,10 @@ process query_sample_name_Bcftools {
         """
         set -euo pipefail
 
+        echo -e "tumor\ncontrol" > samples_type
+
         bcftools query -l $input_bcf > ${tmp_samples}
 
-        paste ${tmp_samples} ${sample_types} > "${tmp_samples}.tsv"
+        paste ${tmp_samples} samples_type > "${tmp_samples}.tsv"
         """
     }

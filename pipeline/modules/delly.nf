@@ -24,12 +24,6 @@ process call_sSV_Delly{
         mode: "copy",
         saveAs: { "call_sSV_Delly/log${file(it).getName()}" }
 
-    publishDir params.output_dir,
-        enabled: params.save_intermediate_files,
-        pattern: "${tumor_sample_bam_name}_samples",
-        mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
-
     input:
         tuple(val(tumor_sample_bam_name), path(tumor_sample_bam), path(tumor_sample_bai), val(control_sample_bam_name), path(control_sample_bam), path(control_sample_bai))
         path reference_fasta
