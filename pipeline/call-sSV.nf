@@ -41,7 +41,7 @@ Starting workflow...
 include { validate_file } from './modules/validation'
 include { query_sample_name_Bcftools } from './modules/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly } from './modules/delly'
-include { generate_sha512 as generate_sha512_ins_1; generate_sha512 as generate_sha512_ins_2; generate_sha512 as generate_sha512_ins_3; generate_sha512 as generate_sha512_ins_4 } from './modules/sha512'
+include { generate_sha512 } from './modules/sha512'
 
 /**
 * Check the params
@@ -209,10 +209,7 @@ workflow{
         )
 
     /**
-    * Generate sha512 checksum for each output file.
+    * Generate one sha512 checksum for the output files.
     */
-    generate_sha512_ins_1(call_sSV_Delly.out.nt_call_bcf)
-    generate_sha512_ins_2(call_sSV_Delly.out.nt_call_bcf_csi)
-    generate_sha512_ins_3(filter_RawsSV_Delly.out.filtered_somatic_bcf)
-    generate_sha512_ins_4(filter_RawsSV_Delly.out.filtered_somatic_bcf_csi)
+    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(call_sSV_Delly.out.nt_call_bcf_csi, filter_RawsSV_Delly.out.filtered_somatic_bcf, filter_RawsSV_Delly.out.filtered_somatic_bcf_csi))
     }
