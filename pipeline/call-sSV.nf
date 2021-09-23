@@ -16,7 +16,7 @@ Current Configuration:
     version: ${workflow.manifest.version}
 
 - input:
-    input_paired_bams: "${params.input_paired_bams}"
+    input_csv: "${params.input_csv}"
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
     exclusion_file: "${params.exclusion_file}"
@@ -47,9 +47,9 @@ include { generate_sha512 as generate_sha512_ins_1; generate_sha512 as generate_
 * Check the params
 */
 
-if (!params.input_paired_bams){
-    // error out - must provide an input_paired_bams file
-    error "***Error: You must specify an input_paired_bams file***"
+if (!params.input_csv){
+    // error out - must provide an input_csv file
+    error "***Error: You must specify an input_csv file***"
     }
 
 if (!params.reference_fasta){
@@ -65,7 +65,7 @@ if (!params.exclusion_file){
 reference_fasta_index = "${params.reference_fasta}.fai"
 
 /**
-* The input file params.input_paired_bams looks as below:
+* The input file params.input_csv looks as below:
 * control_sample_bam, tumor_sample_bam
 * /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
 *
@@ -77,7 +77,7 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 * Create validation_channel to validate the input bams
 */
 validation_channel = Channel
-    .fromPath(params.input_paired_bams, checkIfExists:true)
+    .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
     .map{
         row -> [
@@ -95,7 +95,7 @@ if (params.verbose){
 * Create input_paired_bams_ch to get the paired turmor sample and control sample
 */
 input_paired_bams_ch = Channel
-    .fromPath(params.input_paired_bams, checkIfExists:true)
+    .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
     .map{
         row -> tuple(
@@ -118,7 +118,7 @@ if (params.verbose){
 * otherwise, nextflow complains a same control sample is declared twice.
 */
 tumor_bams_ch = Channel
-    .fromPath(params.input_paired_bams, checkIfExists:true)
+    .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
     .map{
         row -> tuple(
