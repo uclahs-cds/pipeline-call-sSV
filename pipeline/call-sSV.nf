@@ -102,7 +102,6 @@ input_paired_bams_ch = Channel
             Paths.get(row.tumor_sample_bam).getFileName().toString().split('.bam')[0],
             row.tumor_sample_bam,
             "${row.tumor_sample_bam}.bai",
-            Paths.get(row.control_sample_bam).getFileName().toString().split('.bam')[0],
             row.control_sample_bam,
             "${row.control_sample_bam}.bai"
             )
@@ -185,7 +184,8 @@ workflow{
     filter_RawsSV_Delly(
         query_sample_name_Bcftools.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
-        call_sSV_Delly.out.nt_call_bcf_csi
+        call_sSV_Delly.out.nt_call_bcf_csi,
+        call_sSV_Delly.out.tumor_sample_name
         )
 
     /**
