@@ -1,4 +1,4 @@
-# Call Somatic Structural Variant Pipeline
+# Call-sSV Pipeline
 
 * [Overview](#Overview)
 * [How To Run](#How-To-Run)
