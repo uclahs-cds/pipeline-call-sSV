@@ -12,7 +12,7 @@
     * [Performance Validation](#performance-validation)
     * [Validation Tool](#validation-tool)
 * [References](#references)
-
+* [License] (#license)
 
 ## Overview:
 The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
@@ -118,3 +118,17 @@ https://github.com/uclahs-cds/public-tool-PipeVal
 ## References
 
 * [Delly Structural Variant Calling](https://github.com/dellytools/delly)
+
+## License
+
+Authors: Yu Pan (YuPan@mednet.ucla.edu), Ghouse Mohammed (GMohammed@mednet.ucla.edu)
+
+Call-sSV is licensed under the GNU General Public License version 2. See the file LICENSE for the terms of the GNU GPL license.
+
+Call-sSV takes BAM files and utilizes Delly to call somatic structural variants.
+
+Copyright (C) 2021 University of California Los Angeles ("Boutros Lab") All rights reserved.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
