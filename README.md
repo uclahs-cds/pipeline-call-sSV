@@ -12,7 +12,7 @@
     * [Performance Validation](#performance-validation)
     * [Validation Tool](#validation-tool)
 * [References](#references)
-* [License] (#license)
+* [License](#license)
 
 ## Overview:
 The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
