@@ -37,14 +37,21 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 ```script
 delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam
 ```
-The first step requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
+This step requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
 
+#### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
+```script
+echo -e "tumor\ncontrol" > samples_type
+bcftools query -l t1.bcf > samples_name
+paste samples_name samples_type > samples.tsv
+```
+Make sure that tumor1.bam in front of control1.bam in step 1 so that in the generated t1.bcf tumor sample in front of control sample.
 
-#### 2. Somatic Filtering
+#### 3. Somatic Filtering
 ```script
 delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
 ```
-The second step applies somatic filtering against the .bcf file generated in Step 1.
+This step applies somatic filtering against the .bcf file generated in Step 1.
 
 
 ## Inputs
