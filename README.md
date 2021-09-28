@@ -53,6 +53,8 @@ delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
 ```
 This step applies somatic filtering against the .bcf file generated in Step 1.
 
+Note, the cohort based false positive filtering was implemented. However, it turned out this is computationally infeasible. After discussing this with Taka, we decide to drop it. 
+
 
 ## Inputs
 
