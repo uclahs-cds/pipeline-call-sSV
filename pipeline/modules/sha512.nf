@@ -13,19 +13,19 @@ Docker Images:
 process generate_sha512 {
     container docker_image_sha512
 
-    publishDir params.output_dir,
+    publishDir "$params.output_dir",
         enabled: params.save_intermediate_files,
         pattern: "*.vcf.sha512",
         mode: "copy",
-        saveAs: { "bcftools-${params.bcftools_version}/${file(it).getName()}" }
+        saveAs: { "bcftools-${params.bcftools_version}/output/${file(it).getName()}" }
 
-    publishDir params.output_dir,
+    publishDir "$params.output_dir",
         enabled: params.save_intermediate_files,
         pattern: "*.bcf.sha512",
         mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
+        saveAs: { "delly-${params.delly_version}/output/${file(it).getName()}" }
 
-    publishDir params.output_log_dir,
+    publishDir "$params.output_log_dir/process-log",
         enabled: params.save_intermediate_files,
         pattern: ".command.*",
         mode: "copy",

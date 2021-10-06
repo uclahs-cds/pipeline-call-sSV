@@ -13,13 +13,13 @@ Docker Images:
 process query_sample_name_Bcftools {
     container docker_image_bcftools
 
-    publishDir params.output_dir,
+    publishDir "$params.output_dir",
         enabled: params.save_intermediate_files,
         pattern: "${tmp_samples}.tsv",
         mode: "copy",
-        saveAs: { "bcftools-${params.bcftools_version}/${file(it).getName()}" }
+        saveAs: { "bcftools-${params.bcftools_version}/output/${file(it).getName()}" }
 
-    publishDir params.output_log_dir,
+    publishDir "$params.output_log_dir/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "query_sample_name_Bcftools/log${file(it).getName()}" }

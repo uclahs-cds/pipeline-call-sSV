@@ -13,13 +13,13 @@ Docker Images:
 process call_sSV_Delly{
     container docker_image_delly
 
-    publishDir params.output_dir,
+    publishDir "$params.output_dir",
         enabled: params.save_intermediate_files,
         pattern: "*.bcf*",
         mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
+        saveAs: { "delly-${params.delly_version}/output/${file(it).getName()}" }
 
-    publishDir params.output_log_dir,
+    publishDir "$params.output_log_dir/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "call_sSV_Delly/log${file(it).getName()}" }
@@ -38,6 +38,8 @@ process call_sSV_Delly{
         val tumor_sample_name, emit: tumor_sample_name
 
     script:
+        output_dir = params.output_dir.replace("--SAMPLE--","${tumor_sample_name}")
+        output_log_dir = params.output_log_dir.replace("--SAMPLE--","${tumor_sample_name}")
         """
         set -euo pipefail
         delly call \
@@ -54,12 +56,12 @@ process call_sSV_Delly{
 process filter_sSV_Delly{
     container docker_image_delly
 
-    publishDir params.output_dir,
+    publishDir "$params.output_dir",
         pattern: "filtered_somatic_${tumor_sample_name}.bcf*",
         mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
+        saveAs: { "delly-${params.delly_version}/output/${file(it).getName()}" }
 
-    publishDir params.output_log_dir,
+    publishDir "$params.output_log_dir/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "filter_sSV_Delly/log${file(it).getName()}" }
