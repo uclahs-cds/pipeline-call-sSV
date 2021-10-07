@@ -1,35 +1,24 @@
 #!/usr/bin/env nextflow
 
-def docker_image_sha512 = "blcdsdockerregistry/validate:${params.validate_version}"
-
 log.info """\
 ------------------------------------
           S H A - 5 1 2
 ------------------------------------
 Docker Images:
-- docker_image_sha512:   ${docker_image_sha512}
+- docker_image_validate:   ${params.docker_image_validate}
 """
 
 process generate_sha512 {
-    container docker_image_sha512
+    container params.docker_image_validate
 
-    publishDir "$params.output_dir",
-        enabled: params.save_intermediate_files,
-        pattern: "*.vcf.sha512",
-        mode: "copy",
-        saveAs: { "bcftools-${params.bcftools_version}/output/${file(it).getName()}" }
-
-    publishDir "$params.output_dir",
-        enabled: params.save_intermediate_files,
+    publishDir "$params.output_dir/output",
         pattern: "*.bcf.sha512",
-        mode: "copy",
-        saveAs: { "delly-${params.delly_version}/output/${file(it).getName()}" }
+        mode: "copy"
 
-    publishDir "$params.output_log_dir/process-log",
-        enabled: params.save_intermediate_files,
+    publishDir "$params.log_output_dir/process-log",
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "generate_sha512/log${file(it).getName()}" }
+        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
 
     input:
         path input_checksum_file

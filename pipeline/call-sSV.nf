@@ -23,7 +23,7 @@ Current Configuration:
 
 - output:
     output_dir: "${params.output_dir}"
-    output_log_dir: "${params.output_log_dir}"
+    log_output_dir: "${params.log_output_dir}"
     temp_dir: "${params.temp_dir}"
 
 - options:
