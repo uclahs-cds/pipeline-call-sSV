@@ -11,8 +11,16 @@ Docker Images:
 process validate_file {
     container params.docker_image_validate
 
+    publishDir path: "${params.log_output_dir}/process-log",
+        pattern: ".command.*",
+        mode: "copy",
+        saveAs: { "${task.process}/${task.process}-${task.index}/log${file(it).getName()}" }
+
     input:
         path(file_to_validate)
+
+    output:
+        path ".command.*"
 
     script:
         """
