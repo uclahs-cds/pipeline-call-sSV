@@ -8,7 +8,7 @@ Docker Images:
 - docker_image_validate: ${params.docker_image_validate}
 """
 
-process validate_file {
+process run_validate_PipeVal {
     container params.docker_image_validate
 
     publishDir path: "${params.log_output_dir}/process-log",
@@ -21,10 +21,11 @@ process validate_file {
 
     output:
         path ".command.*"
+        path "input_validation.txt", emit: val_file
 
     script:
         """
         set -euo pipefail
-        python -m validate -t file-input ${file_to_validate}
+        python -m validate -t file-input ${file_to_validate} > 'input_validation.txt'
         """
     }

@@ -38,7 +38,7 @@ Starting workflow...
 """
 .stripIndent()
 
-include { validate_file } from './modules/validation'
+include { run_validate_PipeVal } from './modules/validation'
 include { query_sample_name_Bcftools } from './modules/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
@@ -74,9 +74,9 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 */
 
 /**
-* Create validation_channel to validate the input bams
+* Create input_validation to validate the input bams
 */
-validation_channel = Channel
+input_validation = Channel
     .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
     .map{
@@ -88,7 +88,7 @@ validation_channel = Channel
     .flatten()
 
 if (params.verbose){
-    validation_channel.view()
+    input_validation.view()
 }
 
 /**
@@ -135,7 +135,12 @@ workflow{
     /**
     * Validate the input bams
     */
-    validate_file(validation_channel)
+    run_validate_PipeVal(input_validation)
+    // Collect and store input validation output
+    run_validate_PipeVal.out.val_file.collectFile(
+      name: 'input_validation.txt',
+      storeDir: "${params.output_dir}/validation"
+      )
 
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam" per paired (tumor sample, control sample)
