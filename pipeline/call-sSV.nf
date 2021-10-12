@@ -40,7 +40,7 @@ Starting workflow...
 
 include { run_validate_PipeVal } from './modules/validation'
 include { query_SampleName_BCFtools } from './modules/bcftools'
-include { call_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly } from './modules/delly'
+include { call_sSV_Delly; filter_sSV_Delly } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
 
 /**
@@ -186,7 +186,7 @@ workflow{
     * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf"
     * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
     */
-    filter_RawsSV_Delly(
+    filter_sSV_Delly(
         query_sample_name_Bcftools.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.nt_call_bcf_csi,
@@ -196,5 +196,5 @@ workflow{
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(call_sSV_Delly.out.nt_call_bcf_csi, filter_RawsSV_Delly.out.filtered_somatic_bcf, filter_RawsSV_Delly.out.filtered_somatic_bcf_csi))
+    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(call_sSV_Delly.out.nt_call_bcf_csi, filter_sSV_Delly.out.filtered_somatic_bcf, filter_sSV_Delly.out.filtered_somatic_bcf_csi))
     }
