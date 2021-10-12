@@ -39,7 +39,7 @@ Starting workflow...
 .stripIndent()
 
 include { run_validate_PipeVal } from './modules/validation'
-include { query_sample_name_Bcftools } from './modules/bcftools'
+include { query_SampleName_BCFtools } from './modules/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
 
@@ -177,7 +177,7 @@ workflow{
     * S2_v1.1.5 
     * HG002.N
     */
-    query_sample_name_Bcftools(
+    query_SampleName_BCFtools(
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.samples
     )
