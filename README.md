@@ -20,10 +20,10 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 ## How to Run:
 
-1.	Make sure the pipeline is already downloaded to your machine. You can either download the stable release or the dev version by cloning the repo.
-2.	Update the nextflow.config file for input, output, and parameters. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-dev/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
-3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-dev/pipeline/input/tumor_control_pair_0.csv).
-4.	See the submission script, [here](https://github.com/uclahs-cds/tool-submit-nf), to submit your pipeline
+1.	Check if the pipeline and the desired version is in /hot/pipeline/release.
+2.	Create an instance of the template nextflow.config file. Give the nextflow.config instance with an easy-to-understand name. Modify the nextflow.config instance as needed(the input, the output, and the parameters). Later, you might need to check in the nextflow.config instance. An example can be found [Here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
+3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [Here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
+4.	See the submission script, [Here](https://github.com/uclahs-cds/tool-submit-nf), to submit your pipeline
 
 ## Flow Diagram:
 
@@ -35,9 +35,9 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 #### 1. Calling Single Sample Somatic Structural Variants
 ```script
-delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam
+delly call --genome hg19.fa --exclude hg19.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
-This step requires an aligned and sorted tumor sample .bam file and a matched control sample as an input for variant calling with Delly.
+This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
 ```script
@@ -45,7 +45,6 @@ echo -e "tumor\ncontrol" > samples_type
 bcftools query -l t1.bcf > samples_name
 paste samples_name samples_type > samples.tsv
 ```
-Make sure that tumor1.bam in front of control1.bam in step 1 so that in the generated t1.bcf tumor sample in front of control sample.
 
 #### 3. Somatic Filtering
 ```script
@@ -53,14 +52,14 @@ delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
 ```
 This step applies somatic filtering against the .bcf file generated in Step 1.
 
-Note, the cohort based false positive filtering was implemented. However, it turned out this is computationally infeasible. After discussing this with Taka, we decide to drop it. 
+Note: cohort based false positive filtering is compuationally heavy and not implemented in this pipeline.
 
 
 ## Inputs
 
 ### Input CSV
 
-The input CSV should have all columns below and in the same order. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/a04ad31a309a4db746d726ee8ab40b2389b9a98f/pipeline/input/paired_turmor_control_samples.csv).
+The input CSV should have each of the input fields listed below as separate columns, using the same order. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
 
 | Field |	Type |	Description |
 |--- | --- | --- |
@@ -76,6 +75,9 @@ The input CSV should have all columns below and in the same order. An example of
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
 | exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
+| map_qual | yes | integer | Min. paired-end (PE) mapping quality |
+| min_clique_size | yes | integer | Min. PE/SR clique size |
+| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | temp_dir	| yes	| path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
@@ -99,8 +101,8 @@ The input CSV should have all columns below and in the same order. An example of
 | Data Set | Run Configuration | Output Dir | Control Sample | Tumor Sample |  
 | ------ | ------ | ------- | ------ | ------- |
 | A-mini | /hot/pipelines/development/slurm/call-sSV/config/nextflow_amini.config | /hot/pipelines/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 | /hot/resources/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resources/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
-| A-full | /hot/pipelines/development/slurm/call-sSV/config/nextflow_afull.config | /hot/pipelines/development/slurm/call-sSV/output_rupert_WGS_real_sample/call-sSV-20210920-153803/ | /hot/resources/SMC-HET/normal/bams/HG002.N.bam | /hot/pipelines/development/slurm/call-sSV/input/T5.T.sorted_py.bam |
-| Rupert_WGS_real_sample | /hot/pipelines/development/slurm/call-sSV/config/nextflow_rupert_WGS_real_sample.config | /hot/pipelines/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam | 
+| A-full | /hot/pipelines/development/slurm/call-sSV/config/nextflow_afull.config | /hot/pipelines/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 | /hot/resources/SMC-HET/normal/bams/HG002.N.bam | /hot/pipelines/development/slurm/call-sSV/input/T5.T.sorted_py.bam |
+| ILHNLNEV000005-T002-L01-F | /hot/users/rhughwhite/ILHNLNEV/call-sSV/inputs_configs/2021-09-10/ILHNLNEV000005-T002-L01-F/nextflow.config | /hot/users/rhughwhite/ILHNLNEV/call-sSV/output/ILHNLNEV000005-T002-L01-F_testing/call-sSV-20210930-180357 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F//gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-T002-L01-F_realigned_recalibrated_reheadered.bam | 
 
 
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
@@ -117,16 +119,14 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 |----- | -------| --------| ----------| ---------| --------|
 |A-mini	| 2021-09-20 |	F2 |	16m 24s	| 16m 1s	| 1.7 GB |
 |A-full	| 2021-09-20 |	F72 |	19h 54m 5s | 19h 53m 56s | 15.1 GB |
-|Rupert_WGS_real_sample	| 2021-09-20 |	F72 |	22h 30m 16s | 22h 30m 6s | 4.5 GB |
+|ILHNLNEV000005-T002-L01-F (with default filters) | 2021-09-20 | F72 | 6d 22h 10m 42s | 11'797.8h | 11.733 GB |
+|ILHNLNEV000005-T002-L01-F (with stringent filters. See #10 2f72de1) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
 
-## Validation Tool
-
-Included is a template for validating your input files. For more information on the tool checkout:
-https://github.com/uclahs-cds/public-tool-PipeVal
 
 ## References
 
 * [Delly Structural Variant Calling](https://github.com/dellytools/delly)
+
 
 ## License
 
