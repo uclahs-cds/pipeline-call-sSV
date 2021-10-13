@@ -69,8 +69,8 @@ The input CSV should have each of the input fields listed below as separate colu
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
-| dataset_id |	yes	| string |	Boutros lab dataset id |
-| blcds_registered_dataset	| yes |	Boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
+| dataset_id |	yes	| string |	Boutros Lab dataset id |
+| blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
 | sge_scheduler	| yes	| boolean	| Affirms whether job will be executed on the SGE cluster. Default value is false. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
@@ -81,7 +81,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | temp_dir	| yes	| path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
-| verbose |	false |	Boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
+| verbose |	false |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
 
 ## Outputs
 
