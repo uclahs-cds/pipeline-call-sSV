@@ -69,7 +69,7 @@ The input CSV should have each of the input fields listed below as separate colu
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
-| dataset_id |	yes	| string |	Boutros lab dataset id |
+| dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	Boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
 | sge_scheduler	| yes	| boolean	| Affirms whether job will be executed on the SGE cluster. Default value is false. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
