@@ -27,7 +27,7 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 ## Flow Diagram:
 
-![](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-documentation/call-sSV-workflow.svg)
+![](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/call-sSV-workflow.svg)
 
 ## Pipeline Steps:
 
