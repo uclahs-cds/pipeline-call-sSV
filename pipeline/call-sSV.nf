@@ -187,7 +187,7 @@ workflow{
     * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
     */
     filter_sSV_Delly(
-        query_sample_name_Bcftools.out.samples,
+        query_SampleName_BCFtools.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.nt_call_bcf_csi,
         call_sSV_Delly.out.tumor_sample_name

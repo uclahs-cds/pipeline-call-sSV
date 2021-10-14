@@ -39,6 +39,9 @@ process call_sSV_Delly{
         delly call \
             --genome "$reference_fasta" \
             --exclude "$exclusion_file" \
+            --map-qual "${params.map_qual}" \
+            --min-clique-size "${params.min_clique_size}" \
+            --mad-cutoff "${params.mad_cutoff}" \
             --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}.bcf" \
             "$tumor_sample_bam" \
             "$control_sample_bam"

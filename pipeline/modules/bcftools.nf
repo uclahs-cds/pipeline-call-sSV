@@ -8,7 +8,7 @@ Docker Images:
 - docker_image_bcftools: ${params.docker_image_bcftools}
 """
 
-process query_sample_name_Bcftools {
+process query_SampleName_BCFtools {
     container params.docker_image_bcftools
 
     publishDir "${params.output_dir}/intermediate/${task.process.replace(':', '/')}",
