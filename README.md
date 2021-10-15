@@ -35,7 +35,7 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 #### 1. Calling Single Sample Somatic Structural Variants
 ```script
-delly call --genome hg19.fa --exclude hg19.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
+delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
 This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
 
