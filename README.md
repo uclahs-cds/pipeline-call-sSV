@@ -16,7 +16,7 @@
 
 ## Overview:
 The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
-This pipeline is developed using Nextflow , docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE).
+This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE).
 
 ## How to Run:
 
@@ -38,6 +38,7 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
 This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
+The stringent filters (--map-qual 20 --min-clique-size 5 --mad-cutoff 15) are added, which can drastically reduce the runtime, especially when the input bams are big.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
 ```script
