@@ -1,28 +1,24 @@
 #!/usr/bin/env nextflow
 
-def docker_image_delly = "blcdsdockerregistry/delly:${params.delly_version}"
-
 log.info """\
 ------------------------------------
              D E L L Y
 ------------------------------------
 Docker Images:
-- docker_image_delly:   ${docker_image_delly}
+- docker_image_delly: ${params.docker_image_delly}
 """
 
 process call_sSV_Delly{
-    container docker_image_delly
+    container params.docker_image_delly
 
-    publishDir params.output_dir,
-        enabled: params.save_intermediate_files,
-        pattern: "*.bcf*",
-        mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
+    publishDir "$params.output_dir/output",
+        pattern: "DELLY-*.bcf*",
+        mode: "copy"
 
-    publishDir params.output_log_dir,
+    publishDir "$params.log_output_dir/process-log",
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "call_sSV_Delly/log${file(it).getName()}" }
+        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
 
     input:
         tuple(val(tumor_sample_name), path(tumor_sample_bam), path(tumor_sample_bai), path(control_sample_bam), path(control_sample_bai))
@@ -55,17 +51,16 @@ process call_sSV_Delly{
     }
 
 process filter_sSV_Delly{
-    container docker_image_delly
+    container params.docker_image_delly
 
-    publishDir params.output_dir,
+    publishDir "$params.output_dir/output",
         pattern: "filtered_somatic_${tumor_sample_name}.bcf*",
-        mode: "copy",
-        saveAs: { "delly-${params.delly_version}/${file(it).getName()}" }
+        mode: "copy"
 
-    publishDir params.output_log_dir,
+    publishDir "$params.log_output_dir/process-log",
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "filter_sSV_Delly/log${file(it).getName()}" }
+        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
 
     input:
         path samples

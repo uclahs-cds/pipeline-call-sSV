@@ -23,7 +23,7 @@ Current Configuration:
 
 - output:
     output_dir: "${params.output_dir}"
-    output_log_dir: "${params.output_log_dir}"
+    log_output_dir: "${params.log_output_dir}"
     temp_dir: "${params.temp_dir}"
 
 - options:
@@ -38,9 +38,9 @@ Starting workflow...
 """
 .stripIndent()
 
-include { validate_file } from './modules/validation'
-include { query_sample_name_Bcftools } from './modules/bcftools'
-include { call_sSV_Delly; filter_sSV_Delly as filter_RawsSV_Delly } from './modules/delly'
+include { run_validate_PipeVal } from './modules/validation'
+include { query_SampleName_BCFtools } from './modules/bcftools'
+include { call_sSV_Delly; filter_sSV_Delly } from './modules/delly'
 include { generate_sha512 } from './modules/sha512'
 
 /**
@@ -74,9 +74,9 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 */
 
 /**
-* Create validation_channel to validate the input bams
+* Create input_validation to validate the input bams
 */
-validation_channel = Channel
+input_validation = Channel
     .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
     .map{
@@ -88,7 +88,7 @@ validation_channel = Channel
     .flatten()
 
 if (params.verbose){
-    validation_channel.view()
+    input_validation.view()
 }
 
 /**
@@ -135,7 +135,12 @@ workflow{
     /**
     * Validate the input bams
     */
-    validate_file(validation_channel)
+    run_validate_PipeVal(input_validation)
+    // Collect and store input validation output
+    run_validate_PipeVal.out.val_file.collectFile(
+      name: 'input_validation.txt',
+      storeDir: "${params.output_dir}/validation"
+      )
 
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam control1.bam" per paired (tumor sample, control sample)
@@ -172,7 +177,7 @@ workflow{
     * S2_v1.1.5 
     * HG002.N
     */
-    query_sample_name_Bcftools(
+    query_SampleName_BCFtools(
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.samples
     )
@@ -181,8 +186,8 @@ workflow{
     * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf"
     * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
     */
-    filter_RawsSV_Delly(
-        query_sample_name_Bcftools.out.samples,
+    filter_sSV_Delly(
+        query_SampleName_BCFtools.out.samples,
         call_sSV_Delly.out.nt_call_bcf,
         call_sSV_Delly.out.nt_call_bcf_csi,
         call_sSV_Delly.out.tumor_sample_name
@@ -191,5 +196,5 @@ workflow{
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(call_sSV_Delly.out.nt_call_bcf_csi, filter_RawsSV_Delly.out.filtered_somatic_bcf, filter_RawsSV_Delly.out.filtered_somatic_bcf_csi))
+    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(call_sSV_Delly.out.nt_call_bcf_csi, filter_sSV_Delly.out.filtered_somatic_bcf, filter_sSV_Delly.out.filtered_somatic_bcf_csi))
     }

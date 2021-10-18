@@ -16,7 +16,7 @@
 
 ## Overview:
 The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
-This pipeline is developed using Nextflow , docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE).
+This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE).
 
 ## How to Run:
 
@@ -35,9 +35,10 @@ This pipeline is developed using Nextflow , docker and can run either on a singl
 
 #### 1. Calling Single Sample Somatic Structural Variants
 ```script
-delly call --genome hg19.fa --exclude hg19.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
+delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
 This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
+The stringent filters (--map-qual 20 --min-clique-size 5 --mad-cutoff 15) are added, which can drastically reduce the runtime, especially when the input bams are big.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
 ```script
@@ -89,7 +90,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | ---- | ----- | -------- |
 | .bcf |	final	| Binary VCF output format with somatic structural variants if found. |
 | .bcf.csi	| final	| CSI-format index for BCF files |
-| report.html, timeline.html and trace.txt	| Log |	A Nextflow report, timeline and trace files. |
+| report.html, timeline.html and trace.txt	| log |	A Nextflow report, timeline and trace files. |
 | \*.log.command.*	| log |	Process and sample specific logging files created by nextflow. |
 | *.sha512 |	checksum |	Generates SHA-512 hash to validate file integrity. |
 
@@ -102,6 +103,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | ------ | ------ | ------- | ------ | ------- |
 | A-mini | /hot/pipelines/development/slurm/call-sSV/config/nextflow_amini.config | /hot/pipelines/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 | /hot/resources/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resources/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
 | A-full | /hot/pipelines/development/slurm/call-sSV/config/nextflow_afull.config | /hot/pipelines/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 | /hot/resources/SMC-HET/normal/bams/HG002.N.bam | /hot/pipelines/development/slurm/call-sSV/input/T5.T.sorted_py.bam |
+| ILHNLNEV000001-T001-P01-F | /hot/pipelines/development/slurm/call-sSV/config/nextflow_ILHNLNEV000001-T001-P01-F.config | /hot/pipelines/development/slurm/call-sSV/output_ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered/call-sSV-1.0.0 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam |
 | ILHNLNEV000005-T002-L01-F | /hot/users/rhughwhite/ILHNLNEV/call-sSV/inputs_configs/2021-09-10/ILHNLNEV000005-T002-L01-F/nextflow.config | /hot/users/rhughwhite/ILHNLNEV/call-sSV/output/ILHNLNEV000005-T002-L01-F_testing/call-sSV-20210930-180357 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F//gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-T002-L01-F_realigned_recalibrated_reheadered.bam | 
 
 
@@ -117,8 +119,11 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 
 |Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
 |----- | -------| --------| ----------| ---------| --------|
-|A-mini	| 2021-09-20 |	F2 |	16m 24s	| 16m 1s	| 1.7 GB |
-|A-full	| 2021-09-20 |	F72 |	19h 54m 5s | 19h 53m 56s | 15.1 GB |
+|A-mini(with default filters) | 2021-09-20 | F2 | 16m 24s | 16m 1s	| 1.7 GB |
+|A-mini(with stringent filters)	| 2021-10-14 | F2 | 15m 13s | 15m	| 1.7 GB |
+|A-full(with default filters) | 2021-09-20 | F72 | 19h 54m 5s | 19h 53m 56s | 15.1 GB |
+|ILHNLNEV000001-T001-P01-F (with default filters) | 2021-09-20 | F72 | 22h 30m 16s | 22h 30m 6s | 4.5 GB |
+|ILHNLNEV000001-T001-P01-F (with stringent filters)	| 2021-10-14 |	F32 | 8h 37m 34s | 8h 37m 29s | 4.4 GB |
 |ILHNLNEV000005-T002-L01-F (with default filters) | 2021-09-20 | F72 | 6d 22h 10m 42s | 11'797.8h | 11.733 GB |
 |ILHNLNEV000005-T002-L01-F (with stringent filters. See #10 2f72de1) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
 
