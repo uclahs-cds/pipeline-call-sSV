@@ -6,6 +6,6 @@ Contributors: ["Yu Pan", "Ghouse Mohammed"]
 Languages: ["Nextflow", "Docker"]
 Dependencies: ["Java", "Nextflow", "Docker"]
 References: "https://uclahs.box.com/s/qfzr99sc8ntmfddn30ii62wx4273utoz"
-Tools: ["delly:v0.8.7"]
+Tools: ["Delly:v0.8.7", "BCFtools:v1.12", "Validate-nf:v2.1.5"]
 Engineering_Owner: ["Yu Pan"]
 Scientific_Owner: ["Takafumi Yamaguchi"]
