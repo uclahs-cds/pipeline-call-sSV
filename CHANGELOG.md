@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [1.0.0-rc1] - 2020-10-18
+## [1.0.0] - 2020-10-29
 ### Added
 - Use Delly to call the SV of one tumor sample and a matched control sample, further filter the somatic SV.
 - Added option to specify map_qual, min_clique_size, and mad_cutoff Delly filters to reduce the runtime.
