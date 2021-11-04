@@ -4,7 +4,6 @@
 * [How To Run](#How-To-Run)
 * [Flow Diagram](#flow-diagram)
 * [Pipeline Steps](#pipeline-steps)
-    1. [Calling Somatic Structural Variants](#call-somatic-structural-variants)
 * [Inputs](#Inputs)
 * [Outputs](#outputs)
 * [Testing and Validation](#testing-and-validation)
