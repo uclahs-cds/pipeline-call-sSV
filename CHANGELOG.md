@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [1.1.0] - 2021-12-09
+## [1.0.1] - 2021-12-09
 ### Changed
 - Change Delly version from 0.8.7 to 0.9.1 in nextflow.config and metadata.yaml
 
