@@ -30,6 +30,6 @@ process generate_sha512 {
     script:
         """
         set -euo pipefail
-        python -m validate -t sha512-gen $input_checksum_file > ${input_checksum_file}.sha512
+        sha512sum $input_checksum_file > ${input_checksum_file}.sha512
         """
     }
