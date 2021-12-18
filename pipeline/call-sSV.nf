@@ -39,9 +39,9 @@ Starting workflow...
 .stripIndent()
 
 include { run_validate_PipeVal } from './modules/validation'
-include { query_SampleName_BCFtools } from './modules/bcftools'
+include { query_SampleName_BCFtools; filter_NonPassCalls_BCFtools } from './modules/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly } from './modules/delly'
-include { generate_sha512 } from './modules/sha512'
+include { generate_sha512; generate_sha512 as generate_sha512_NonPassFiltering } from './modules/sha512'
 
 /**
 * Check the params
@@ -89,7 +89,7 @@ input_validation = Channel
 
 if (params.verbose){
     input_validation.view()
-}
+    }
 
 /**
 * Create input_paired_bams_ch to get the paired turmor sample and control sample
@@ -109,7 +109,7 @@ input_paired_bams_ch = Channel
 
 if (params.verbose){
     input_paired_bams_ch.view()
-}
+    }
 
 /**
 * Create tumor_bams_ch to only get the turmor samples.
@@ -129,7 +129,7 @@ tumor_bams_ch = Channel
 
 if (params.verbose){
     tumor_bams_ch.view()
-}
+    }
 
 workflow{
     /**
@@ -196,5 +196,18 @@ workflow{
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(call_sSV_Delly.out.nt_call_bcf_csi, filter_sSV_Delly.out.filtered_somatic_bcf, filter_sSV_Delly.out.filtered_somatic_bcf_csi))
+    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(
+            call_sSV_Delly.out.nt_call_bcf_csi, 
+            filter_sSV_Delly.out.somatic_bcf, 
+            filter_sSV_Delly.out.somatic_bcf_csi))
+
+    /**
+    * Call "bcftools view -i 'FILTER=="PASS"' -O b -o "non_pass_filtered_${input_bcf}" $input_bcf"
+    * to filter out NonPass calls
+    * and further generate sha512 for the output
+    */
+    if (params.non_pass_filtering) {
+        filter_NonPassCalls_BCFtools(filter_sSV_Delly.out.somatic_bcf)
+        generate_sha512_NonPassFiltering(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered.mix(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered_csi))
+        }
     }
