@@ -54,7 +54,7 @@ process filter_sSV_Delly{
     container params.docker_image_delly
 
     publishDir "$params.output_dir/output",
-        pattern: "${filename_base}_somatic.bcf*",
+        pattern: "filtered_somatic_${tumor_sample_name}.bcf*",
         mode: "copy"
 
     publishDir "$params.log_output_dir/process-log",
@@ -69,14 +69,13 @@ process filter_sSV_Delly{
         val tumor_sample_name
 
     output:
-        path "${filename_base}_somatic.bcf", emit: somatic_bcf
-        path "${filename_base}_somatic.bcf.csi", emit: somatic_bcf_csi
+        path "filtered_somatic_${tumor_sample_name}.bcf", emit: filtered_somatic_bcf
+        path "filtered_somatic_${tumor_sample_name}.bcf.csi", emit: filtered_somatic_bcf_csi
         path ".command.*"
  
     script:
-        filename_base = file(input_bcf).baseName
         """
         set -euo pipefail
-        delly filter -f somatic -s ${samples} -o ${filename_base}_somatic.bcf "$input_bcf"
+        delly filter -f somatic -s ${samples} -o filtered_somatic_${tumor_sample_name}.bcf "$input_bcf"
         """
     }
