@@ -41,7 +41,7 @@ Starting workflow...
 include { run_validate_PipeVal } from './modules/validation'
 include { query_SampleName_BCFtools; filter_NonPassCalls_BCFtools } from './modules/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly } from './modules/delly'
-include { generate_sha512; generate_sha512 as generate_sha512_NonPassFiltering } from './modules/sha512'
+include { generate_sha512_NonPassFiltering; generate_sha512_intermediate } from './modules/sha512'
 
 /**
 * Check the params
@@ -196,7 +196,7 @@ workflow{
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512(call_sSV_Delly.out.nt_call_bcf.mix(
+    generate_sha512_intermediate(call_sSV_Delly.out.nt_call_bcf.mix(
             call_sSV_Delly.out.nt_call_bcf_csi, 
             filter_sSV_Delly.out.somatic_bcf, 
             filter_sSV_Delly.out.somatic_bcf_csi))
@@ -206,8 +206,6 @@ workflow{
     * to filter out NonPass calls
     * and further generate sha512 for the output
     */
-    if (params.non_pass_filtering) {
-        filter_NonPassCalls_BCFtools(filter_sSV_Delly.out.somatic_bcf)
-        generate_sha512_NonPassFiltering(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered.mix(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered_csi))
-        }
+    filter_NonPassCalls_BCFtools(filter_sSV_Delly.out.somatic_bcf)
+    generate_sha512_NonPassFiltering(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered.mix(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered_csi)) 
     }

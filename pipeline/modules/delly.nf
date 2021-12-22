@@ -11,7 +11,8 @@ Docker Images:
 process call_sSV_Delly{
     container params.docker_image_delly
 
-    publishDir "$params.output_dir/output",
+    publishDir "${params.output_dir}/intermediate/${task.process.replace(':', '/')}",
+        enabled: params.save_intermediate_files,
         pattern: "DELLY-*.bcf*",
         mode: "copy"
 
