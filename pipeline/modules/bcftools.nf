@@ -41,7 +41,7 @@ process query_SampleName_BCFtools {
         """
     }
 
-process filter_NonPassCalls_BCFtools {
+process filter_BCF_BCFtools {
     container params.docker_image_bcftools
 
     publishDir "${params.output_dir}/output",

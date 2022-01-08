@@ -8,7 +8,7 @@ Docker Images:
 - docker_image_validate:   ${params.docker_image_validate}
 """
 
-process generate_sha512_NonPassFiltering {
+process generate_sha512 {
     container params.docker_image_validate
 
     publishDir "$params.output_dir/output",

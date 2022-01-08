@@ -39,9 +39,9 @@ Starting workflow...
 .stripIndent()
 
 include { run_validate_PipeVal } from './modules/validation'
-include { query_SampleName_BCFtools; filter_NonPassCalls_BCFtools } from './modules/bcftools'
+include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './modules/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly } from './modules/delly'
-include { generate_sha512_NonPassFiltering } from './modules/sha512'
+include { generate_sha512 } from './modules/sha512'
 
 /**
 * Check the params
@@ -198,11 +198,11 @@ workflow{
     * to filter out NonPass calls
     * and further generate sha512 for the output
     */
-    filter_NonPassCalls_BCFtools(filter_sSV_Delly.out.somatic_bcf)
+    filter_BCF_BCFtools(filter_sSV_Delly.out.somatic_bcf)
 
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512_NonPassFiltering(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered.mix(filter_NonPassCalls_BCFtools.out.nonPassCallsFiltered_csi))
+    generate_sha512(filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(filter_BCF_BCFtools.out.nonPassCallsFiltered_csi))
 
     }
