@@ -55,6 +55,7 @@ process filter_BCF_BCFtools {
 
     input:
         path input_bcf
+        val filter_condition
 
     output:
         path ".command.*"
@@ -66,7 +67,7 @@ process filter_BCF_BCFtools {
         """
         set -euo pipefail
 
-        bcftools view -i 'FILTER=="PASS"' -O b -o "${filename_base}_filtered.bcf" $input_bcf
+        bcftools view -i "$filter_condition" -O b -o "${filename_base}_filtered.bcf" $input_bcf
         
         bcftools index "${filename_base}_filtered.bcf"
         """

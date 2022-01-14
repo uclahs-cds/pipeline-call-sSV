@@ -20,6 +20,7 @@ Current Configuration:
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
     exclusion_file: "${params.exclusion_file}"
+    filter_condition_for_filter_BCF_BCFtools: "${params.filter_condition_for_filter_BCF_BCFtools}"
 
 - output:
     output_dir: "${params.output_dir}"
@@ -194,11 +195,10 @@ workflow{
         )
 
     /**
-    * Call "bcftools view -i 'FILTER=="PASS"' -O b -o "non_pass_filtered_${input_bcf}" $input_bcf"
-    * to filter out NonPass calls
-    * and further generate sha512 for the output
+    * Filter the output bcf from filter_sSV_Delly.
+    * The default filter_condition is "FILTER=='PASS'", which filters out NonPass calls.
     */
-    filter_BCF_BCFtools(filter_sSV_Delly.out.somatic_bcf)
+    filter_BCF_BCFtools(filter_sSV_Delly.out.somatic_bcf, params.filter_condition_for_filter_BCF_BCFtools)
 
     /**
     * Generate one sha512 checksum for the output files.
