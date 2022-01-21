@@ -1,6 +1,7 @@
 # System files
 *.log
 .DS_Store
+*.swp
 
 # R
 .Rhistory
@@ -28,6 +29,7 @@ venv
 work/
 .nextflow/
 *.nextflow.log*
+*.error
 
 ## Molecular files
 
