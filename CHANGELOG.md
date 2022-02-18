@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [2.0.0-rc.1] - 2022-01-14
+## [2.0.0] - 2022-02-17
 ### Added
 - Add the process "filter_BCF_BCFtools" to filter Non-Pass calls.
 
