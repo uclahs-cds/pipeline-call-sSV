@@ -40,3 +40,35 @@ process query_SampleName_BCFtools {
         paste ${tmp_samples} samples_type > "${tmp_samples}.tsv"
         """
     }
+
+process filter_BCF_BCFtools {
+    container params.docker_image_bcftools
+
+    publishDir "${params.output_dir}/output",
+        pattern: "${filename_base}_filtered.bcf*",
+        mode: "copy"
+
+    publishDir "${params.log_output_dir}/process-log",
+        pattern: ".command.*",
+        mode: "copy",
+        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
+
+    input:
+        path input_bcf
+        val filter_condition
+
+    output:
+        path ".command.*"
+        path "${filename_base}_filtered.bcf", emit: nonPassCallsFiltered
+        path "${filename_base}_filtered.bcf.csi", emit: nonPassCallsFiltered_csi
+
+    script:
+        filename_base = file(input_bcf).baseName
+        """
+        set -euo pipefail
+
+        bcftools view -i "$filter_condition" -O b -o "${filename_base}_filtered.bcf" $input_bcf
+        
+        bcftools index "${filename_base}_filtered.bcf"
+        """
+    }

@@ -24,12 +24,12 @@ Closes #...
 
 - DNA A-mini
 	- sample:    <!-- e.g. A-mini S2.T-0, HG002.N-0 -->
-	- input:     <!-- /hot/pipelines/development/slurm/call-sSV/input/tumor_control_pair_0.csv -->
-	- config:    <!-- /hot/pipelines/development/slurm/call-sSV/config/nextflow_amini.config -->
-	- output:    <!-- /hot/pipelines/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 --> 
+	- input:     <!-- /hot/pipeline/development/slurm/call-sSV/input/tumor_control_pair_0.csv -->
+	- config:    <!-- /hot/pipeline/development/slurm/call-sSV/config/nextflow_amini.config -->
+	- output:    <!-- /hot/pipeline/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 --> 
 
 - DNA A-full
 	- sample:    <!-- e.g. T5.T, HG002.N -->
-	- input:     <!-- /hot/pipelines/development/slurm/call-sSV/input/tumor_control_pair_afull.csv -->
-	- config:    <!-- /hot/pipelines/development/slurm/call-sSV/config/nextflow_afull.config -->
-	- output:    <!-- /hot/pipelines/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 --> 
+	- input:     <!-- /hot/pipeline/development/slurm/call-sSV/input/tumor_control_pair_afull.csv -->
+	- config:    <!-- /hot/pipeline/development/slurm/call-sSV/config/nextflow_afull.config -->
+	- output:    <!-- /hot/pipeline/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 --> 
