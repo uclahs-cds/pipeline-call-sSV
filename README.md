@@ -80,7 +80,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
-| temp_dir	| yes	| path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
+| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
 | verbose |	false |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
 
 ## Outputs
