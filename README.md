@@ -15,7 +15,7 @@
 
 ## Overview:
 The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
-This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC cluster (e.g. Slurm, SGE).
+This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC Slurm cluster.
 
 ## How to Run:
 
@@ -71,7 +71,6 @@ The input CSV should have each of the input fields listed below as separate colu
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
-| sge_scheduler	| yes	| boolean	| Affirms whether job will be executed on the SGE cluster. Default value is false. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
 | exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
@@ -80,7 +79,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
-| temp_dir	| yes	| path |	Absolute path to the directory where the nextflow’s intermediate files are saved. |
+| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
 | verbose |	false |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
 
 ## Outputs

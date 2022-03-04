@@ -10,8 +10,8 @@ assignees: ''
 **Describe the issue**
 A clear and concise description of what the issue is. Please include the following in your issue report along with any explicit errors observed
 * Pipeline release version
-* Cluster you are using (SGE/Slurm-Dev/Slurm-Test)
-* Node type (F2 / F72 / M64 )
+* Cluster you are using (Slurm-Dev/Slurm-Test)
+* Node type (F2 / F32 / F72 / M64 )
 * Submission method (interactive/submission script)
 * Actual submission script (python submission script, "nextflow run ...", etc.)
 * Sbatch or qsub command and logs if applicable

@@ -25,7 +25,6 @@ Current Configuration:
 - output:
     output_dir: "${params.output_dir}"
     log_output_dir: "${params.log_output_dir}"
-    temp_dir: "${params.temp_dir}"
 
 - options:
     save_intermediate_files: ${params.save_intermediate_files}
