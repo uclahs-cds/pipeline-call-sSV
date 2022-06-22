@@ -11,7 +11,7 @@
     - input csv: <!-- path/to/input.csv -->
     - config:    <!-- path/to/xxx.config -->
     - output:    <!-- path/to/output -->
-- DNA A-full
+- DNA full
     - sample:    <!-- e.g. A-mini S2.T-1, A-mini S2.T-n1 -->
     - input csv: <!-- path/to/input.csv -->
     - config:    <!-- path/to/xxx.config -->
