@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+### Changed
+- Change the memory allocation of process "query_SampleName_BCFtools" from 30Gb to 3Gb in F2.config
 
 ---
 
