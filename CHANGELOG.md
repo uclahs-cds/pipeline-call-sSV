@@ -9,7 +9,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Changed
-- Fix F2 detection in Line 111 of methods.config
+- Fix memory allocation for process 'query_SampleName_BCFtools' in F2.config - Discussion #28 and PR 
+- Fix F2 detection in methods.config - PR #32
 
 ---
 
