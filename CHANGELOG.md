@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+### Changed
+- Change Delly version from 0.9.1 to 1.0.3 in default.config
 ### Fixed
 - Fix memory allocation for process 'query_SampleName_BCFtools' in F2.config - Discussion #28 and PR #33
 - Fix F2 detection in methods.config - PR #32
