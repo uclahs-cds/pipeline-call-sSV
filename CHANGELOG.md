@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+### Added
+- Add F16.config to enable F16 node compatibility
 ### Changed
 - Change Delly version from 0.9.1 to 1.0.3 in default.config
 ### Fixed
