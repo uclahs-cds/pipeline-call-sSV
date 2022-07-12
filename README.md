@@ -82,7 +82,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
 | verbose |	yes |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
 
-An example of this NextFlow Input Parameters Config can be found [here] (https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/template.config).
+An example of this NextFlow Input Parameters Config can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/template.config).
 
 ## Outputs
 
