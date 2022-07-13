@@ -59,7 +59,7 @@ Note: cohort based false positive filtering is compuationally heavy and not impl
 
 ### Input CSV
 
-The input CSV should have each of the input fields listed below as separate columns, using the same order. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
+The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
 
 | Field |	Type |	Description |
 |--- | --- | --- |
@@ -80,7 +80,9 @@ The input CSV should have each of the input fields listed below as separate colu
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
-| verbose |	false |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
+| verbose |	yes |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
+
+An example of this NextFlow Input Parameters Config can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/template.config).
 
 ## Outputs
 
@@ -99,22 +101,39 @@ The input CSV should have each of the input fields listed below as separate colu
 
 | Data Set | Run Configuration | Output Dir | Control Sample | Tumor Sample |  
 | ------ | ------ | ------- | ------ | ------- |
-| A-mini | /hot/pipeline/development/slurm/call-sSV/config/nextflow_amini.config | /hot/pipeline/development/slurm/call-sSV/output_amini/call-sSV-20210920-135858 | /hot/resources/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resources/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
-| A-full | /hot/pipeline/development/slurm/call-sSV/config/nextflow_afull.config | /hot/pipeline/development/slurm/call-sSV/output_afull/call-sSV-20210921-162552 | /hot/resources/SMC-HET/normal/bams/HG002.N.bam | /hot/pipeline/development/slurm/call-sSV/input/T5.T.sorted_py.bam |
-| ILHNLNEV000001-T001-P01-F | /hot/pipeline/development/slurm/call-sSV/config/nextflow_ILHNLNEV000001-T001-P01-F.config | /hot/pipeline/development/slurm/call-sSV/output_ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered/call-sSV-1.0.0 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam |
-| ILHNLNEV000005-T002-L01-F | /hot/users/rhughwhite/ILHNLNEV/call-sSV/inputs_configs/2021-09-10/ILHNLNEV000005-T002-L01-F/nextflow.config | /hot/users/rhughwhite/ILHNLNEV/call-sSV/output/ILHNLNEV000005-T002-L01-F_testing/call-sSV-20210930-180357 | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/users/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F//gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-T002-L01-F_realigned_recalibrated_reheadered.bam | 
+| A-mini | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/A-mini-hg38.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmoootor-upgrade-delly-0.9.1-to-1.0.3/A-mini/call-sSV-2.0.0/S2.T-0/DELLY-1.0.3/output/ | /hot/resource/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resource/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
+| A-full | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/A-full-F72-hg19.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmoootor-upgrade-delly-0.9.1-to-1.0.3/A-full-F72/call-sSV-2.0.0/T5.T.sorted_py/DELLY-1.0.3/output/ | /hot/resource/SMC-HET/normal/bams/HG002.N.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/T5.T.sorted_py.bam |
+| ILHNLNEV000001-T001-P01-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/ILHNLNEV000001-T001-P01-F-F32-hg38.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmoootor-upgrade-delly-0.9.1-to-1.0.3/ILHNLNEV000001-T001-P01-F-F32/call-sSV-2.0.0/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered/DELLY-1.0.3/output/ | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam |
+| ILHNLNEV000005-T002-L01-F | /hot/user/rhughwhite/ILHNLNEV/call-sSV/inputs_configs/2021-09-10/ILHNLNEV000005-T002-L01-F/nextflow.config | /hot/user/rhughwhite/ILHNLNEV/call-sSV/output/ILHNLNEV000005-T002-L01-F_testing/call-sSV-20210930-180357/ | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-T002-L01-F_realigned_recalibrated_reheadered.bam |
 
 
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
 
+## GRCH38 (HG38)
 * reference_fasta: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta
 * reference_fasta_index: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai
-* exclusion_file: /hot/ref/tool-specific-input/Delly/GRCh38/human.hg38.excl.tsv
+* exclusion_file: /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv
+
+## GRCH37 (HG19)
+* reference_fasta: /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa
+* reference_fasta_index: /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa.fai
+* exclusion_file: /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv
 
 ## Performance Validation
 
 Testing was performed primarily in the Boutros Lab SLURM Development cluster. Metrics below will be updated where relevant with additional testing and tuning outputs.
 
+## with Delly v1.0.3
+|Test Case      | Test Date     | Node Type |   Duration        | CPU Hours     | Virtual Memory Usage (RAM)-peak rss|
+|----- | -------| --------| ----------| ---------| --------|
+|A-mini(with stringent filters) | 2022-07-01 | F2 | 20m 32s | 18m | 1.8 GB |
+|A-full(with stringent filters) | 2022-07-10 | F16 | 17h 53m 49s | 17h 54m | 15.1 GB |
+|A-full(with stringent filters) | 2021-09-20 | F32 | 20h 14m 1s | 20h 12m | 15.1 GB |
+|A-full(with stringent filters) | 2022-07-10 | F72 | 18h 16m 15s | 18h 18m | 15.1 GB |
+|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F16 | 8h 46m 31s | 8h 48m | 4.5 GB |
+|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F32 | 9h 38m 29s | 9h 36m | 4.5 GB |
+
+## with Delly v0.9.1 and older versions
 |Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
 |----- | -------| --------| ----------| ---------| --------|
 |A-mini(with default filters) | 2021-09-20 | F2 | 16m 24s | 16m 1s	| 1.7 GB |
@@ -133,7 +152,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 
 ## License
 
-Authors: Yu Pan (YuPan@mednet.ucla.edu), Ghouse Mohammed (GMohammed@mednet.ucla.edu)
+Authors: Yu Pan (YuPan@mednet.ucla.edu), Ghouse Mohammed (GMohammed@mednet.ucla.edu), Mohammed Faizal Eeman Mootor (MMootor@mednet.ucla.edu)
 
 Call-sSV is licensed under the GNU General Public License version 2. See the file LICENSE for the terms of the GNU GPL license.
 
