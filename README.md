@@ -70,14 +70,14 @@ The input CSV should have each of the input fields listed below as separate colu
 | Input Parameter |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
-| blcds_registered_dataset	| no |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
+| blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
 | exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
 | map_qual | yes | integer | Min. paired-end (PE) mapping quality |
 | min_clique_size | yes | integer | Min. PE/SR clique size |
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
-| save_intermediate_files |	no	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
+| save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
 | verbose |	yes |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
@@ -133,7 +133,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 |ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F16 | 8h 46m 31s | 8h 48m | 4.5 GB |
 |ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F32 | 9h 38m 29s | 9h 36m | 4.5 GB |
 
-## with Delly v0.9.1
+## with Delly v0.9.1 and older versions
 |Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
 |----- | -------| --------| ----------| ---------| --------|
 |A-mini(with default filters) | 2021-09-20 | F2 | 16m 24s | 16m 1s	| 1.7 GB |
