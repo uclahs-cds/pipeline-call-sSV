@@ -31,7 +31,7 @@ Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource a
 
     * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
 
-3. Create the input csv using the [template](input/call-sSV.input.csv).See [Input CSV](#Input CSV) for detailed description of each column. All columns must exist in order to run the pipeline successfully.
+3. Create the input csv using the [template](input/call-sSV.input.csv).See [Input CSV](##Input CSV) for detailed description of each column. All columns must exist in order to run the pipeline successfully.
    
    * Again, do not directly modify the source template csv file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
 
