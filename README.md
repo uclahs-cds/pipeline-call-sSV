@@ -27,7 +27,7 @@ Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource a
 
     * The source code should never be modified when running our pipelines
 
-2. Create a config file for input, output, and parameters. An example for a config file can be found [here](config/template.config). See [Nextflow Config File Parameters](#Nextflow-Config-File-Parameters) for the detailed description of each variable in the config file. The config file can be generated using a python script (see below).
+2. Create a config file for input, output, and parameters. An example for a config file can be found [here](config/template.config). See [Nextflow Config File Parameters](#Nextflow-Config-File-Parameters) for the detailed description of each variable in the config file.
 
     * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
 
