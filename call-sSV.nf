@@ -38,10 +38,10 @@ Starting workflow...
 """
 .stripIndent()
 
-include { run_validate_PipeVal } from './modules/validation'
-include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './modules/bcftools'
-include { call_sSV_Delly; filter_sSV_Delly } from './modules/delly'
-include { generate_sha512 } from './modules/sha512'
+include { run_validate_PipeVal } from './module/validation'
+include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools'
+include { call_sSV_Delly; filter_sSV_Delly } from './module/delly'
+include { generate_sha512 } from './module/sha512'
 
 /**
 * Check the params
