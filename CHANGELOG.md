@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Add F16.config to enable F16 node compatibility
 ### Changed
+- Standardize the repo structure based on NF pipeline template
 - Update README.md with resource locations and runtime of Delly v1.0.3 on different datasets and node types
 - Change Delly version from 0.9.1 to 1.0.3 in default.config
 ### Fixed
