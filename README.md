@@ -19,10 +19,41 @@ This pipeline is developed using Nextflow, docker and can run either on a single
 
 ## How to Run:
 
-1.	Check if the pipeline and the desired version is in /hot/pipeline/release.
-2.	Create an instance of the template nextflow.config file. Give the nextflow.config instance with an easy-to-understand name. Modify the nextflow.config instance as needed(the input, the output, and the parameters). Later, you might need to check in the nextflow.config instance. An example can be found [Here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
-3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [Here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
-4.	See the submission script, [Here](https://github.com/uclahs-cds/tool-submit-nf), to submit your pipeline
+Below is a summary of how to run the pipeline.  See [here](https://confluence.mednet.ucla.edu/pages/viewpage.action?spaceKey=BOUTROSLAB&title=How+to+run+a+nextflow+pipeline) for full instructions.
+
+Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource allocation and Nextflow errors could cause the pipeline to fail.
+
+1. The recommended way of running the pipeline is to directly use the source code located here: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/`, rather than cloning a copy of the pipeline.
+
+    * The source code should never be modified when running our pipelines
+
+2. Create a config file for input, output, and parameters. An example for a config file can be found [here](config/template.config). See [Nextflow Config File Parameters](#Nextflow Config File Parameters) for the detailed description of each variable in the config file. The config file can be generated using a python script (see below).
+
+    * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
+
+3. Create the input csv using the [template](input/call-sSV.input.csv).See [Input CSV](#Input CSV) for detailed description of each column. All columns must exist in order to run the pipeline successfully.
+   
+   * Again, do not directly modify the source template csv file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
+
+4. The pipeline can be executed locally using the command below:
+
+```bash
+nextflow run path/to/main.nf -config path/to/sample-specific.config
+```
+
+* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/2.0.0/pipeline/call-sSV.nf`
+* `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config) 
+
+To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
+
+```bash
+python path/to/submit_nextflow_pipeline.py \
+    --nextflow_script path/to/main.nf \
+    --nextflow_config path/to/sample-specific.config \
+    --pipeline_run_name <sample_name> \
+    --partition_type <node type, F2 or F16 or F32 or higher> \
+    --email <your UCLA email, jdoe@ucla.edu>
+```
 
 ## Flow Diagram:
 
