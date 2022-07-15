@@ -19,10 +19,42 @@ This pipeline is developed using Nextflow, docker and can run either on a single
 
 ## How to Run:
 
-1.	Check if the pipeline and the desired version is in /hot/pipeline/release.
-2.	Create an instance of the template nextflow.config file. Give the nextflow.config instance with an easy-to-understand name. Modify the nextflow.config instance as needed(the input, the output, and the parameters). Later, you might need to check in the nextflow.config instance. An example can be found [Here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/nextflow.config). See [Inputs](#inputs) for the description of each variables in the config file.
-3.	Update the input CSV. See [Inputs](#inputs) for the columns needed. All columns must exist to run the pipeline. An example can be found [Here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
-4.	See the submission script, [Here](https://github.com/uclahs-cds/tool-submit-nf), to submit your pipeline
+Below is a summary of how to run the pipeline.  See [here](https://confluence.mednet.ucla.edu/pages/viewpage.action?spaceKey=BOUTROSLAB&title=How+to+run+a+nextflow+pipeline) for full instructions.
+
+Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource allocation and Nextflow errors could cause the pipeline to fail.
+
+1. The recommended way of running the pipeline is to directly use the source code located here: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/`, rather than cloning a copy of the pipeline.
+
+    * The source code should never be modified when running our pipelines
+
+2. Create a config file for input, output, and parameters. An example for a config file can be found [here](config/template.config). See [Nextflow Config File Parameters](#Nextflow-Config-File-Parameters) for the detailed description of each variable in the config file.
+
+    * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
+
+3. Create the input CSV using the [template](input/call-sSV-input.csv).See [Input CSV](#Input-CSV) for detailed description of each column. All columns must exist and should be comma separated in order to run the pipeline successfully.
+   
+   * Again, do not directly modify the source template CSV file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
+
+4. The pipeline can be executed locally using the command below:
+
+```bash
+nextflow run path/to/main.nf -config path/to/sample-specific.config
+```
+
+* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/2.0.0/pipeline/call-sSV.nf`
+* `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config) 
+
+To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
+
+```bash
+python path/to/submit_nextflow_pipeline.py \
+    --nextflow_script path/to/main.nf \
+    --nextflow_config path/to/sample-specific.config \
+    --pipeline_run_name <sample_name> \
+    --partition_type F16 \
+    --email <your UCLA email, jdoe@ucla.edu>
+```
+In the above command, the partition type can be changed based on the size of the dataset. At this point, node F16 is generally recommended for larger datasets like A-full and node F2 for smaller datasets like A-mini.
 
 ## Flow Diagram:
 
@@ -37,7 +69,7 @@ This pipeline is developed using Nextflow, docker and can run either on a single
 delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
 This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
-The stringent filters (--map-qual 20 --min-clique-size 5 --mad-cutoff 15) are added, which can drastically reduce the runtime, especially when the input bams are big.
+The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file](config/template.config). If need be, these stringent filters can be adjusted in the config file.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
 ```script
@@ -50,7 +82,7 @@ paste samples_name samples_type > samples.tsv
 ```script
 delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
 ```
-This step applies somatic filtering against the .bcf file generated in Step 1.
+This step applies somatic filtering against the `.bcf` file generated in Step 1.
 
 Note: cohort based false positive filtering is compuationally heavy and not implemented in this pipeline.
 
@@ -59,30 +91,30 @@ Note: cohort based false positive filtering is compuationally heavy and not impl
 
 ### Input CSV
 
-The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/input/tumor_control_pair_0.csv).
+The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](input/call-sSV-input.csv).
 
 | Field |	Type |	Description |
 |--- | --- | --- |
-|control_sample_bam |	string	| Absolute path to the control sample .BAM file |
-|tumor_sample_bam	| string	| Absolute path to the tumor sample .BAM file. |
+|control_sample_bam |	string	| Absolute path to the control sample `.bam` file |
+|tumor_sample_bam	| string	| Absolute path to the tumor sample `.bam` file. |
 
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
-| blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
+| blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
-| reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. |
 | exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
 | map_qual | yes | integer | Min. paired-end (PE) mapping quality |
 | min_clique_size | yes | integer | Min. PE/SR clique size |
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
-| save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
+| save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is `true`. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
-| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
-| verbose |	yes |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
+| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With `ucla_cds`, the default is `/scratch` and should only be changed for testing/development. Changing this directory to `/hot` or `/tmp` can lead to high server latency and potential disk space limitations, respectively. |
+| verbose |	yes |	boolean	| If set to `true`, the values of input channels will be printed, can be used for debugging|
 
-An example of this NextFlow Input Parameters Config can be found [here](https://github.com/uclahs-cds/pipeline-call-sSV/blob/main/pipeline/config/template.config).
+An example of the NextFlow Input Parameters Config file can be found [here](config/template.config).
 
 ## Outputs
 
@@ -110,14 +142,14 @@ An example of this NextFlow Input Parameters Config can be found [here](https://
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
 
 ## GRCH38 (HG38)
-* reference_fasta: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta
-* reference_fasta_index: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai
-* exclusion_file: /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv
+* reference_fasta: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta`
+* reference_fasta_index: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai`
+* exclusion_file: `/hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv`
 
 ## GRCH37 (HG19)
-* reference_fasta: /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa
-* reference_fasta_index: /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa.fai
-* exclusion_file: /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv
+* reference_fasta: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa`
+* reference_fasta_index: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa.fai`
+* exclusion_file: `/hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv`
 
 ## Performance Validation
 
@@ -142,7 +174,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 |ILHNLNEV000001-T001-P01-F (with default filters) | 2021-09-20 | F72 | 22h 30m 16s | 22h 30m 6s | 4.5 GB |
 |ILHNLNEV000001-T001-P01-F (with stringent filters)	| 2021-10-14 |	F32 | 8h 37m 34s | 8h 37m 29s | 4.4 GB |
 |ILHNLNEV000005-T002-L01-F (with default filters) | 2021-09-20 | F72 | 6d 22h 10m 42s | 11'797.8h | 11.733 GB |
-|ILHNLNEV000005-T002-L01-F (with stringent filters. See #10 2f72de1) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
+|ILHNLNEV000005-T002-L01-F (with stringent filters. See [#10](https://github.com/uclahs-cds/pipeline-call-sSV/issues/10) [2f72de1](https://github.com/uclahs-cds/pipeline-call-sSV/commit/2f72de1ba190623e4344f144a12cc315fda1dd18)) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
 
 
 ## References
@@ -158,7 +190,7 @@ Call-sSV is licensed under the GNU General Public License version 2. See the fil
 
 Call-sSV takes BAM files and utilizes Delly to call somatic structural variants.
 
-Copyright (C) 2021 University of California Los Angeles ("Boutros Lab") All rights reserved.
+Copyright (C) 2021-2022 University of California Los Angeles ("Boutros Lab") All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
