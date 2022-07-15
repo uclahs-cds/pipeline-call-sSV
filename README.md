@@ -69,7 +69,7 @@ In the above command, the partition type can be changed based on the size of the
 delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
 This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
-The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMS are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file](config/template.config). If need be, these stringent filters can be adjusted in the config file.
+The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file](config/template.config). If need be, these stringent filters can be adjusted in the config file.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
 ```script
@@ -82,7 +82,7 @@ paste samples_name samples_type > samples.tsv
 ```script
 delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
 ```
-This step applies somatic filtering against the `.BCF` file generated in Step 1.
+This step applies somatic filtering against the `.bcf` file generated in Step 1.
 
 Note: cohort based false positive filtering is compuationally heavy and not implemented in this pipeline.
 
@@ -95,24 +95,24 @@ The input CSV should have each of the input fields listed below as separate colu
 
 | Field |	Type |	Description |
 |--- | --- | --- |
-|control_sample_bam |	string	| Absolute path to the control sample .BAM file |
-|tumor_sample_bam	| string	| Absolute path to the tumor sample .BAM file. |
+|control_sample_bam |	string	| Absolute path to the control sample `.bam` file |
+|tumor_sample_bam	| string	| Absolute path to the tumor sample `.bam` file. |
 
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
-| blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is false. |
+| blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
-| reference_fasta	| yes |	path	| Absolute path to the reference genome fasta file. The reference genome is used by Delly for structural variant calling. |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. |
 | exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
 | map_qual | yes | integer | Min. paired-end (PE) mapping quality |
 | min_clique_size | yes | integer | Min. PE/SR clique size |
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
-| save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is true. |
+| save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is `true`. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
-| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
-| verbose |	yes |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
+| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With `ucla_cds`, the default is `/scratch` and should only be changed for testing/development. Changing this directory to `/hot` or `/tmp` can lead to high server latency and potential disk space limitations, respectively. |
+| verbose |	yes |	boolean	| If set to `true`, the values of input channels will be printed, can be used for debugging|
 
 An example of the NextFlow Input Parameters Config file can be found [here](config/template.config).
 
