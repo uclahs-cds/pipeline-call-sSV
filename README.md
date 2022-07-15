@@ -31,9 +31,9 @@ Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource a
 
     * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
 
-3. Create the input csv using the [template](input/call-sSV.input.csv).See [Input CSV](#Input-CSV) for detailed description of each column. All columns must exist and should be comma separated in order to run the pipeline successfully.
+3. Create the input CSV using the [template](input/call-sSV-input.csv).See [Input CSV](#Input-CSV) for detailed description of each column. All columns must exist and should be comma separated in order to run the pipeline successfully.
    
-   * Again, do not directly modify the source template csv file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
+   * Again, do not directly modify the source template CSV file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
 
 4. The pipeline can be executed locally using the command below:
 
@@ -51,9 +51,10 @@ python path/to/submit_nextflow_pipeline.py \
     --nextflow_script path/to/main.nf \
     --nextflow_config path/to/sample-specific.config \
     --pipeline_run_name <sample_name> \
-    --partition_type <node type, F2 or F16 or F32 or higher> \
+    --partition_type F16 \
     --email <your UCLA email, jdoe@ucla.edu>
 ```
+In the above command, the partition type can be changed based on the size of the dataset. At this point, node F16 is generally recommended for larger datasets like A-full and node F2 for smaller datasets like A-mini.
 
 ## Flow Diagram:
 
@@ -68,7 +69,7 @@ python path/to/submit_nextflow_pipeline.py \
 delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
 ```
 This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
-The stringent filters (--map-qual 20 --min-clique-size 5 --mad-cutoff 15) are added, which can drastically reduce the runtime, especially when the input bams are big.
+The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMS are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file] (config/template.config). If need be, these stringent filters can be adjusted in the config file.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
 ```script
@@ -81,7 +82,7 @@ paste samples_name samples_type > samples.tsv
 ```script
 delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf
 ```
-This step applies somatic filtering against the .bcf file generated in Step 1.
+This step applies somatic filtering against the `.BCF` file generated in Step 1.
 
 Note: cohort based false positive filtering is compuationally heavy and not implemented in this pipeline.
 
@@ -90,7 +91,7 @@ Note: cohort based false positive filtering is compuationally heavy and not impl
 
 ### Input CSV
 
-The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](input/call-sSV.input.csv).
+The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](input/call-sSV-input.csv).
 
 | Field |	Type |	Description |
 |--- | --- | --- |
@@ -113,7 +114,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With ucla_cds, the default is /scratch and should only be changed for testing/development. Changing this directory to /hot or /tmp can lead to high server latency and potential disk space limitations, respectively. |
 | verbose |	yes |	boolean	| If set to true, the values of input channels will be printed, can be used for debugging|
 
-An example of this NextFlow Input Parameters Config can be found [here](config/template.config).
+An example of the NextFlow Input Parameters Config file can be found [here](config/template.config).
 
 ## Outputs
 
@@ -173,7 +174,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 |ILHNLNEV000001-T001-P01-F (with default filters) | 2021-09-20 | F72 | 22h 30m 16s | 22h 30m 6s | 4.5 GB |
 |ILHNLNEV000001-T001-P01-F (with stringent filters)	| 2021-10-14 |	F32 | 8h 37m 34s | 8h 37m 29s | 4.4 GB |
 |ILHNLNEV000005-T002-L01-F (with default filters) | 2021-09-20 | F72 | 6d 22h 10m 42s | 11'797.8h | 11.733 GB |
-|ILHNLNEV000005-T002-L01-F (with stringent filters. See #10 2f72de1) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
+|ILHNLNEV000005-T002-L01-F (with stringent filters. See [#10](https://github.com/uclahs-cds/pipeline-call-sSV/issues/10) [2f72de1](https://github.com/uclahs-cds/pipeline-call-sSV/commit/2f72de1ba190623e4344f144a12cc315fda1dd18)) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
 
 
 ## References
@@ -189,7 +190,7 @@ Call-sSV is licensed under the GNU General Public License version 2. See the fil
 
 Call-sSV takes BAM files and utilizes Delly to call somatic structural variants.
 
-Copyright (C) 2021 University of California Los Angeles ("Boutros Lab") All rights reserved.
+Copyright (C) 2021-2022 University of California Los Angeles ("Boutros Lab") All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
