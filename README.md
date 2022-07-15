@@ -142,14 +142,14 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 ### Test runs for the A-mini/partial/full samples were performed using the following reference files
 
 ## GRCH38 (HG38)
-* reference_fasta: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta
-* reference_fasta_index: /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai
-* exclusion_file: /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv
+* reference_fasta: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta`
+* reference_fasta_index: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai`
+* exclusion_file: `/hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv`
 
 ## GRCH37 (HG19)
-* reference_fasta: /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa
-* reference_fasta_index: /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa.fai
-* exclusion_file: /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv
+* reference_fasta: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa`
+* reference_fasta_index: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa.fai`
+* exclusion_file: `/hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv`
 
 ## Performance Validation
 
