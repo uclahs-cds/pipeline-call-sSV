@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Add F16.config to enable F16 node compatibility
 ### Changed
-- Set `save_intermediate_files` to false in default.config
+- Remove `save_intermediate_files` argument in default.config as it is already specified in template.config
 - Rename call-sSV.nf to main.nf
 - Standardize the repo structure based on NF pipeline template
 - Update README.md with resource locations and runtime of Delly v1.0.3 on different datasets and node types
