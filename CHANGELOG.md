@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Add F16.config to enable F16 node compatibility
 ### Changed
+- Upgrade BCTools 1.12 to 1.15.1
 - Remove `save_intermediate_files` argument in default.config as it is already specified in template.config
 - Rename call-sSV.nf to main.nf
 - Standardize the repo structure based on NF pipeline template
