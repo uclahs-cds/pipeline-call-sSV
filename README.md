@@ -41,7 +41,7 @@ Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource a
 nextflow run path/to/main.nf -config path/to/sample-specific.config
 ```
 
-* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/3.0.0/pipeline/main.nf`
+* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/3.0.0/main.nf`
 * `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config) 
 
 To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
@@ -90,6 +90,8 @@ Note: cohort based false positive filtering is compuationally heavy and not impl
 ## Inputs
 
 ### Input CSV
+
+The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](input/call-sSV-input.csv).
 
 | Field |	Type |	Description |
 |--- | --- | --- |
