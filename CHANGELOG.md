@@ -8,6 +8,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+
+---
+
+## [3.0.0] - 2022-07-25
 ### Added
 - Add F16.config to enable F16 node compatibility
 ### Changed
