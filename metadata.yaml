@@ -5,4 +5,4 @@ maintainers: "Boutros Lab Infrastructure <BoutrosLabInfrastructure@mednet.ucla.e
 languages: ["Nextflow", "Docker"]
 dependencies: ["Java", "Nextflow", "Docker"]
 references: "https://uclahs.box.com/s/qfzr99sc8ntmfddn30ii62wx4273utoz"
-tools: ["Delly:v1.0.3", "BCFtools:v1.15.1", "PipeVal:v2.1.5"]
+tools: ["Delly:v1.1.3", "BCFtools:v1.15.1", "PipeVal:v2.1.5"]
