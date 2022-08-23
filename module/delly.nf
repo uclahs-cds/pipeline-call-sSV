@@ -8,7 +8,9 @@ Docker Images:
 - docker_image_delly: ${params.docker_image_delly}
 """
 
-process call_sSV_Delly{
+include { generate_standard_filename } from '${projectDir}/external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
+
+process call_sSV_Delly {
     container params.docker_image_delly
 
     publishDir "${params.output_dir}/intermediate/${task.process.replace(':', '/')}",
@@ -28,13 +30,19 @@ process call_sSV_Delly{
         path exclusion_file
 
     output:
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}.bcf", emit: nt_call_bcf
-        path "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}.bcf.csi", emit: nt_call_bcf_csi
+        path "${output_filename}.bcf", emit: nt_call_bcf
+        path "${output_filename}.bcf.csi", emit: nt_call_bcf_csi
         path "${tumor_sample_name}", emit: samples
         path ".command.*"
         val tumor_sample_name, emit: tumor_sample_name
 
     script:
+        output_filename = generate_standard_filename(
+            "DELLY-${params.delly_version}",
+            params.dataset_id,
+            tumor_sample_name,
+            [:]
+            )
         """
         set -euo pipefail
         delly call \
@@ -43,7 +51,7 @@ process call_sSV_Delly{
             --map-qual "${params.map_qual}" \
             --min-clique-size "${params.min_clique_size}" \
             --mad-cutoff "${params.mad_cutoff}" \
-            --outfile "DELLY-${params.delly_version}_${params.dataset_id}_${tumor_sample_name}.bcf" \
+            --outfile "${output_filename}.bcf" \
             "$tumor_sample_bam" \
             "$control_sample_bam"
 
@@ -51,7 +59,7 @@ process call_sSV_Delly{
         """
     }
 
-process filter_sSV_Delly{
+process filter_sSV_Delly {
     container params.docker_image_delly
 
     publishDir "${params.output_dir}/intermediate/${task.process.replace(':', '/')}",
