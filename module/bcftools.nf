@@ -45,7 +45,7 @@ process filter_BCF_BCFtools {
     container params.docker_image_bcftools
 
     publishDir "${params.output_dir}/output",
-        pattern: "${filename_base}_filtered.bcf*",
+        pattern: "${filename_base}-filtered.bcf*",
         mode: "copy"
 
     publishDir "${params.log_output_dir}/process-log",
@@ -59,16 +59,16 @@ process filter_BCF_BCFtools {
 
     output:
         path ".command.*"
-        path "${filename_base}_filtered.bcf", emit: nonPassCallsFiltered
-        path "${filename_base}_filtered.bcf.csi", emit: nonPassCallsFiltered_csi
+        path "${filename_base}-filtered.bcf", emit: nonPassCallsFiltered
+        path "${filename_base}-filtered.bcf.csi", emit: nonPassCallsFiltered_csi
 
     script:
         filename_base = file(input_bcf).baseName
         """
         set -euo pipefail
 
-        bcftools view -i "$filter_condition" -O b -o "${filename_base}_filtered.bcf" $input_bcf
+        bcftools view -i "$filter_condition" -O b -o "${filename_base}-filtered.bcf" $input_bcf
         
-        bcftools index "${filename_base}_filtered.bcf"
+        bcftools index "${filename_base}-filtered.bcf"
         """
     }
