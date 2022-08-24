@@ -8,7 +8,7 @@ Docker Images:
 - docker_image_delly: ${params.docker_image_delly}
 """
 
-include { generate_standard_filename } from '${projectDir}/external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
+include { generate_standard_filename } from '../external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
 
 process call_sSV_Delly {
     container params.docker_image_delly
