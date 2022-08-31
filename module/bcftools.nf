@@ -8,12 +8,14 @@ Docker Images:
 - docker_image_bcftools: ${params.docker_image_bcftools}
 """
 
+include { generate_standard_filename } from '../external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
+
 process query_SampleName_BCFtools {
     container params.docker_image_bcftools
 
     publishDir "${params.output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
-        pattern: "${tmp_samples}.tsv",
+        pattern: "${output_filename}.tsv",
         mode: "copy"
 
     publishDir "${params.log_output_dir}/process-log",
@@ -24,12 +26,19 @@ process query_SampleName_BCFtools {
     input:
         path input_bcf
         path tmp_samples
+        val tumor_sample_name
 
     output:
         path ".command.*"
-        path "${tmp_samples}.tsv", emit: samples
+        path "${output_filename}.tsv", emit: samples
 
     script:
+        output_filename = generate_standard_filename(
+            "BCFtools-${params.bcftools_version}",
+            params.dataset_id,
+            tumor_sample_name,
+            [additional_information: "query-tumour-control-name"]
+            )
         """
         set -euo pipefail
 
@@ -37,7 +46,7 @@ process query_SampleName_BCFtools {
 
         bcftools query -l $input_bcf > ${tmp_samples}
 
-        paste ${tmp_samples} samples_type > "${tmp_samples}.tsv"
+        paste ${tmp_samples} samples_type > "${output_filename}.tsv"
         """
     }
 
@@ -45,7 +54,7 @@ process filter_BCF_BCFtools {
     container params.docker_image_bcftools
 
     publishDir "${params.output_dir}/output",
-        pattern: "${filename_base}_filtered.bcf*",
+        pattern: "${output_filename}.bcf*",
         mode: "copy"
 
     publishDir "${params.log_output_dir}/process-log",
@@ -56,19 +65,25 @@ process filter_BCF_BCFtools {
     input:
         path input_bcf
         val filter_condition
+        val tumor_sample_name
 
     output:
         path ".command.*"
-        path "${filename_base}_filtered.bcf", emit: nonPassCallsFiltered
-        path "${filename_base}_filtered.bcf.csi", emit: nonPassCallsFiltered_csi
+        path "${output_filename}.bcf", emit: nonPassCallsFiltered
+        path "${output_filename}.bcf.csi", emit: nonPassCallsFiltered_csi
 
     script:
-        filename_base = file(input_bcf).baseName
+        output_filename = generate_standard_filename(
+            "DELLY-${params.delly_version}",
+            params.dataset_id,
+            tumor_sample_name,
+            [:]
+            )
         """
         set -euo pipefail
 
-        bcftools view -i "$filter_condition" -O b -o "${filename_base}_filtered.bcf" $input_bcf
+        bcftools view -i "$filter_condition" -O b -o "${output_filename}.bcf" $input_bcf
         
-        bcftools index "${filename_base}_filtered.bcf"
+        bcftools index "${output_filename}.bcf"
         """
     }
