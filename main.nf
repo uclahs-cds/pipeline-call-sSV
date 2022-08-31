@@ -179,7 +179,8 @@ workflow{
     */
     query_SampleName_BCFtools(
         call_sSV_Delly.out.nt_call_bcf,
-        call_sSV_Delly.out.samples
+        call_sSV_Delly.out.samples,
+        call_sSV_Delly.out.tumor_sample_name
     )
 
     /**
@@ -197,7 +198,11 @@ workflow{
     * Filter the output bcf from filter_sSV_Delly.
     * The default filter_condition is "FILTER=='PASS'", which filters out NonPass calls.
     */
-    filter_BCF_BCFtools(filter_sSV_Delly.out.somatic_bcf, params.filter_condition)
+    filter_BCF_BCFtools(
+        filter_sSV_Delly.out.somatic_bcf,
+        params.filter_condition,
+        call_sSV_Delly.out.tumor_sample_name
+        )
 
     /**
     * Generate one sha512 checksum for the output files.
