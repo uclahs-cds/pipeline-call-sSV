@@ -41,7 +41,7 @@ process call_sSV_Delly {
             "DELLY-${params.delly_version}",
             params.dataset_id,
             tumor_sample_name,
-            [:]
+            [additional_information: "unfiltered"]
             )
         """
         set -euo pipefail
@@ -64,7 +64,7 @@ process filter_sSV_Delly {
 
     publishDir "${params.output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
-        pattern: "${filename_base}_somatic.bcf*",
+        pattern: "${output_filename}.bcf*",
         mode: "copy"
 
     publishDir "$params.log_output_dir/process-log",
@@ -79,14 +79,19 @@ process filter_sSV_Delly {
         val tumor_sample_name
 
     output:
-        path "${filename_base}_somatic.bcf", emit: somatic_bcf
-        path "${filename_base}_somatic.bcf.csi", emit: somatic_bcf_csi
+        path "${output_filename}.bcf", emit: somatic_bcf
+        path "${output_filename}.bcf.csi", emit: somatic_bcf_csi
         path ".command.*"
  
     script:
-        filename_base = file(input_bcf).baseName
+        output_filename = generate_standard_filename(
+            "DELLY-${params.delly_version}",
+            params.dataset_id,
+            tumor_sample_name,
+            [additional_information: "somatic-filtered"]
+            )
         """
         set -euo pipefail
-        delly filter -f somatic -s ${samples} -o ${filename_base}_somatic.bcf "$input_bcf"
+        delly filter -f somatic -s ${samples} -o ${output_filename}.bcf "$input_bcf"
         """
     }
