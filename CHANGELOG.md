@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Changed
+- Standardize the variable names - change `tumor_sample_name` to `tumor_id` and change variable name `control` to `normal` in the pipeline except for [code](https://github.com/uclahs-cds/pipeline-call-sSV/blob/af3862dd1a7580017a57ef19ff83ac5900dced6b/module/bcftools.nf#L45) in `module/bcftools.nf` that prints tumor and control sample to a file which is used by [`delly filter` step](https://github.com/uclahs-cds/pipeline-call-sSV/blob/af3862dd1a7580017a57ef19ff83ac5900dced6b/module/delly.nf#L95)
 - Standardize output filename using [generate_standardized_filename](https://github.com/uclahs-cds/pipeline-Nextflow-module/tree/main/modules/common/generate_standardized_filename)
 - Upgrade Delly 1.0.3 to 1.1.3
 
