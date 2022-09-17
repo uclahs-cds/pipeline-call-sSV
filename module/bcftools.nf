@@ -42,7 +42,7 @@ process query_SampleName_BCFtools {
         """
         set -euo pipefail
 
-        echo -e "tumor\nnormal" > samples_type
+        echo -e "tumor\ncontrol" > samples_type
 
         bcftools query -l $input_bcf > ${tmp_samples}
 
