@@ -26,7 +26,7 @@ process query_SampleName_BCFtools {
     input:
         path input_bcf
         path tmp_samples
-        val tumor_sample_name
+        val tumor_id
 
     output:
         path ".command.*"
@@ -36,13 +36,13 @@ process query_SampleName_BCFtools {
         output_filename = generate_standard_filename(
             "BCFtools-${params.bcftools_version}",
             params.dataset_id,
-            tumor_sample_name,
-            [additional_information: "query-tumour-control-name"]
+            tumor_id,
+            [additional_information: "query-tumor-normal-name"]
             )
         """
         set -euo pipefail
 
-        echo -e "tumor\ncontrol" > samples_type
+        echo -e "tumor\nnormal" > samples_type
 
         bcftools query -l $input_bcf > ${tmp_samples}
 
@@ -65,7 +65,7 @@ process filter_BCF_BCFtools {
     input:
         path input_bcf
         val filter_condition
-        val tumor_sample_name
+        val tumor_id
 
     output:
         path ".command.*"
@@ -76,7 +76,7 @@ process filter_BCF_BCFtools {
         output_filename = generate_standard_filename(
             "DELLY-${params.delly_version}",
             params.dataset_id,
-            tumor_sample_name,
+            tumor_id,
             [:]
             )
         """
