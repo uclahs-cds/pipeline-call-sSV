@@ -24,7 +24,7 @@ process call_sSV_Delly {
         saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
 
     input:
-        tuple(val(tumor_id), path(tumor_sample_bam), path(tumor_sample_bai), path(normal_sample_bam), path(normal_sample_bai))
+        tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
         path reference_fasta
         path reference_fasta_fai
         path exclusion_file
@@ -52,8 +52,8 @@ process call_sSV_Delly {
             --min-clique-size "${params.min_clique_size}" \
             --mad-cutoff "${params.mad_cutoff}" \
             --outfile "${output_filename}.bcf" \
-            "$tumor_sample_bam" \
-            "$normal_sample_bam"
+            "$tumor_bam" \
+            "$normal_bam"
 
         touch "${tumor_id}"
         """

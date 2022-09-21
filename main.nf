@@ -66,7 +66,7 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 
 /**
 * The input file params.input_csv looks as below:
-* normal_sample_bam, tumor_sample_bam
+* normal_bam, tumor_bam
 * /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
 *
 * Later, calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam normal1.bam ... normalN.bam" needs all the normal samples, 
@@ -81,8 +81,8 @@ input_validation = Channel
     .splitCsv(header:true)
     .map{
         row -> [
-            row.tumor_sample_bam,
-            row.normal_sample_bam
+            row.tumor_bam,
+            row.normal_bam
             ]
         }
     .flatten()
@@ -99,11 +99,11 @@ input_paired_bams_ch = Channel
     .splitCsv(header:true)
     .map{
         row -> tuple(
-            Paths.get(row.tumor_sample_bam).getFileName().toString().split('.bam')[0],
-            row.tumor_sample_bam,
-            "${row.tumor_sample_bam}.bai",
-            row.normal_sample_bam,
-            "${row.normal_sample_bam}.bai"
+            Paths.get(row.tumor_bam).getFileName().toString().split('.bam')[0],
+            row.tumor_bam,
+            "${row.tumor_bam}.bai",
+            row.normal_bam,
+            "${row.normal_bam}.bai"
             )
         }
 
@@ -121,9 +121,9 @@ tumor_bams_ch = Channel
     .splitCsv(header:true)
     .map{
         row -> tuple(
-            Paths.get(row.tumor_sample_bam).getFileName().toString().split('.bam')[0],
-            row.tumor_sample_bam,
-            "${row.tumor_sample_bam}.bai"
+            Paths.get(row.tumor_bam).getFileName().toString().split('.bam')[0],
+            row.tumor_bam,
+            "${row.tumor_bam}.bai"
             )
         }
 
@@ -161,7 +161,7 @@ workflow{
     * HG002.N	normal
     * 
     * Use bcftools query -l to get the sample names out of call_sSV_Delly.out.nt_call_bcf
-    * Further generate ${normal_sample_bam_name}_${tumor_sample_bam_name}_samples.tsv which will be used by delly filter
+    * Further generate ${normal_bam_name}_${tumor_bam_name}_samples.tsv which will be used by delly filter
     * Note, the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of samples in delly call.
     * For example, 
     *    delly call \
