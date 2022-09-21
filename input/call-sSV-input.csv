@@ -1,2 +1,2 @@
-normal_sample_bam,tumor_sample_bam
+normal_bam,tumor_bam
 /path/to/normal_sample.bam,/path/to/tumor_sample.bam
