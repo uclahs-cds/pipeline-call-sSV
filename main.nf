@@ -161,7 +161,7 @@ workflow{
     * HG002.N	normal
     * 
     * Use bcftools query -l to get the sample names out of call_sSV_Delly.out.nt_call_bcf
-    * Further generate ${normal_bam_name}_${tumor_bam_name}_samples.tsv which will be used by delly filter
+    * Further generate BCFtools_${params.bcftools_version}_${params.dataset_id}_${tumor_id}_query-tumor-normal-name.tsv which will be used by delly filter
     * Note, the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of samples in delly call.
     * For example, 
     *    delly call \
