@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Changed
+- Standardize the variable names in the pipeline and change input CSV column names from `control_sample_bam` to `normal_bam` and `tumor_sample_bam` to `tumor_bam`
 - Standardize output filename using [generate_standardized_filename](https://github.com/uclahs-cds/pipeline-Nextflow-module/tree/main/modules/common/generate_standardized_filename)
 - Upgrade Delly 1.0.3 to 1.1.3
 
