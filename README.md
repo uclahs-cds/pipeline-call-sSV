@@ -14,7 +14,7 @@
 * [License](#license)
 
 ## Overview:
-The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched control sample.
+The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched normal sample.
 This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC Slurm cluster.
 
 ## How to Run:
@@ -66,9 +66,9 @@ In the above command, the partition type can be changed based on the size of the
 
 #### 1. Calling Single Sample Somatic Structural Variants
 ```script
-delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam control1.bam
+delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam normal1.bam
 ```
-This step requires an aligned and sorted tumor sample BAM file and a matched control sample as an input for variant calling with Delly.
+This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with Delly.
 The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file](config/template.config). If need be, these stringent filters can be adjusted in the config file.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
@@ -95,8 +95,8 @@ The input CSV should have each of the input fields listed below as separate colu
 
 | Field |	Type |	Description |
 |--- | --- | --- |
-|control_sample_bam |	string	| Absolute path to the control sample `.bam` file |
-|tumor_sample_bam	| string	| Absolute path to the tumor sample `.bam` file. |
+|normal_bam |	string	| Absolute path to the normal sample `.bam` file |
+|tumor_bam	| string	| Absolute path to the tumor sample `.bam` file. |
 
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
@@ -131,7 +131,7 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 
 ### Test Data Set
 
-| Data Set | Run Configuration | Output Dir | Control Sample | Tumor Sample |  
+| Data Set | Run Configuration | Output Dir | Normal Sample | Tumor Sample |  
 | ------ | ------ | ------- | ------ | ------- |
 | A-mini | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/A-mini-hg38.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/A-mini/call-sSV-2.0.0/S2.T-0/DELLY-1.0.3/output/ | /hot/resource/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resource/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
 | A-full | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/A-full-F72-hg19.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/A-full-F72/call-sSV-2.0.0/T5.T.sorted_py/DELLY-1.0.3/output/ | /hot/resource/SMC-HET/normal/bams/HG002.N.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/T5.T.sorted_py.bam |

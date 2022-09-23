@@ -24,7 +24,7 @@ process call_sSV_Delly {
         saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
 
     input:
-        tuple(val(tumor_sample_name), path(tumor_sample_bam), path(tumor_sample_bai), path(control_sample_bam), path(control_sample_bai))
+        tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
         path reference_fasta
         path reference_fasta_fai
         path exclusion_file
@@ -32,15 +32,15 @@ process call_sSV_Delly {
     output:
         path "${output_filename}.bcf", emit: nt_call_bcf
         path "${output_filename}.bcf.csi", emit: nt_call_bcf_csi
-        path "${tumor_sample_name}", emit: samples
+        path "${tumor_id}", emit: samples
         path ".command.*"
-        val tumor_sample_name, emit: tumor_sample_name
+        val tumor_id, emit: tumor_id
 
     script:
         output_filename = generate_standard_filename(
             "DELLY-${params.delly_version}",
             params.dataset_id,
-            tumor_sample_name,
+            tumor_id,
             [additional_information: "unfiltered"]
             )
         """
@@ -52,10 +52,10 @@ process call_sSV_Delly {
             --min-clique-size "${params.min_clique_size}" \
             --mad-cutoff "${params.mad_cutoff}" \
             --outfile "${output_filename}.bcf" \
-            "$tumor_sample_bam" \
-            "$control_sample_bam"
+            "$tumor_bam" \
+            "$normal_bam"
 
-        touch "${tumor_sample_name}"
+        touch "${tumor_id}"
         """
     }
 
@@ -76,7 +76,7 @@ process filter_sSV_Delly {
         path samples
         path input_bcf
         path input_bcf_csi
-        val tumor_sample_name
+        val tumor_id
 
     output:
         path "${output_filename}.bcf", emit: somatic_bcf
@@ -87,7 +87,7 @@ process filter_sSV_Delly {
         output_filename = generate_standard_filename(
             "DELLY-${params.delly_version}",
             params.dataset_id,
-            tumor_sample_name,
+            tumor_id,
             [additional_information: "somatic-filtered"]
             )
         """
