@@ -66,7 +66,7 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 
 /**
 * The input file params.input_csv looks as below:
-* normal_bam, tumor_bam
+* normal_BAM, tumor_BAM
 * /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
 *
 * Later, calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam normal1.bam ... normalN.bam" needs all the normal samples, 
@@ -81,8 +81,8 @@ input_validation = Channel
     .splitCsv(header:true)
     .map{
         row -> [
-            row.tumor_bam,
-            row.normal_bam
+            row.tumor_BAM,
+            row.normal_BAM
             ]
         }
     .flatten()
@@ -99,11 +99,11 @@ input_paired_bams_ch = Channel
     .splitCsv(header:true)
     .map{
         row -> tuple(
-            Paths.get(row.tumor_bam).getFileName().toString().split('.bam')[0],
-            row.tumor_bam,
-            "${row.tumor_bam}.bai",
-            row.normal_bam,
-            "${row.normal_bam}.bai"
+            Paths.get(row.tumor_BAM).getFileName().toString().split('.bam')[0],
+            row.tumor_BAM,
+            "${row.tumor_BAM}.bai",
+            row.normal_BAM,
+            "${row.normal_BAM}.bai"
             )
         }
 
@@ -121,9 +121,9 @@ tumor_bams_ch = Channel
     .splitCsv(header:true)
     .map{
         row -> tuple(
-            Paths.get(row.tumor_bam).getFileName().toString().split('.bam')[0],
-            row.tumor_bam,
-            "${row.tumor_bam}.bai"
+            Paths.get(row.tumor_BAM).getFileName().toString().split('.bam')[0],
+            row.tumor_BAM,
+            "${row.tumor_BAM}.bai"
             )
         }
 
