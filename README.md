@@ -98,9 +98,9 @@ The input CSV should have each of the input fields listed below as separate colu
 |patient_id | string | Patient ID (will be standardized according to data storage structure in the near future) |
 |sample_id | string | Sample ID |
 |normal_id | string | ID of matched normal sample |
-|normal_bam |	path	| Absolute path to the normal sample `.bam` file |
+|normal_BAM |	path	| Absolute path to the normal sample `.bam` file |
 |tumor_id | string | ID of the tumor sample | 
-|tumor_bam	| path	| Absolute path to the tumor sample `.bam` file. |
+|tumor_BAM	| path	| Absolute path to the tumor sample `.bam` file. |
 
 ## Nextflow Config File Parameters
 | Input Parameter |	Required |	Type |	Description |
