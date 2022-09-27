@@ -1,2 +1,2 @@
-patient_id,sample_id,normal_id,normal_bam,tumor_id,tumor_bam
+patient_id,sample_id,normal_id,normal_BAM,tumor_id,tumor_BAM
 <PatientID>,<SampleID>,<NormalSampleID>,/path/to/normal/bam,<TumourSampleID>,/path/to/tumour/bam
