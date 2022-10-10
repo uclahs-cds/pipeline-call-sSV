@@ -45,10 +45,10 @@ process call_sSV_Manta {
     
     script:
         output_filename = generate_standard_filename(
-            "DELLY-${params.delly_version}",
+            "Manta-${params.manta_version}",
             params.dataset_id,
             tumor_id,
-            [additional_information: "unfiltered"]
+            [:]
             )
         """
         set -euo pipefail
