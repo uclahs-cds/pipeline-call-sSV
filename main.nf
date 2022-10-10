@@ -204,6 +204,12 @@ workflow{
         call_sSV_Delly.out.tumor_id
         )
 
+    call_sSV_Manta(
+        input_paired_bams_ch,
+        params.reference_fasta,
+        reference_fasta_index
+        )
+
     /**
     * Generate one sha512 checksum for the output files.
     */
