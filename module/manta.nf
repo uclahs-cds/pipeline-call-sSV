@@ -8,6 +8,8 @@ Docker Images:
 - docker_image_manta: ${params.docker_image_manta}
 """
 
+include { generate_standard_filename } from '../external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
+
 process call_sSV_Manta {
     container params.docker_image_manta
 
@@ -40,16 +42,24 @@ process call_sSV_Manta {
         path "*Stats*"
         path ".command.*"
         val tumor_id, emit: tumor_id
-    """
-    set -euo pipefail
-    configManta.py \
-        --normalBam "$normal_bam" \
-        --tumorBam "$tumor_bam"
-        --referenceFasta "$reference_fasta" \
-        --runDir MantaWorkflow
-    MantaWorkflow/runWorkflow.py
+    
+    script:
+        output_filename = generate_standard_filename(
+            "DELLY-${params.delly_version}",
+            params.dataset_id,
+            tumor_id,
+            [additional_information: "unfiltered"]
+            )
+        """
+        set -euo pipefail
+        configManta.py \
+            --normalBam "$normal_bam" \
+            --tumorBam "$tumor_bam"
+            --referenceFasta "$reference_fasta" \
+            --runDir MantaWorkflow
+        MantaWorkflow/runWorkflow.py
 
-    cp MantaWorkflow/results/variants/* ./
-    cp MantaWorkflow/results/stats/* ./
-    """
+        cp MantaWorkflow/results/variants/* ./
+        cp MantaWorkflow/results/stats/* ./
+        """
     }
