@@ -32,12 +32,12 @@ process call_sSV_Manta {
         path reference_fasta_fai
 
     output:
-        path "${output_filename}_candidateSmallIndels.vcf.gz", emit: vcf_small_indel_sv_file
-        path "${output_filename}_candidateSmallIndels.vcf.gz.tbi", emit: vcf_small_indel_sv_tbi
-        path "${output_filename}_diploidSV.vcf.gz", emit: vcf_diploid_sv_file
-        path "${output_filename}_diploidSV.vcf.gz.tbi", emit: vcf_diploid_sv_tbi
-        path "${output_filename}_candidateSV.vcf.gz", emit: vcf_candidate_sv_file
-        path "${output_filename}_candidateSV.vcf.gz.tbi", emit: vcf_candidate_sv_tbi
+        path "candidateSmallIndels.vcf.gz", emit: vcf_small_indel_sv_file
+        path "candidateSmallIndels.vcf.gz.tbi", emit: vcf_small_indel_sv_tbi
+        path "diploidSV.vcf.gz", emit: vcf_diploid_sv_file
+        path "diploidSV.vcf.gz.tbi", emit: vcf_diploid_sv_tbi
+        path "candidateSV.vcf.gz", emit: vcf_candidate_sv_file
+        path "candidateSV.vcf.gz.tbi", emit: vcf_candidate_sv_tbi
         path "*vcf.gz*"
         path "*Stats*"
         path ".command.*"
