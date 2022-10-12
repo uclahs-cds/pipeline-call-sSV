@@ -41,7 +41,8 @@ Starting workflow...
 include { run_validate_PipeVal } from './module/validation'
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly } from './module/delly'
-include { generate_sha512 } from './module/sha512'
+include { call_sSV_Manta } from './module/manta'
+include { generate_sha512 as generate_sha512_BCFtools; generate_sha512 as generate_sha512_Manta } from './module/sha512'
 
 /**
 * Check the params
@@ -213,6 +214,19 @@ workflow{
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512(filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(filter_BCF_BCFtools.out.nonPassCallsFiltered_csi))
+    generate_sha512_BCFtools(
+        filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(
+            filter_BCF_BCFtools.out.nonPassCallsFiltered_csi
+            )
+        )
+    generate_sha512_Manta(
+        call_sSV_Manta.out.vcf_small_indel_sv_file.mix(
+            call_sSV_Manta.out.vcf_diploid_sv_file,
+            call_sSV_Manta.out.vcf_candidate_sv_file,
+            call_sSV_Manta.out.vcf_small_indel_sv_tbi,
+            call_sSV_Manta.out.vcf_diploid_sv_tbi,
+            call_sSV_Manta.out.vcf_candidate_sv_tbi
+        )
+    )
 
     }
