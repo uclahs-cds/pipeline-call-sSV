@@ -99,13 +99,14 @@ The input CSV should have each of the input fields listed below as separate colu
 |tumor_bam	| string	| Absolute path to the tumor sample `.bam` file. |
 
 ## Nextflow Config File Parameters
+
 | Input Parameter |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
-| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. |
-| exclusion_file |	yes	| path |	Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
+| exclusion_file |	yes	| path | Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
 | map_qual | yes | integer | Min. paired-end (PE) mapping quality |
 | min_clique_size | yes | integer | Min. PE/SR clique size |
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
@@ -138,32 +139,19 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 | ILHNLNEV000001-T001-P01-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/ILHNLNEV000001-T001-P01-F-F32-hg38.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/ILHNLNEV000001-T001-P01-F-F32/call-sSV-2.0.0/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered/DELLY-1.0.3/output/ | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam |
 | ILHNLNEV000005-T002-L01-F | /hot/user/rhughwhite/ILHNLNEV/call-sSV/inputs_configs/2021-09-10/ILHNLNEV000005-T002-L01-F/nextflow.config | /hot/user/rhughwhite/ILHNLNEV/call-sSV/output/ILHNLNEV000005-T002-L01-F_testing/call-sSV-20210930-180357/ | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-T002-L01-F_realigned_recalibrated_reheadered.bam |
 
-
-### Test runs for the A-mini/partial/full samples were performed using the following reference files
-
-## GRCH38 (HG38)
-* reference_fasta: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta`
-* reference_fasta_index: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta.fai`
-* exclusion_file: `/hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv`
-
-## GRCH37 (HG19)
-* reference_fasta: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa`
-* reference_fasta_index: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa.fai`
-* exclusion_file: `/hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv`
-
 ## Performance Validation
 
 Testing was performed primarily in the Boutros Lab SLURM Development cluster. Metrics below will be updated where relevant with additional testing and tuning outputs.
 
-## with Delly v1.0.3
+## with Delly v1.0.3 and newer versions
 |Test Case      | Test Date     | Node Type |   Duration        | CPU Hours     | Virtual Memory Usage (RAM)-peak rss|
 |----- | -------| --------| ----------| ---------| --------|
 |A-mini(with stringent filters) | 2022-07-01 | F2 | 20m 32s | 18m | 1.8 GB |
 |A-full(with stringent filters) | 2022-07-10 | F16 | 17h 53m 49s | 17h 54m | 15.1 GB |
 |A-full(with stringent filters) | 2021-09-20 | F32 | 20h 14m 1s | 20h 12m | 15.1 GB |
 |A-full(with stringent filters) | 2022-07-10 | F72 | 18h 16m 15s | 18h 18m | 15.1 GB |
-|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F16 | 8h 46m 31s | 8h 48m | 4.5 GB |
-|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F32 | 9h 38m 29s | 9h 36m | 4.5 GB |
+|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F16 | 8h 46m 31s | 8h 48m | 4.4 GB |
+|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F32 | 9h 38m 29s | 9h 36m | 4.4 GB |
 
 ## with Delly v0.9.1 and older versions
 |Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
