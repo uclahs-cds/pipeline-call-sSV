@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [4.0.0] - 2022-10-07
+## [4.0.0] - 2022-10-13
 ### Added
 - Retry mechanism to retry a process with higher memory - PR #69
 
