@@ -105,8 +105,8 @@ The input CSV should have each of the input fields listed below as separate colu
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
-| reference_fasta	| yes |	path	| Absolute path to the (reference)[#Required-Reference-Files] genome FASTA file. The reference genome is used by Delly for structural variant calling. |
-| exclusion_file |	yes	| path |	Absolute path to the delly (reference)[#Required-Reference-Files] genome exclusion file utilized to remove suggested regions for structural variant calling. |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
+| exclusion_file |	yes	| path | Absolute path to the delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
 | map_qual | yes | integer | Min. paired-end (PE) mapping quality |
 | min_clique_size | yes | integer | Min. PE/SR clique size |
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) |
@@ -116,14 +116,6 @@ The input CSV should have each of the input fields listed below as separate colu
 | verbose |	yes |	boolean	| If set to `true`, the values of input channels will be printed, can be used for debugging|
 
 An example of the NextFlow Input Parameters Config file can be found [here](config/template.config).
-
-### Required Reference Files
-#### GRCH38 (HG38)
-* reference_fasta: `/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta`
-* exclusion_file: `/hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv`
-#### GRCH37 (HG19)
-* reference_fasta: `/hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa`
-* exclusion_file: `/hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv`
 
 ## Outputs
 
