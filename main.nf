@@ -133,7 +133,7 @@ if (params.verbose){
     tumor_bams_ch.view()
     }
 
-workflow{
+workflow {
     /**
     * Validate the input bams
     */
@@ -141,7 +141,7 @@ workflow{
     // Collect and store input validation output
     run_validate_PipeVal.out.val_file.collectFile(
       name: 'input_validation.txt',
-      storeDir: "${params.output_dir}/validation"
+      storeDir: "${params.output_dir}/${params.docker_image_validate.split("/")[1].replace(':', '-').toUpperCase()}"
       )
 
     /**
