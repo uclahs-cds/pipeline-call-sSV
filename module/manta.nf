@@ -17,7 +17,7 @@ process call_sSV_Manta {
         pattern: "*vcf.gz*",
         mode: "copy"
 
-    publishDir "$params.output_dir/QC",
+    publishDir "$params.output_dir/${params.docker_image_manta.split("/")[1].replace(':', '-').toUpperCase()}/QC",
         pattern: "*Stats*",
         mode: "copy"
 
@@ -38,6 +38,8 @@ process call_sSV_Manta {
         path "MantaWorkflow/results/variants/diploidSV.vcf.gz.tbi", emit: vcf_diploid_sv_tbi
         path "MantaWorkflow/results/variants/candidateSV.vcf.gz", emit: vcf_candidate_sv_file
         path "MantaWorkflow/results/variants/candidateSV.vcf.gz.tbi", emit: vcf_candidate_sv_tbi
+        path "MantaWorkflow/results/variants/somaticSV.vcf.gz", emit: vcf_somatic_sv_file
+        path "MantaWorkflow/results/variants/somaticSV.vcf.gz.tbi", emit: vcf_somatic_sv_tbi
         path "*vcf.gz*"
         path "*Stats*"
         path ".command.*"
