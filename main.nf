@@ -42,7 +42,8 @@ include { run_validate_PipeVal } from './module/validation'
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly } from './module/delly'
 include { call_sSV_Manta } from './module/manta'
-include { generate_sha512 as generate_sha512_BCFtools; generate_sha512 as generate_sha512_Manta } from './module/sha512'
+include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(docker_image_name: "$params.docker_image_delly")
+include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(docker_image_name: "$params.docker_image_manta")
 
 /**
 * Check the params
@@ -228,5 +229,4 @@ workflow{
             call_sSV_Manta.out.vcf_candidate_sv_tbi
         )
     )
-
     }
