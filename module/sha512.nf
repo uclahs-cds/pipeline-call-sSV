@@ -11,7 +11,7 @@ Docker Images:
 process generate_sha512 {
     container params.docker_image_validate
 
-    publishDir "$params.output_dir/output",
+    publishDir "$params.output_dir/${params.docker_image_name.split("/")[1].replace(':', '-').capitalize()}/output",
         pattern: "*.sha512",
         mode: "copy"
 
