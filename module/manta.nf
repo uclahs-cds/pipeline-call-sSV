@@ -32,14 +32,7 @@ process call_sSV_Manta {
         path reference_fasta_fai
 
     output:
-        path "${output_filename}_candidateSmallIndels.vcf.gz", emit: vcf_small_indel_sv_file
-        path "${output_filename}_candidateSmallIndels.vcf.gz.tbi", emit: vcf_small_indel_sv_tbi
-        path "${output_filename}_diploidSV.vcf.gz", emit: vcf_diploid_sv_file
-        path "${output_filename}_diploidSV.vcf.gz.tbi", emit: vcf_diploid_sv_tbi
-        path "${output_filename}_candidateSV.vcf.gz", emit: vcf_candidate_sv_file
-        path "${output_filename}_candidateSV.vcf.gz.tbi", emit: vcf_candidate_sv_tbi
-        path "${output_filename}_somaticSV.vcf.gz", emit: vcf_somatic_sv_file
-        path "${output_filename}_somaticSV.vcf.gz.tbi", emit: vcf_somatic_sv_tbi
+        path "${output_filename}_*.vcf.gz*", emit: manta_vcfs
         path "${output_filename}_*Stats*"
         path ".command.*"
         val tumor_id, emit: tumor_id

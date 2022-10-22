@@ -221,14 +221,6 @@ workflow {
             )
         )
     generate_sha512_Manta(
-        call_sSV_Manta.out.vcf_small_indel_sv_file.mix(
-            call_sSV_Manta.out.vcf_diploid_sv_file,
-            call_sSV_Manta.out.vcf_candidate_sv_file,
-            call_sSV_Manta.out.vcf_somatic_sv_file,
-            call_sSV_Manta.out.vcf_small_indel_sv_tbi,
-            call_sSV_Manta.out.vcf_diploid_sv_tbi,
-            call_sSV_Manta.out.vcf_candidate_sv_tbi,
-            call_sSV_Manta.out.vcf_somatic_sv_tbi
+        call_sSV_Manta.out.manta_vcfs.flatten()
         )
-    )
     }
