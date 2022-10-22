@@ -215,9 +215,7 @@ workflow {
     * Generate one sha512 checksum for the output files.
     */
     generate_sha512_BCFtools(
-        filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(
-            filter_BCF_BCFtools.out.nonPassCallsFiltered_csi
-            )
+        filter_BCF_BCFtools.out.nonPassCallsFiltered_and_csi.flatten()
         )
     generate_sha512_Manta(
         call_sSV_Manta.out.manta_vcfs.flatten()

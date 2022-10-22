@@ -69,8 +69,7 @@ process filter_BCF_BCFtools {
 
     output:
         path ".command.*"
-        path "${output_filename}.bcf", emit: nonPassCallsFiltered
-        path "${output_filename}.bcf.csi", emit: nonPassCallsFiltered_csi
+        path "${output_filename}.bcf*", emit: nonPassCallsFiltered_and_csi
 
     script:
         output_filename = generate_standard_filename(
