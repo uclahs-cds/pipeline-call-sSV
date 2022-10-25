@@ -11,8 +11,8 @@ Docker Images:
 process run_validate_PipeVal {
     container params.docker_image_validate
 
-    publishDir "$params.output_dir_base",
-        pattern: "input-validation.txt",
+    publishDir "$params.output_dir_base/validation",
+        pattern: "input_validation.txt",
         mode: "copy"
 
     publishDir path: "${params.log_output_dir}/process-log",
