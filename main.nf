@@ -41,7 +41,9 @@ Starting workflow...
 include { run_validate_PipeVal } from './module/validation'
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools'
 include { call_sSV_Delly; filter_sSV_Delly } from './module/delly'
-include { generate_sha512 } from './module/sha512'
+include { call_sSV_Manta } from './module/manta'
+include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(docker_image_name: "$params.docker_image_delly")
+include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(docker_image_name: "$params.docker_image_manta")
 
 /**
 * Check the params
@@ -131,7 +133,7 @@ if (params.verbose){
     tumor_bams_ch.view()
     }
 
-workflow{
+workflow {
     /**
     * Validate the input bams
     */
@@ -139,7 +141,7 @@ workflow{
     // Collect and store input validation output
     run_validate_PipeVal.out.val_file.collectFile(
       name: 'input_validation.txt',
-      storeDir: "${params.output_dir}/validation"
+      storeDir: "${params.output_dir}/${params.docker_image_validate.split("/")[1].replace(':', '-').toUpperCase()}/validation"
       )
 
     /**
@@ -204,9 +206,21 @@ workflow{
         call_sSV_Delly.out.tumor_id
         )
 
+    call_sSV_Manta(
+        input_paired_bams_ch,
+        params.reference_fasta,
+        reference_fasta_index
+        )
+
     /**
     * Generate one sha512 checksum for the output files.
     */
-    generate_sha512(filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(filter_BCF_BCFtools.out.nonPassCallsFiltered_csi))
-
+    generate_sha512_BCFtools(
+        filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(
+            filter_BCF_BCFtools.out.nonPassCallsFiltered_csi
+            )
+        )
+    generate_sha512_Manta(
+        call_sSV_Manta.out.manta_vcfs.flatten()
+        )
     }
