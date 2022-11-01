@@ -38,11 +38,10 @@ Starting workflow...
 """
 .stripIndent()
 
-output_dir_validation = "$params.output_dir/${params.docker_image_validate.split("/")[1].replace(':', '-').toUpperCase()}"
 output_dir_delly = "$params.output_dir/${params.docker_image_delly.split("/")[1].replace(':', '-').toUpperCase()}"
 output_dir_manta = "$params.output_dir/${params.docker_image_manta.split("/")[1].replace(':', '-').toUpperCase()}"
 
-include { run_validate_PipeVal } from './module/validation' addParams(output_dir_base: output_dir_validation)
+include { run_validate_PipeVal } from './module/validation'
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(output_dir_base: output_dir_delly)
 include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(output_dir_base: output_dir_delly)
 include { call_sSV_Manta } from './module/manta' addParams(output_dir_base: output_dir_manta)
@@ -142,6 +141,12 @@ workflow {
     * Validate the input bams
     */
     run_validate_PipeVal(input_validation)
+    // Collect and store input validation output
+    run_validate_PipeVal.out.val_file.collectFile(
+      name: 'input_validation.txt',
+      newLine: true,
+      storeDir: "${params.output_dir}/validation"
+      )
 
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam normal1.bam" per paired (tumor sample, normal sample)
