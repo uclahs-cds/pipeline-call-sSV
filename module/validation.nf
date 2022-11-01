@@ -21,7 +21,7 @@ process run_validate_PipeVal {
 
     output:
         path ".command.*"
-        path "input_validation.txt"
+        path "input_validation.txt", emit: val_file
 
     script:
         """
