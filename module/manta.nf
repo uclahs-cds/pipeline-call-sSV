@@ -13,11 +13,11 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process call_sSV_Manta {
     container params.docker_image_manta
 
-    publishDir "$params.output_dir_base/output",
+    publishDir "$params.workflow_output_dir/output",
         pattern: "*vcf.gz*",
         mode: "copy"
 
-    publishDir "$params.output_dir_base/QC",
+    publishDir "$params.workflow_output_dir/QC",
         pattern: "*Stats*",
         mode: "copy"
 

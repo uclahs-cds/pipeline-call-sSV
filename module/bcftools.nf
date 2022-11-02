@@ -13,7 +13,7 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process query_SampleName_BCFtools {
     container params.docker_image_bcftools
 
-    publishDir "$params.output_dir_base/intermediate/${task.process.replace(':', '/')}",
+    publishDir "$params.workflow_output_dir/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
         pattern: "${output_filename}.tsv",
         mode: "copy"
@@ -53,7 +53,7 @@ process query_SampleName_BCFtools {
 process filter_BCF_BCFtools {
     container params.docker_image_bcftools
 
-    publishDir "$params.output_dir_base/output",
+    publishDir "$params.workflow_output_dir/output",
         pattern: "${output_filename}.bcf*",
         mode: "copy"
 

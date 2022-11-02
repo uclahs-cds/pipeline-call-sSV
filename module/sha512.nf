@@ -11,7 +11,7 @@ Docker Images:
 process generate_sha512 {
     container params.docker_image_validate
 
-    publishDir "$params.output_dir_base/output",
+    publishDir "$params.workflow_output_dir/output",
         pattern: "*.sha512",
         mode: "copy"
 

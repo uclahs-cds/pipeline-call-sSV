@@ -42,19 +42,19 @@ Starting workflow...
 
 include { run_validate_PipeVal } from './module/validation'
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(
-    output_dir_base: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
     )
 include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
-    output_dir_base: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
     )
 include { call_sSV_Manta } from './module/manta' addParams(
-    output_dir_base: "${params.output_dir_base}/Manta-${params.manta_version}"
+    workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
 include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
-    output_dir_base: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
     )
 include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(
-    output_dir_base: "${params.output_dir_base}/Manta-${params.manta_version}"
+    workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
 
 /**
