@@ -30,7 +30,9 @@ Current Configuration:
     save_intermediate_files: ${params.save_intermediate_files}
 
 - tools:
-    delly: ${params.delly_version}
+    DELLY: ${params.delly_version}
+    BCFtools: ${params.bcftools_version}
+    Manta: ${params.manta_version}
 
 ------------------------------------
 Starting workflow...
@@ -38,15 +40,22 @@ Starting workflow...
 """
 .stripIndent()
 
-output_dir_delly = "$params.output_dir/${params.docker_image_delly.split("/")[1].replace(':', '-').toUpperCase()}"
-output_dir_manta = "$params.output_dir/${params.docker_image_manta.split("/")[1].replace(':', '-').toUpperCase()}"
-
 include { run_validate_PipeVal } from './module/validation'
-include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(output_dir_base: output_dir_delly)
-include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(output_dir_base: output_dir_delly)
-include { call_sSV_Manta } from './module/manta' addParams(output_dir_base: output_dir_manta)
-include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(output_dir_base: output_dir_delly)
-include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(output_dir_base: output_dir_manta)
+include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(
+    output_dir_base: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    )
+include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
+    output_dir_base: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    )
+include { call_sSV_Manta } from './module/manta' addParams(
+    output_dir_base: "${params.output_dir_base}/Manta-${params.manta_version}"
+    )
+include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
+    output_dir_base: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    )
+include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(
+    output_dir_base: "${params.output_dir_base}/Manta-${params.manta_version}"
+    )
 
 /**
 * Check the params
@@ -145,7 +154,7 @@ workflow {
     run_validate_PipeVal.out.val_file.collectFile(
       name: 'input_validation.txt',
       newLine: true,
-      storeDir: "${params.output_dir}/validation"
+      storeDir: "${params.output_dir_base}/validation"
       )
 
     /**
