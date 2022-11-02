@@ -153,7 +153,6 @@ workflow {
     // Collect and store input validation output
     run_validate_PipeVal.out.val_file.collectFile(
       name: 'input_validation.txt',
-      newLine: true,
       storeDir: "${params.output_dir_base}/validation"
       )
 

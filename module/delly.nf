@@ -13,7 +13,7 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process call_sSV_Delly {
     container params.docker_image_delly
 
-    publishDir "$params.worklfow_output_dir/intermediate/${task.process.replace(':', '/')}",
+    publishDir "$params.workflow_output_dir/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
         pattern: "DELLY-*.bcf*",
         mode: "copy"
