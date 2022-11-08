@@ -13,7 +13,7 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process query_SampleName_BCFtools {
     container params.docker_image_bcftools
 
-    publishDir "$params.workflow_output_dir/intermediate/${task.process.replace(':', '/')}",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
         pattern: "${output_filename}.tsv",
         mode: "copy"
@@ -44,7 +44,7 @@ process query_SampleName_BCFtools {
 
         echo -e "tumor\ncontrol" > samples_type
 
-        bcftools query -l $input_bcf > ${tmp_samples}
+        bcftools query -l ${input_bcf} > ${tmp_samples}
 
         paste ${tmp_samples} samples_type > "${output_filename}.tsv"
         """
@@ -53,7 +53,7 @@ process query_SampleName_BCFtools {
 process filter_BCF_BCFtools {
     container params.docker_image_bcftools
 
-    publishDir "$params.workflow_output_dir/output",
+    publishDir "${params.workflow_output_dir}/output",
         pattern: "${output_filename}.bcf*",
         mode: "copy"
 
@@ -81,7 +81,7 @@ process filter_BCF_BCFtools {
         """
         set -euo pipefail
 
-        bcftools view -i "$filter_condition" -O b -o "${output_filename}.bcf" $input_bcf
+        bcftools view -i "${filter_condition}" -O b -o "${output_filename}.bcf" ${input_bcf}
         
         bcftools index "${output_filename}.bcf"
         """

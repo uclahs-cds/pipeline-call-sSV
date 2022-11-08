@@ -13,12 +13,12 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process call_sSV_Delly {
     container params.docker_image_delly
 
-    publishDir "$params.workflow_output_dir/intermediate/${task.process.replace(':', '/')}",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
         pattern: "DELLY-*.bcf*",
         mode: "copy"
 
-    publishDir "$params.log_output_dir/process-log",
+    publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
@@ -46,14 +46,14 @@ process call_sSV_Delly {
         """
         set -euo pipefail
         delly call \
-            --genome "$reference_fasta" \
-            --exclude "$exclusion_file" \
+            --genome "${reference_fasta}" \
+            --exclude "${exclusion_file}" \
             --map-qual "${params.map_qual}" \
             --min-clique-size "${params.min_clique_size}" \
             --mad-cutoff "${params.mad_cutoff}" \
             --outfile "${output_filename}.bcf" \
-            "$tumor_bam" \
-            "$normal_bam"
+            "${tumor_bam}" \
+            "${normal_bam}"
 
         touch "${tumor_id}"
         """
@@ -62,12 +62,12 @@ process call_sSV_Delly {
 process filter_sSV_Delly {
     container params.docker_image_delly
 
-    publishDir "$params.workflow_output_dir/intermediate/${task.process.replace(':', '/')}",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
         pattern: "${output_filename}.bcf*",
         mode: "copy"
 
-    publishDir "$params.log_output_dir/process-log",
+    publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
@@ -92,6 +92,6 @@ process filter_sSV_Delly {
             )
         """
         set -euo pipefail
-        delly filter -f somatic -s ${samples} -o ${output_filename}.bcf "$input_bcf"
+        delly filter -f somatic -s ${samples} -o ${output_filename}.bcf "${input_bcf}"
         """
     }

@@ -13,15 +13,15 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process call_sSV_Manta {
     container params.docker_image_manta
 
-    publishDir "$params.workflow_output_dir/output",
+    publishDir "${params.workflow_output_dir}/output",
         pattern: "*vcf.gz*",
         mode: "copy"
 
-    publishDir "$params.workflow_output_dir/QC",
+    publishDir "${params.workflow_output_dir}/QC",
         pattern: "*Stats*",
         mode: "copy"
 
-    publishDir "$params.log_output_dir/process-log",
+    publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
@@ -47,9 +47,9 @@ process call_sSV_Manta {
         """
         set -euo pipefail
         configManta.py \
-            --normalBam "$normal_bam" \
-            --tumorBam "$tumor_bam" \
-            --referenceFasta "$reference_fasta" \
+            --normalBam "${normal_bam}" \
+            --tumorBam "${tumor_bam}" \
+            --referenceFasta "${reference_fasta}" \
             --runDir MantaWorkflow
         MantaWorkflow/runWorkflow.py
 
