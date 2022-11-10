@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+### Changed
+- Simplify output directory declaration for each process using `addParams` and use `output_dir_base`
+
 ### Added
 - Add Manta SV caller
 

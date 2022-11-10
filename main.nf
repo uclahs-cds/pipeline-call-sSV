@@ -30,7 +30,9 @@ Current Configuration:
     save_intermediate_files: ${params.save_intermediate_files}
 
 - tools:
-    delly: ${params.delly_version}
+    DELLY: ${params.delly_version}
+    BCFtools: ${params.bcftools_version}
+    Manta: ${params.manta_version}
 
 ------------------------------------
 Starting workflow...
@@ -39,11 +41,21 @@ Starting workflow...
 .stripIndent()
 
 include { run_validate_PipeVal } from './module/validation'
-include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools'
-include { call_sSV_Delly; filter_sSV_Delly } from './module/delly'
-include { call_sSV_Manta } from './module/manta'
-include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(docker_image_name: "$params.docker_image_delly")
-include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(docker_image_name: "$params.docker_image_manta")
+include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    )
+include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    )
+include { call_sSV_Manta } from './module/manta' addParams(
+    workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
+    )
+include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
+    )
+include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(
+    workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
+    )
 
 /**
 * Check the params
@@ -141,7 +153,7 @@ workflow {
     // Collect and store input validation output
     run_validate_PipeVal.out.val_file.collectFile(
       name: 'input_validation.txt',
-      storeDir: "${params.output_dir}/${params.docker_image_validate.split("/")[1].replace(':', '-').toUpperCase()}/validation"
+      storeDir: "${params.output_dir_base}/validation"
       )
 
     /**
@@ -216,9 +228,7 @@ workflow {
     * Generate one sha512 checksum for the output files.
     */
     generate_sha512_BCFtools(
-        filter_BCF_BCFtools.out.nonPassCallsFiltered.mix(
-            filter_BCF_BCFtools.out.nonPassCallsFiltered_csi
-            )
+        filter_BCF_BCFtools.out.nonPassCallsFiltered_and_csi.flatten()
         )
     generate_sha512_Manta(
         call_sSV_Manta.out.manta_vcfs.flatten()

@@ -13,7 +13,7 @@ include { generate_standard_filename } from '../external/pipeline-Nextflow-modul
 process query_SampleName_BCFtools {
     container params.docker_image_bcftools
 
-    publishDir "${params.output_dir}/${params.docker_image_delly.split("/")[1].replace(':', '-').toUpperCase()}/intermediate/${task.process.replace(':', '/')}",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
         pattern: "${output_filename}.tsv",
         mode: "copy"
@@ -44,7 +44,7 @@ process query_SampleName_BCFtools {
 
         echo -e "tumor\ncontrol" > samples_type
 
-        bcftools query -l $input_bcf > ${tmp_samples}
+        bcftools query -l ${input_bcf} > ${tmp_samples}
 
         paste ${tmp_samples} samples_type > "${output_filename}.tsv"
         """
@@ -53,7 +53,7 @@ process query_SampleName_BCFtools {
 process filter_BCF_BCFtools {
     container params.docker_image_bcftools
 
-    publishDir "${params.output_dir}/${params.docker_image_delly.split("/")[1].replace(':', '-').toUpperCase()}/output",
+    publishDir "${params.workflow_output_dir}/output",
         pattern: "${output_filename}.bcf*",
         mode: "copy"
 
@@ -69,8 +69,7 @@ process filter_BCF_BCFtools {
 
     output:
         path ".command.*"
-        path "${output_filename}.bcf", emit: nonPassCallsFiltered
-        path "${output_filename}.bcf.csi", emit: nonPassCallsFiltered_csi
+        path "${output_filename}.bcf*", emit: nonPassCallsFiltered_and_csi
 
     script:
         output_filename = generate_standard_filename(
@@ -82,7 +81,7 @@ process filter_BCF_BCFtools {
         """
         set -euo pipefail
 
-        bcftools view -i "$filter_condition" -O b -o "${output_filename}.bcf" $input_bcf
+        bcftools view -i "${filter_condition}" -O b -o "${output_filename}.bcf" ${input_bcf}
         
         bcftools index "${output_filename}.bcf"
         """

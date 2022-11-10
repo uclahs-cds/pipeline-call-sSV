@@ -11,11 +11,11 @@ Docker Images:
 process generate_sha512 {
     container params.docker_image_validate
 
-    publishDir "$params.output_dir/${params.docker_image_name.split("/")[1].replace(':', '-').toUpperCase()}/output",
+    publishDir "${params.workflow_output_dir}/output",
         pattern: "*.sha512",
         mode: "copy"
 
-    publishDir "$params.log_output_dir/process-log",
+    publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
         mode: "copy",
         saveAs: { "${task.process}/${task.process}-${task.index}/log${file(it).getName()}" }
@@ -30,6 +30,6 @@ process generate_sha512 {
     script:
         """
         set -euo pipefail
-        sha512sum $input_checksum_file > ${input_checksum_file}.sha512
+        sha512sum ${input_checksum_file} > ${input_checksum_file}.sha512
         """
     }
