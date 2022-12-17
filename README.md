@@ -106,6 +106,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
+| algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`. List can contain a single caller of choice.  | 
 | `run_delly` | true | boolean | Whether or not the workflow should run Delly (either run_delly or run_manta must be set to `true`) |
 | `run_manta` | true | boolean | Whether or not the workflow should run Manta (either run_delly or run_manta must be set to `true`) |
 | input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
