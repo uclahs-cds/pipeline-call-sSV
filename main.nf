@@ -28,8 +28,7 @@ Current Configuration:
 
 - options:
     save_intermediate_files: ${params.save_intermediate_files}
-    run_delly: ${params.run_delly}
-    run_manta: ${params.run_manta}
+    SV caller(s): ${params.algorithm}
 
 - tools:
     DELLY: ${params.delly_version}
