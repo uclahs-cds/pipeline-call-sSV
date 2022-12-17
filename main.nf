@@ -78,7 +78,7 @@ if (!params.exclusion_file){
     error "*** Error: You must provide an exclusion file***"
     }
 
-if (!params.run_delly && !params.run_manta) {
+if (!params.algorithm.contains('delly') && !params.algotrithm.contains('manta')) {
     // error out - must specify a valid SV caller
     error "***Error: You must specify either DELLY or Manta***"
     }
@@ -168,7 +168,7 @@ workflow {
     * The sv are stored in call_sSV_Delly.out.nt_call_bcf
     * also create call_sSV_Delly.out.samples per paired (tumor sample, normal sample)
     */
-    if (params.run_delly) {
+    if ('delly' in params.algorithm) {
         call_sSV_Delly(
             input_paired_bams_ch,
             params.reference_fasta,
@@ -232,7 +232,7 @@ workflow {
             filter_BCF_BCFtools.out.nonPassCallsFiltered_and_csi.flatten()
             )
         }
-    if (params.run_manta) {
+    if ('manta' in params.algorithm) {
         call_sSV_Manta(
             input_paired_bams_ch,
             params.reference_fasta,
