@@ -10,14 +10,12 @@
     - sample:    <!-- e.g. A-mini S2.T-1, A-mini S2.T-n1 -->
     - input csv: <!-- path/to/input.csv -->
     - config:    <!-- path/to/xxx.config -->
-    - DELLY output:    <!-- path/to/DELLY output -->
-    - Manta output:    <!-- path/to/Manta output -->
+    - output:    <!-- path/to/output -->
 - DNA A-full
     - sample:    <!-- e.g. A-full S2.T-1, A-full S2.T-n1 -->
     - input csv: <!-- path/to/input.csv -->
     - config:    <!-- path/to/xxx.config -->
-    - DELLY output:    <!-- path/to/DELLY output -->
-    - Manta output:    <!-- path/to/Manta output -->    
+    - output:    <!-- path/to/output -->
 
 # Checklist
 <!--- Please read each of the following items and confirm by replacing the [ ] with a [X] --->
