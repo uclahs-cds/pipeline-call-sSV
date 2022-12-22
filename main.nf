@@ -28,6 +28,7 @@ Current Configuration:
 
 - options:
     save_intermediate_files: ${params.save_intermediate_files}
+    SV caller(s): ${params.algorithm}
 
 - tools:
     DELLY: ${params.delly_version}
@@ -74,6 +75,11 @@ if (!params.reference_fasta){
 if (!params.exclusion_file){
     // error out - must provide exclusion file
     error "*** Error: You must provide an exclusion file***"
+    }
+
+if (!params.algorithm.contains('delly') && !params.algotrithm.contains('manta')) {
+    // error out - must specify a valid SV caller
+    error "***Error: You must specify either DELLY or Manta***"
     }
 
 reference_fasta_index = "${params.reference_fasta}.fai"
@@ -161,76 +167,81 @@ workflow {
     * The sv are stored in call_sSV_Delly.out.nt_call_bcf
     * also create call_sSV_Delly.out.samples per paired (tumor sample, normal sample)
     */
-    call_sSV_Delly(
-        input_paired_bams_ch,
-        params.reference_fasta,
-        reference_fasta_index,
-        params.exclusion_file
+    if ('delly' in params.algorithm) {
+        call_sSV_Delly(
+            input_paired_bams_ch,
+            params.reference_fasta,
+            reference_fasta_index,
+            params.exclusion_file
+            )
+        /**
+        * calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
+        * sample_name   sample_type
+        * S2_v1.1.5	tumor
+        * HG002.N	normal
+        * 
+        * Use bcftools query -l to get the sample names out of call_sSV_Delly.out.nt_call_bcf
+        * Further generate BCFtools_${params.bcftools_version}_${params.dataset_id}_${tumor_id}_query-tumor-normal-name.tsv which will be used by delly filter
+        * Note, the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of samples in delly call.
+        * For example, 
+        *    delly call \
+        *    -g /tmp/ref/genome/genome.fa \
+        *    -x /tmp/ref/delly/human.hg38.excl.tsv \
+        *    -o /tmp/output/output.bcf \
+        *    /tmp/bams/HG002.N-0.bam \
+        *    /tmp/bams/S2.T-0.bam"
+        * bcftools query -l /tmp/output/output.bcf will yield
+        * HG002.N
+        * S2_v1.1.5
+        * If you put /tmp/bams/S2.T-0.bam in front of /tmp/bams/HG002.N-0.bam, bcftools query -l /tmp/output/output.bcf will yield
+        * S2_v1.1.5 
+        * HG002.N
+        */
+        query_SampleName_BCFtools(
+            call_sSV_Delly.out.nt_call_bcf,
+            call_sSV_Delly.out.samples,
+            call_sSV_Delly.out.tumor_id
         )
 
-    /**
-    * calling "delly filter -f somatic -s samples.tsv -o t1.pre.bcf t1.bcf" requires a samples.tsv, which should look like:
-    * sample_name   sample_type
-    * S2_v1.1.5	tumor
-    * HG002.N	normal
-    * 
-    * Use bcftools query -l to get the sample names out of call_sSV_Delly.out.nt_call_bcf
-    * Further generate BCFtools_${params.bcftools_version}_${params.dataset_id}_${tumor_id}_query-tumor-normal-name.tsv which will be used by delly filter
-    * Note, the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of samples in delly call.
-    * For example, 
-    *    delly call \
-    *    -g /tmp/ref/genome/genome.fa \
-    *    -x /tmp/ref/delly/human.hg38.excl.tsv \
-    *    -o /tmp/output/output.bcf \
-    *    /tmp/bams/HG002.N-0.bam \
-    *    /tmp/bams/S2.T-0.bam"
-    * bcftools query -l /tmp/output/output.bcf will yield
-    * HG002.N
-    * S2_v1.1.5
-    * If you put /tmp/bams/S2.T-0.bam in front of /tmp/bams/HG002.N-0.bam, bcftools query -l /tmp/output/output.bcf will yield
-    * S2_v1.1.5 
-    * HG002.N
-    */
-    query_SampleName_BCFtools(
-        call_sSV_Delly.out.nt_call_bcf,
-        call_sSV_Delly.out.samples,
-        call_sSV_Delly.out.tumor_id
-    )
+        /**
+        * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf"
+        * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
+        */
+        filter_sSV_Delly(
+            query_SampleName_BCFtools.out.samples,
+            call_sSV_Delly.out.nt_call_bcf,
+            call_sSV_Delly.out.nt_call_bcf_csi,
+            call_sSV_Delly.out.tumor_id
+            )
 
-    /**
-    * Call "delly filter -f somatic -o t1.pre.bcf -s samples.tsv t1.bcf"
-    * by using the call_sSV_Delly.out.samples and call_sSV_Delly.out.nt_call_bcf
-    */
-    filter_sSV_Delly(
-        query_SampleName_BCFtools.out.samples,
-        call_sSV_Delly.out.nt_call_bcf,
-        call_sSV_Delly.out.nt_call_bcf_csi,
-        call_sSV_Delly.out.tumor_id
-        )
+        /**
+        * Filter the output bcf from filter_sSV_Delly.
+        * The default filter_condition is "FILTER=='PASS'", which filters out NonPass calls.
+        */
+        filter_BCF_BCFtools(
+            filter_sSV_Delly.out.somatic_bcf,
+            params.filter_condition,
+            call_sSV_Delly.out.tumor_id
+            )
 
-    /**
-    * Filter the output bcf from filter_sSV_Delly.
-    * The default filter_condition is "FILTER=='PASS'", which filters out NonPass calls.
-    */
-    filter_BCF_BCFtools(
-        filter_sSV_Delly.out.somatic_bcf,
-        params.filter_condition,
-        call_sSV_Delly.out.tumor_id
-        )
-
-    call_sSV_Manta(
-        input_paired_bams_ch,
-        params.reference_fasta,
-        reference_fasta_index
-        )
-
-    /**
-    * Generate one sha512 checksum for the output files.
-    */
-    generate_sha512_BCFtools(
-        filter_BCF_BCFtools.out.nonPassCallsFiltered_and_csi.flatten()
-        )
-    generate_sha512_Manta(
-        call_sSV_Manta.out.manta_vcfs.flatten()
-        )
+        /**
+        * Generate one sha512 checksum for DELLY's output files.
+        */
+        generate_sha512_BCFtools(
+            filter_BCF_BCFtools.out.nonPassCallsFiltered_and_csi.flatten()
+            )
+        }
+    if ('manta' in params.algorithm) {
+        call_sSV_Manta(
+            input_paired_bams_ch,
+            params.reference_fasta,
+            reference_fasta_index
+            )
+        /**
+        * Generate one sha512 checksum for the output files.
+        */
+        generate_sha512_Manta(
+            call_sSV_Manta.out.manta_vcfs.flatten()
+            )
+        }
     }
