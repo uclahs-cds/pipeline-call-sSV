@@ -14,8 +14,20 @@
 * [License](#license)
 
 ## Overview:
-The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly). This pipeline requires at least one tumor sample and a matched normal sample.
+The call-sSV pipeline calls somatic structural variants utilizing [Delly](https://github.com/dellytools/delly) and [Manta](https://github.com/Illumina/manta). This pipeline requires at least one tumor sample and a matched normal sample.
 This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC Slurm cluster.
+
+### Node Specific Config File Settings
+
+| Config File | Available Node cpus / memory | Designated Process 1; cpus / memory | Designated Process 2; cpus / memory | Designated Process 3; cpus / memory |
+|:------------|:---------|:-------------------------|:-------------------------|:-------------------------|
+| `F2.config` | 2 / 3 GB | call_sSV_Delly; 1 / 3 GB | call_sSV_Manta; 1 / 3 GB\* | run_validate_PipeVal; 1 / 1 GB |
+| `F16.config` | 16 / 29 GB | call_gSV_Delly; 1 / 16 GB | call_gSV_Manta; 1 / 16 GB | run_validate_PipeVal; 1 / 1 GB |
+| `F32.config` | 32 / 62.8 GB | call_gSV_Delly; 1 / 30 GB | call_gSV_Manta; 1 / 30 GB | run_validate_PipeVal; 1 / 1 GB |
+| `F72.config` | 72 / 136.8 GB | call_gSV_Delly; 1 / 30 GB | call_gSV_Manta; 1 / 30 GB | run_validate_PipeVal; 1 / 1 GB |
+| `M64.config` | 64 / 950 GB | call_gSV_Delly; 1 / 30 GB | call_gSV_Manta; 1 / 30 GB | run_validate_PipeVal; 1 / 1 GB |
+---
+\* Manta SV calling wouldn't work on an F2 node due to incompatible resources. In order to test the pipeline for tasks not relevant to Manta, please set `algorithm = ['delly']` in the sample specific [config](config/template.config) file.
 
 ## How to Run:
 
@@ -41,7 +53,7 @@ Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource a
 nextflow run path/to/main.nf -config path/to/sample-specific.config
 ```
 
-* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/3.0.0/main.nf`
+* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/4.1.0/main.nf`
 * `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config) 
 
 To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
@@ -64,13 +76,13 @@ In the above command, the partition type can be changed based on the size of the
 
 ## Pipeline Steps:
 
-### Call Somatic Structural Variants:
+### Call Somatic Structural Variants - DELLY workflow:
 
 #### 1. Calling Single Sample Somatic Structural Variants
 ```script
 delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam normal1.bam
 ```
-This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with Delly.
+This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with DELLY.
 The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file](config/template.config). If need be, these stringent filters can be adjusted in the config file.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
@@ -88,6 +100,14 @@ This step applies somatic filtering against the `.bcf` file generated in Step 1.
 
 Note: cohort based false positive filtering is compuationally heavy and not implemented in this pipeline.
 
+### Call Somatic Structural Variants - DELLY workflow:
+
+#### 1. Calling Single Sample Somatic Structural Variants
+```script
+configManta.py --normalBam "${normal_bam}" --tumorBam "${tumor_bam}" --referenceFasta "${reference_fasta}" --runDir MantaWorkflow
+MantaWorkflow/runWorkflow.py
+```
+This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with Manta.
 
 ## Inputs
 
@@ -125,8 +145,10 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 
 | Output |	Output type |	Description |
 | ---- | ----- | -------- |
-| .bcf |	final	| Binary VCF output format with somatic structural variants if found. |
-| .bcf.csi	| final	| CSI-format index for BCF files |
+| .bcf |	final	| Binary VCF output format from DELLY with somatic structural variants if found. |
+| .bcf.csi	| final	| CSI-format index for BCF files from DELLY. |
+| .vcf.gz | final | zipped VCF output format from Manta with somatic structural variants if found. |
+| .vcf.gz.tbi | final | TBI-format index for zipped VCF files from Manta. |
 | report.html, timeline.html and trace.txt	| log |	A Nextflow report, timeline and trace files. |
 | \*.log.command.*	| log |	Process and sample specific logging files created by nextflow. |
 | *.sha512 |	checksum |	Generates SHA-512 hash to validate file integrity. |
