@@ -72,7 +72,7 @@ In the above command, the partition type can be changed based on the size of the
 
 ## Flow Diagram:
 
-![](https://github.com/uclahs-cds/pipeline-call-sSV/blob/yupan-documentation/call-sSV-workflow.svg)
+![call-sSV flow diagram](call-sSV-workflow.svg?raw=true)
 
 ## Pipeline Steps:
 
