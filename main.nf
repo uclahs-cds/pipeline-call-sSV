@@ -34,6 +34,7 @@ Current Configuration:
     DELLY: ${params.delly_version}
     BCFtools: ${params.bcftools_version}
     Manta: ${params.manta_version}
+    PipeVal: ${params.pipeval_version}
 
 ------------------------------------
 Starting workflow...
@@ -41,7 +42,9 @@ Starting workflow...
 """
 .stripIndent()
 
-include { run_validate_PipeVal } from './module/validation'
+include { run_validate_PipeVal } from "./external/pipeline-Nextflow-module/modules/PipeVal/validate/main.nf" addParams(
+    options: [ docker_image_version: params.pipeval_version ]
+    )
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(
     workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
     )
@@ -96,16 +99,24 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 /**
 * Create input_validation to validate the input bams
 */
-input_validation = Channel
+validation_mode = Channel.of("file-input")
+
+input_files = Channel
     .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
-    .map{
+    .map {
         row -> [
             row.tumor_bam,
-            row.normal_bam
+            "${row.tumor_bam}.bai",
+            row.normal_bam,
+            "${row.normal_bam}.bai"
             ]
         }
     .flatten()
+
+validation_mode
+     .combine(input_files)
+     .set { input_validation }
 
 if (params.verbose){
     input_validation.view()
@@ -159,7 +170,7 @@ workflow {
     // Collect and store input validation output
     run_validate_PipeVal.out.val_file.collectFile(
       name: 'input_validation.txt',
-      storeDir: "${params.output_dir_base}/validation"
+      storeDir: "${params.output_dir_base}/validation/run_validate_PipeVal"
       )
 
     /**
