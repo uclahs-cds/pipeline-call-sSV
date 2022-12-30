@@ -14,8 +14,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Simplify output directory declaration for each process using `addParams` and use `output_dir_base`
 
 ### Added
+- Add `PipeVal:v3.0.0` using pipeline-Nextflow-module to validate the input CSV file
 - Parameter `algorithm` to select the SV caller(s) of choice in `template.config`
 - Add Manta SV caller
+
+### Removed
+- Remove `module/validation.nf` as PipeVal sub-module is used
 
 ---
 
