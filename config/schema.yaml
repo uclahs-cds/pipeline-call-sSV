@@ -1,0 +1,26 @@
+---
+input_csv:
+    type: 'Path'
+    mode: 'r'
+    required: true
+    help: 'Absolute path to the input CSV file'
+reference_fasta:
+    type: 'Path'
+    mode: 'r'
+    required: true
+    help: 'Absolute path to a reference FASTA file'
+exclusion_file:
+    type: 'Path'
+    mode: 'r'
+    required: true
+    help: 'Absoulte path to an exclusion file'
+algorithm:
+    type: 'List'
+    required: true
+    help: 'List of SV caller(s) for calling'
+    default:
+        - delly
+        - manta
+    choices:
+        - delly
+        - manta
