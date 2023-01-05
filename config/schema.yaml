@@ -24,3 +24,12 @@ algorithm:
     choices:
         - delly
         - manta
+output_dir:
+    type: 'Path'
+    mode: 'w'
+    required: true
+    help: 'Absolute path to output directory'
+dataset_id:
+    type: 'String'
+    required: true
+    help: 'Dataset identifier'
