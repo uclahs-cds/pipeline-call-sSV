@@ -33,3 +33,19 @@ dataset_id:
     type: 'String'
     required: true
     help: 'Dataset identifier'
+map_qual:
+    type: 'Integer'
+    required: true
+    default: 20
+min_clique_size:
+    type: 'Integer'
+    required: true
+    default: 5
+mad_cutoff:
+    type: 'Integer'
+    required: true
+    default: 15
+filter_condition:
+    type: 'String'
+    required: true
+    default: "FILTER=='PASS'"
