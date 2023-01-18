@@ -34,6 +34,7 @@ Current Configuration:
     DELLY: ${params.delly_version}
     BCFtools: ${params.bcftools_version}
     Manta: ${params.manta_version}
+    PipeVal: ${params.pipeval_version}
 
 ------------------------------------
 Starting workflow...
@@ -41,7 +42,9 @@ Starting workflow...
 """
 .stripIndent()
 
-include { run_validate_PipeVal } from './module/validation'
+include { run_validate_PipeVal } from "./external/pipeline-Nextflow-module/modules/PipeVal/validate/main.nf" addParams(
+    options: [ docker_image_version: params.pipeval_version ]
+    )
 include { query_SampleName_BCFtools; filter_BCF_BCFtools } from './module/bcftools' addParams(
     workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
     )
@@ -59,32 +62,6 @@ include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addP
     )
 
 /**
-* Check the params
-*/
-
-if (!params.input_csv){
-    // error out - must provide an input_csv file
-    error "***Error: You must specify an input_csv file***"
-    }
-
-if (!params.reference_fasta){
-    // error out - must provide a reference FASTA file
-    error "***Error: You must specify a reference FASTA file***"
-    }
-
-if (!params.exclusion_file){
-    // error out - must provide exclusion file
-    error "*** Error: You must provide an exclusion file***"
-    }
-
-if (!params.algorithm.contains('delly') && !params.algotrithm.contains('manta')) {
-    // error out - must specify a valid SV caller
-    error "***Error: You must specify either DELLY or Manta***"
-    }
-
-reference_fasta_index = "${params.reference_fasta}.fai"
-
-/**
 * The input file params.input_csv looks as below:
 * normal_bam, tumor_bam
 * /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
@@ -96,16 +73,24 @@ reference_fasta_index = "${params.reference_fasta}.fai"
 /**
 * Create input_validation to validate the input bams
 */
-input_validation = Channel
+validation_mode = Channel.of("file-input")
+
+input_files = Channel
     .fromPath(params.input_csv, checkIfExists:true)
     .splitCsv(header:true)
-    .map{
+    .map {
         row -> [
             row.tumor_bam,
-            row.normal_bam
+            "${row.tumor_bam}.bai",
+            row.normal_bam,
+            "${row.normal_bam}.bai"
             ]
         }
     .flatten()
+
+validation_mode
+     .combine(input_files)
+     .set { input_validation }
 
 if (params.verbose){
     input_validation.view()
@@ -151,16 +136,18 @@ if (params.verbose){
     tumor_bams_ch.view()
     }
 
+reference_fasta_index = "${params.reference_fasta}.fai"
+
 workflow {
     /**
     * Validate the input bams
     */
     run_validate_PipeVal(input_validation)
     // Collect and store input validation output
-    run_validate_PipeVal.out.val_file.collectFile(
-      name: 'input_validation.txt',
-      storeDir: "${params.output_dir_base}/validation"
-      )
+    run_validate_PipeVal.out.validation_result.collectFile(
+        name: 'input_validation.txt',
+        storeDir: "${params.output_dir_base}/validation/run_validate_PipeVal"
+        )
 
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam normal1.bam" per paired (tumor sample, normal sample)
