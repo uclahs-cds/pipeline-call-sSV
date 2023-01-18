@@ -62,32 +62,6 @@ include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addP
     )
 
 /**
-* Check the params
-*/
-
-if (!params.input_csv){
-    // error out - must provide an input_csv file
-    error "***Error: You must specify an input_csv file***"
-    }
-
-if (!params.reference_fasta){
-    // error out - must provide a reference FASTA file
-    error "***Error: You must specify a reference FASTA file***"
-    }
-
-if (!params.exclusion_file){
-    // error out - must provide exclusion file
-    error "*** Error: You must provide an exclusion file***"
-    }
-
-if (!params.algorithm.contains('delly') && !params.algotrithm.contains('manta')) {
-    // error out - must specify a valid SV caller
-    error "***Error: You must specify either DELLY or Manta***"
-    }
-
-reference_fasta_index = "${params.reference_fasta}.fai"
-
-/**
 * The input file params.input_csv looks as below:
 * normal_bam, tumor_bam
 * /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
@@ -161,6 +135,8 @@ tumor_bams_ch = Channel
 if (params.verbose){
     tumor_bams_ch.view()
     }
+
+reference_fasta_index = "${params.reference_fasta}.fai"
 
 workflow {
     /**
