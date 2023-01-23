@@ -178,7 +178,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 
 ## References
 
-* [DELLY Structural Variant Calling](https://github.com/dellytools/delly)
+* [DELLY Structural Variant Caller](https://github.com/dellytools/delly)
 * [Manta Structural Variant Caller](https://github.com/Illumina/manta)
 
 
