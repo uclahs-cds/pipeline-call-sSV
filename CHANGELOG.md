@@ -8,7 +8,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+
+---
+
+## [4.1.0-rc.1] - 2023-01-23
 ### Changed
+- Update `README.md` for release `4.1.0-rc.1`
 - Move param checking to `methods.config` using `schema.config`
 - Parameterize Docker registry
 - Use `ghcr.io/uclahs-cds` as default registry
