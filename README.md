@@ -160,51 +160,37 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 
 | Data Set | Run Configuration | Output Dir | Normal Sample | Tumor Sample |  
 | ------ | ------ | ------- | ------ | ------- |
-| A-mini | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/A-mini-hg38.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/A-mini/call-sSV-2.0.0/S2.T-0/DELLY-1.0.3/output/ | /hot/resource/SMC-HET/normal/bams/A-mini/0/output/HG002.N-0.bam | /hot/resource/SMC-HET/tumours/A-mini/bams/0/output/S2.T-0.bam |
-| A-full | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/A-full-F72-hg19.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/A-full-F72/call-sSV-2.0.0/T5.T.sorted_py/DELLY-1.0.3/output/ | /hot/resource/SMC-HET/normal/bams/HG002.N.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/T5.T.sorted_py.bam |
-| ILHNLNEV000001-T001-P01-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/config/ILHNLNEV000001-T001-P01-F-F32-hg38.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/3.0.0/mmoootor-upgrade-delly-0.9.1-to-1.0.3/ILHNLNEV000001-T001-P01-F-F32/call-sSV-2.0.0/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered/DELLY-1.0.3/output/ | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000001-T001-P01-F/gSNP/2021-01-05_22.01.08/ILHNLNEV000001/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000001-T001-P01-F_realigned_recalibrated_reheadered.bam |
-| ILHNLNEV000005-T002-L01-F | /hot/user/rhughwhite/ILHNLNEV/call-sSV/inputs_configs/2021-09-10/ILHNLNEV000005-T002-L01-F/nextflow.config | /hot/user/rhughwhite/ILHNLNEV/call-sSV/output/ILHNLNEV000005-T002-L01-F_testing/call-sSV-20210930-180357/ | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/user/rhughwhite/ILHNLNEV/call-gSNP/output/2020-12-22/ILHNLNEV000005-T002-L01-F/gSNP/2021-01-08_17.01.47/ILHNLNEV000005/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000005-T002-L01-F_realigned_recalibrated_reheadered.bam |
+| A-mini TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-4-1-0-rc-1/config/TWGSAMIN000001-T003-S03-F_F16.config |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-4-1-0-rc-1/TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam |
+| ILHNLNEV000009 | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-4-1-0-rc-1/config/ILHNLNEV000009-T002-L01-F_F32.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-4-1-0-rc-1/ILHNLNEV000009-T002-L01-F | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-T002-L01-F_realigned_recalibrated_reheadered.bam |
+| DTB-266_WCDT | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-4-1-0-rc-1/config/DTB-266_WCDT_F72.config |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-4-1-0-rc-1/DTB-266_WCDT | /hot/users/tgebo/WCDT/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_N_realigned_recalibrated_merged.bam | /hot/users/tgebo/WCDT/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_T_realigned_recalibrated_merged.bam |
 
 ## Performance Validation
 
 Testing was performed primarily in the Boutros Lab SLURM Development cluster. Metrics below will be updated where relevant with additional testing and tuning outputs.
 
-## with Delly v1.0.3 and newer versions
-|Test Case      | Test Date     | Node Type |   Duration        | CPU Hours     | Virtual Memory Usage (RAM)-peak rss|
+| Test Case | Test Date | Node Type | Duration | CPU Hours | Peak RSS (RAM) |
 |----- | -------| --------| ----------| ---------| --------|
-|A-mini(with stringent filters) | 2022-07-01 | F2 | 20m 32s | 18m | 1.8 GB |
-|A-full(with stringent filters) | 2022-07-10 | F16 | 17h 53m 49s | 17h 54m | 15.1 GB |
-|A-full(with stringent filters) | 2021-09-20 | F32 | 20h 14m 1s | 20h 12m | 15.1 GB |
-|A-full(with stringent filters) | 2022-07-10 | F72 | 18h 16m 15s | 18h 18m | 15.1 GB |
-|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F16 | 8h 46m 31s | 8h 48m | 4.4 GB |
-|ILHNLNEV000001-T001-P01-F (with stringent filters)     | 2022-07-10 |  F32 | 9h 38m 29s | 9h 36m | 4.4 GB |
-
-## with Delly v0.9.1 and older versions
-|Test Case	| Test Date	| Node Type |	Duration	| CPU Hours	| Virtual Memory Usage (RAM)-peak rss|
-|----- | -------| --------| ----------| ---------| --------|
-|A-mini(with default filters) | 2021-09-20 | F2 | 16m 24s | 16m 1s	| 1.7 GB |
-|A-mini(with stringent filters)	| 2021-10-14 | F2 | 15m 13s | 15m	| 1.7 GB |
-|A-full(with default filters) | 2021-09-20 | F72 | 19h 54m 5s | 19h 53m 56s | 15.1 GB |
-|ILHNLNEV000001-T001-P01-F (with default filters) | 2021-09-20 | F72 | 22h 30m 16s | 22h 30m 6s | 4.5 GB |
-|ILHNLNEV000001-T001-P01-F (with stringent filters)	| 2021-10-14 |	F32 | 8h 37m 34s | 8h 37m 29s | 4.4 GB |
-|ILHNLNEV000005-T002-L01-F (with default filters) | 2021-09-20 | F72 | 6d 22h 10m 42s | 11'797.8h | 11.733 GB |
+| TWGSAMIN000001-T003-S03-F | 2023-01-19 | F16 | 41m 35s | 0.7 | 1.8 GB |
+| ILHNLNEV000009-T002-L01-F | 2023-01-20 | F32 | 1d 23h 10m 46s | 63.3 | 12.1 GB |
+| DTB-266_WCDT | 2023-01-19 | F72 | 22h 55m 17s | 45.1 | 13.2 GB |
 |ILHNLNEV000005-T002-L01-F (with stringent filters. See [#10](https://github.com/uclahs-cds/pipeline-call-sSV/issues/10) [2f72de1](https://github.com/uclahs-cds/pipeline-call-sSV/commit/2f72de1ba190623e4344f144a12cc315fda1dd18)) | 2021-10-02 | F72 | 1d 10h 55m 13s | 2'478.4h | 11.590 GB |
 
 
 ## References
 
-* [Delly Structural Variant Calling](https://github.com/dellytools/delly)
+* [DELLY Structural Variant Calling](https://github.com/dellytools/delly)
+* [Manta Structural Variant Caller](https://github.com/Illumina/manta)
 
 
 ## License
 
 Authors: Yu Pan (YuPan@mednet.ucla.edu), Ghouse Mohammed (GMohammed@mednet.ucla.edu), Mohammed Faizal Eeman Mootor (MMootor@mednet.ucla.edu)
 
-Call-sSV is licensed under the GNU General Public License version 2. See the file LICENSE for the terms of the GNU GPL license.
+`call-sSV` is licensed under the GNU General Public License version 2. See the file LICENSE for the terms of the GNU GPL license.
 
-Call-sSV takes BAM files and utilizes Delly to call somatic structural variants.
+`call-sSV` takes BAM files and utilizes DELLY and Manta to call somatic structural variants.
 
-Copyright (C) 2021-2022 University of California Los Angeles ("Boutros Lab") All rights reserved.
+Copyright (C) 2021-2023 University of California Los Angeles ("Boutros Lab") All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
