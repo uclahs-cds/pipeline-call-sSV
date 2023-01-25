@@ -106,7 +106,7 @@ This step requires an aligned and sorted tumor sample BAM file and a matched nor
 The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](input/call-sSV-input.csv).
 
 | Input |	Type | Required | Description |
-|--- | --- | --- |
+|--- | --- | --- | --- |
 | normal_bam | string | yes | Absolute path to the normal sample `.bam` file |
 | tumor_bam	| string | yes | Absolute path to the tumor sample `.bam` file |
 
