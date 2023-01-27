@@ -11,6 +11,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.0.0] - 2023-01-27
+### Changed
+- Update `README.md` for release `5.0.0`
+- Perform additional test to release `5.0.0`
+
+---
+
 ## [5.0.0-rc.1] - 2023-01-24
 ### Changed
 - Update `README.md` for release `5.0.0-rc.1`
