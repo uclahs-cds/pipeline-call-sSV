@@ -121,7 +121,7 @@ The input CSV should have each of the input fields listed below as separate colu
 | reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
 | exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
 | map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly.|
-| min_clique_size | yes | integer | Minimum number of supporting PE or SR read alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. |
+| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. |
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly.|
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is `false`. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
