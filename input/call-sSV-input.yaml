@@ -1,0 +1,8 @@
+---
+patient_id: "patient_id"
+input:
+  BAM:
+    normal:
+      - "/absolute/path/to/BAM"
+    tumor:
+      - "/abosolute/path/to/BAM"
