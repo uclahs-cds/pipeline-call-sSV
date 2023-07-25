@@ -18,11 +18,11 @@ algorithm:
   required: true
   help: 'List of SV caller(s) for calling'
   default:
-      - delly
-      - manta
+    - delly
+    - manta
   choices:
-      - delly
-      - manta
+    - delly
+    - manta
 output_dir:
   type: 'Path'
   mode: 'w'
