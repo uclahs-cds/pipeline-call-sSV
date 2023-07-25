@@ -82,7 +82,7 @@ process filter_sSV_Delly {
         path "${output_filename}.bcf", emit: somatic_bcf
         path "${output_filename}.bcf.csi", emit: somatic_bcf_csi
         path ".command.*"
- 
+
     script:
         output_filename = generate_standard_filename(
             "DELLY-${params.delly_version}",
