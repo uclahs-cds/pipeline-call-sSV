@@ -61,77 +61,47 @@ include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addP
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
 
-/**
-* The input file params.input_csv looks as below:
-* normal_bam, tumor_bam
-* /hot/users/ybugh/A-mini/0/output/HG002.N-0.bam, /hot/users/ybugh/A-mini/0/output/S2.T-0.bam
-*
-* Later, calling "delly call -g hg19.fa -v t1.pre.bcf -o geno.bcf -x hg19.excl tumor1.bam normal1.bam ... normalN.bam" needs all the normal samples, 
-* which will be collected from params.input_normal_bams.
-*/
+// Returns the index file for the given bam or vcf
+def indexFile(bam_or_vcf) {
+    if (bam_or_vcf.endsWith('.bam')) {
+        return "${bam_or_vcf}.bai"
+    } else if (bam_or_vcf.endsWith('vcf.gz')) {
+        return "${bam_or_vcf}.tbi"
+    } else {
+        throw new Exception("Index file for ${bam_or_vcf} file type not supported. Use .bam or .vcf.gz files.")
+    }
+}
 
-/**
-* Create input_validation to validate the input bams
-*/
-validation_mode = Channel.of("file-input")
+Channel.from(params.samples_to_process)
+    .map{ sample -> ['index': indexFile(sample.path)] + sample }
+    .set{ input_ch_samples_with_index }
 
-input_files = Channel
-    .fromPath(params.input_csv, checkIfExists:true)
-    .splitCsv(header:true)
-    .map {
-        row -> [
-            row.tumor_bam,
-            "${row.tumor_bam}.bai",
-            row.normal_bam,
-            "${row.normal_bam}.bai"
-            ]
-        }
+input_ch_samples_with_index
+    .map{ sample -> [sample.path, sample.index] }
     .flatten()
-
-validation_mode
-     .combine(input_files)
-     .set { input_validation }
-
+    .set{ input_validation }
 if (params.verbose){
     input_validation.view()
     }
 
-/**
-* Create input_paired_bams_ch to get the paired turmor sample and normal sample
-*/
-input_paired_bams_ch = Channel
-    .fromPath(params.input_csv, checkIfExists:true)
-    .splitCsv(header:true)
-    .map{
-        row -> tuple(
-            Paths.get(row.tumor_bam).getFileName().toString().split('.bam')[0],
-            row.tumor_bam,
-            "${row.tumor_bam}.bai",
-            row.normal_bam,
-            "${row.normal_bam}.bai"
-            )
-        }
+tumor_id = input_ch_samples_with_index
+    .filter{ it.sample_type == 'tumor' }
+    .map{ it -> [it.id] }
+    .flatten()
 
+tumor_id_bam_bai = input_ch_samples_with_index
+    .filter{ it.sample_type == 'tumor' }
+    .map{ it -> [it.id, it.path, it.index] }
+normal_bam_bai = input_ch_samples_with_index
+    .filter{ it.sample_type == 'normal' }
+    .map{ it -> [it.path, it.index] }
+
+input_paired_bams_ch = tumor_id_bam_bai.combine(normal_bam_bai)
 if (params.verbose){
     input_paired_bams_ch.view()
     }
 
-/**
-* Create tumor_bams_ch to only get the turmor samples.
-* I tried to reuse input_paired_bams_ch, however, in that way, I have to filter the paired normal sample out of the all_normal_samples_bams_list,
-* otherwise, nextflow complains a same normal sample is declared twice.
-*/
-tumor_bams_ch = Channel
-    .fromPath(params.input_csv, checkIfExists:true)
-    .splitCsv(header:true)
-    .map{
-        row -> tuple(
-            Paths.get(row.tumor_bam).getFileName().toString().split('.bam')[0],
-            row.tumor_bam,
-            "${row.tumor_bam}.bai"
-            )
-        }
-
+tumor_bams_ch = tumor_id_bam_bai
 if (params.verbose){
     tumor_bams_ch.view()
     }
@@ -166,11 +136,11 @@ workflow {
         * sample_name   sample_type
         * S2_v1.1.5	tumor
         * HG002.N	normal
-        * 
+        *
         * Use bcftools query -l to get the sample names out of call_sSV_Delly.out.nt_call_bcf
         * Further generate BCFtools_${params.bcftools_version}_${params.dataset_id}_${tumor_id}_query-tumor-normal-name.tsv which will be used by delly filter
         * Note, the order of samples in call_sSV_Delly.out.nt_call_bcf is determined by the order of samples in delly call.
-        * For example, 
+        * For example,
         *    delly call \
         *    -g /tmp/ref/genome/genome.fa \
         *    -x /tmp/ref/delly/human.hg38.excl.tsv \
@@ -181,7 +151,7 @@ workflow {
         * HG002.N
         * S2_v1.1.5
         * If you put /tmp/bams/S2.T-0.bam in front of /tmp/bams/HG002.N-0.bam, bcftools query -l /tmp/output/output.bcf will yield
-        * S2_v1.1.5 
+        * S2_v1.1.5
         * HG002.N
         */
         query_SampleName_BCFtools(
