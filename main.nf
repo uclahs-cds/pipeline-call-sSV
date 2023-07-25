@@ -16,7 +16,7 @@ Current Configuration:
     version: ${workflow.manifest.version}
 
 - input:
-    input_csv: "${params.input_csv}"
+    samples: ${params.samples_to_process}
     reference_fasta: "${params.reference_fasta}"
     reference_fasta_index: "${params.reference_fasta}.fai"
     exclusion_file: "${params.exclusion_file}"
