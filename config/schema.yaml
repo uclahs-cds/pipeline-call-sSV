@@ -4,50 +4,50 @@ sample_id:
   required: true
   help: 'Sample ID'
 reference_fasta:
-    type: 'Path'
-    mode: 'r'
-    required: true
-    help: 'Absolute path to a reference FASTA file'
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to a reference FASTA file'
 exclusion_file:
-    type: 'Path'
-    mode: 'r'
-    required: true
-    help: 'Absoulte path to an exclusion file'
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absoulte path to an exclusion file'
 algorithm:
-    type: 'List'
-    required: true
-    help: 'List of SV caller(s) for calling'
-    default:
-        - delly
-        - manta
-    choices:
-        - delly
-        - manta
+  type: 'List'
+  required: true
+  help: 'List of SV caller(s) for calling'
+  default:
+      - delly
+      - manta
+  choices:
+      - delly
+      - manta
 output_dir:
-    type: 'Path'
-    mode: 'w'
-    required: true
-    help: 'Absolute path to output directory'
+  type: 'Path'
+  mode: 'w'
+  required: true
+  help: 'Absolute path to output directory'
 dataset_id:
-    type: 'String'
-    required: true
-    help: 'Dataset identifier'
+  type: 'String'
+  required: true
+  help: 'Dataset identifier'
 map_qual:
-    type: 'Integer'
-    required: true
-    default: 20
+  type: 'Integer'
+  required: true
+  default: 20
 min_clique_size:
-    type: 'Integer'
-    required: true
-    default: 5
+  type: 'Integer'
+  required: true
+  default: 5
 mad_cutoff:
-    type: 'Integer'
-    required: true
-    default: 15
+  type: 'Integer'
+  required: true
+  default: 15
 filter_condition:
-    type: 'String'
-    required: true
-    default: "FILTER=='PASS'"
+  type: 'String'
+  required: true
+  default: "FILTER=='PASS'"
 input:
   type: 'InputNamespace'
   required: true
