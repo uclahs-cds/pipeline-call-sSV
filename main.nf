@@ -61,14 +61,12 @@ include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addP
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
 
-// Returns the index file for the given bam or vcf
-def indexFile(bam_or_vcf) {
-    if (bam_or_vcf.endsWith('.bam')) {
-        return "${bam_or_vcf}.bai"
-    } else if (bam_or_vcf.endsWith('vcf.gz')) {
-        return "${bam_or_vcf}.tbi"
+// Returns the index file for the given bam
+def indexFile(bam) {
+    if (bam.endsWith('.bam')) {
+        return "${bam}.bai"
     } else {
-        throw new Exception("Index file for ${bam_or_vcf} file type not supported. Use .bam or .vcf.gz files.")
+        throw new Exception("Index file for ${bam} file type not supported. Use .bam!")
     }
 }
 
@@ -83,11 +81,6 @@ input_ch_samples_with_index
 if (params.verbose){
     input_validation.view()
     }
-
-tumor_id = input_ch_samples_with_index
-    .filter{ it.sample_type == 'tumor' }
-    .map{ it -> [it.id] }
-    .flatten()
 
 tumor_id_bam_bai = input_ch_samples_with_index
     .filter{ it.sample_type == 'tumor' }
