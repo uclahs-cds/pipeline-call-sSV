@@ -31,18 +31,20 @@ Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource a
 
     * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
 
-3. Create the input CSV using the [template](input/call-sSV-input.csv).See [Input CSV](#Input-CSV) for detailed description of each column. All columns must exist and should be comma separated in order to run the pipeline successfully.
-   
-   * Again, do not directly modify the source template CSV file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
+3. Create the input YAML using the [template](input/call-sSV-input.yaml).See [Input YAML](#Input-YAML) for detailed description of each column.
+
+   * Again, do not directly modify the source template input YAML file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
 
 4. The pipeline can be executed locally using the command below:
 
+- YAML input
 ```bash
-nextflow run path/to/main.nf -config path/to/sample-specific.config
+nextflow run path/to/main.nf -config path/to/sample-specific.config -params-file path/to/input.yaml
 ```
 
-* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/5.0.0/main.nf`
-* `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config) 
+* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/6.0.0/main.nf`
+* `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config)
+* `path/to/input.config` is the path to where you saved your project-specific copy of [input-sSV.yaml](input/call-sSV-input.yaml)
 
 To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
 
@@ -50,6 +52,7 @@ To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://
 python path/to/submit_nextflow_pipeline.py \
     --nextflow_script path/to/main.nf \
     --nextflow_config path/to/sample-specific.config \
+    --nextflow_yaml path/to/input.yaml \
     --pipeline_run_name <sample_name> \
     --partition_type F16 \
     --email <your UCLA email, jdoe@ucla.edu>
@@ -101,14 +104,27 @@ This step requires an aligned and sorted tumor sample BAM file and a matched nor
 
 ## Inputs
 
-### Input CSV
+### Input YAML
 
-The input CSV should have each of the input fields listed below as separate columns, using the same order and comma as column separator. An example of the input CSV can be found [here](input/call-sSV-input.csv).
+| Field | Type | Description |
+|:------|:-----|:------------|
+| sample_id | string | Sample ID (will be standardized according to data storage structure in the near future) |
+| normal | path | Set to absolute path to normal BAM |
+| tumor | path | Set to absolute path to tumour BAM |
 
-| Input |	Type | Required | Description |
-|--- | --- | --- | --- |
-| normal_bam | string | yes | Absolute path to the normal sample `.bam` file |
-| tumor_bam	| string | yes | Absolute path to the tumor sample `.bam` file |
+```
+---
+sample_id: "sample_id"
+input:
+  BAM:
+    normal:
+      - "/absolute/path/to/BAM"
+      - "/absolute/path/to/BAM"
+    tumor:
+      - "/absolute/path/to/BAM"
+      - "/absolute/path/to/BAM"
+
+```
 
 ## Nextflow Config File Parameters
 
@@ -117,7 +133,6 @@ The input CSV should have each of the input fields listed below as separate colu
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`. List can contain a single caller of choice.  |
-| input_csv |	yes |	string	| Absolute path to the input CSV file for the pipeline. |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
 | exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
 | map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
@@ -148,7 +163,7 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 
 ### Test Data Set
 
-| Data Set | Run Configuration | Output Dir | Normal Sample | Tumor Sample |  
+| Data Set | Run Configuration | Output Dir | Normal Sample | Tumor Sample |
 | ------ | ------ | ------- | ------ | ------- |
 | A-mini TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/config/TWGSAMIN000001-T003-S03-F_F16.config |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam |
 | ILHNLNEV000009 | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/config/ILHNLNEV000009-T002-L01-F_F32.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/ILHNLNEV000009-T002-L01-F | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-T002-L01-F_realigned_recalibrated_reheadered.bam |
