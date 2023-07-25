@@ -1,9 +1,8 @@
 ---
-input_csv:
-    type: 'Path'
-    mode: 'r'
-    required: true
-    help: 'Absolute path to the input CSV file'
+sample_id:
+  type: 'String'
+  required: true
+  help: 'Sample ID'
 reference_fasta:
     type: 'Path'
     mode: 'r'
@@ -49,3 +48,21 @@ filter_condition:
     type: 'String'
     required: true
     default: "FILTER=='PASS'"
+input:
+  type: 'InputNamespace'
+  required: true
+  help: 'Input samples'
+  elements:
+    BAM:
+      type: 'InputBAMNamespace'
+      required: true
+      help: 'Input BAMs for calling'
+      elements:
+        normal:
+          type: 'BAMEntryList'
+          required: false
+          help: 'Input normal BAMs'
+        tumor:
+          type: 'BAMEntryList'
+          required: false
+          help: 'Input tumor BAMs'
