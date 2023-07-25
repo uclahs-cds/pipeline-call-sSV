@@ -16,7 +16,7 @@ exclusion_file:
 algorithm:
   type: 'List'
   required: true
-  help: 'List of SV caller(s) for calling'
+  help: 'List of available somatic SV callers'
   default:
     - delly
     - manta
@@ -56,7 +56,7 @@ input:
     BAM:
       type: 'InputBAMNamespace'
       required: true
-      help: 'Input BAMs for calling'
+      help: 'Input BAMs for somatic structural variant calling'
       elements:
         normal:
           type: 'BAMEntryList'
