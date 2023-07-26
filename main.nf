@@ -94,11 +94,6 @@ if (params.verbose){
     input_paired_bams_ch.view()
     }
 
-tumor_bams_ch = tumor_id_bam_bai
-if (params.verbose){
-    tumor_bams_ch.view()
-    }
-
 reference_fasta_index = "${params.reference_fasta}.fai"
 
 workflow {
