@@ -8,10 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+
+---
+
+## [6.0.0] - 2023-08-01
 ### Added
 - YAML input
 
 ### Changed
+- Update YAML input and tests in `README.md`
 - Parse sample ID from tumor BAM for output directory naming
 - Update `README.md` to clarify adjustable parameters and note lab default values
 
