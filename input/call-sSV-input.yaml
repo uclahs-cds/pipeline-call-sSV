@@ -1,0 +1,8 @@
+---
+sample_id: "sample_id"
+input:
+  BAM:
+    normal:
+      - "/absolute/path/to/BAM"
+    tumor:
+      - "/abosolute/path/to/BAM"
