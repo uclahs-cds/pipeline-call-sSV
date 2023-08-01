@@ -44,7 +44,7 @@ nextflow run path/to/main.nf -config path/to/sample-specific.config -params-file
 
 * For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/6.0.0/main.nf`
 * `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config)
-* `path/to/input.config` is the path to where you saved your project-specific copy of [input-sSV.yaml](input/call-sSV-input.yaml)
+* `path/to/input.yaml` is the path to where you saved your project-specific copy of [input-sSV.yaml](input/call-sSV-input.yaml)
 
 To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
 
@@ -108,7 +108,7 @@ This step requires an aligned and sorted tumor sample BAM file and a matched nor
 
 | Field | Type | Description |
 |:------|:-----|:------------|
-| sample_id | string | Sample ID (will be standardized according to data storage structure in the near future) |
+| sample_id | string | Tumor ID |
 | normal | path | Set to absolute path to normal BAM |
 | tumor | path | Set to absolute path to tumour BAM |
 
@@ -163,11 +163,11 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 
 ### Test Data Set
 
-| Data Set | Run Configuration | Output Dir | Normal Sample | Tumor Sample |
-| ------ | ------ | ------- | ------ | ------- |
-| A-mini TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/config/TWGSAMIN000001-T003-S03-F_F16.config |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam |
-| ILHNLNEV000009 | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/config/ILHNLNEV000009-T002-L01-F_F32.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/ILHNLNEV000009-T002-L01-F | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-T002-L01-F_realigned_recalibrated_reheadered.bam |
-| DTB-266_WCDT | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/config/DTB-266_WCDT_F72.config |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/DTB-266_WCDT | /hot/data/unregistered/Quigley-Gebo-PRAD-SVMW/processed/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_N_realigned_recalibrated_merged.bam | /hot/data/unregistered/Quigley-Gebo-PRAD-SVMW/processed/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_T_realigned_recalibrated_merged.bam |
+| Data Set | Run Configuration | YAML input | Output Dir | Normal Sample | Tumor Sample |
+| ------ | ------ | ------- | ------ | ------- | ------- |
+| A-mini TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/TWGSAMIN000001-T003-S03-F.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/yaml/call-sSV-input-TWGSAMIN000001-T003-S03-F.yaml | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/TWGSAMIN000001-T003-S03-F/  | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam |
+| ILHNLNEV000009 | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/ILHNLNEV000009-T002-L01-F_F32.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/ILHNLNEV000009-T002-L01-F_F32.yaml | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/ILHNLNEV000009-T002-L01-F/ | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-T002-L01-F_realigned_recalibrated_reheadered.bam |
+| DTB-266_WCDT | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/5.0.0/mmootor-release-5-0-0-rc-1/config/DTB-266_WCDT_F72.config | - |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/DTB-266_WCDT/ | /hot/data/unregistered/Quigley-Gebo-PRAD-SVMW/processed/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_N_realigned_recalibrated_merged.bam | /hot/data/unregistered/Quigley-Gebo-PRAD-SVMW/processed/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_T_realigned_recalibrated_merged.bam |
 
 ## Performance Validation
 
