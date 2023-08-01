@@ -16,7 +16,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - YAML input
 
 ### Changed
+- Update pipeline SVG
 - Update YAML input and tests in `README.md`
+- Update Pipeval to `v4.0.0-rc.2`
 - Parse sample ID from tumor BAM for output directory naming
 - Update `README.md` to clarify adjustable parameters and note lab default values
 
