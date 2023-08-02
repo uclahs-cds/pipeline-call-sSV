@@ -118,11 +118,9 @@ sample_id: "sample_id"
 input:
   BAM:
     normal:
-      - "/absolute/path/to/BAM"
-      - "/absolute/path/to/BAM"
+      - "/path/to/BAM"
     tumor:
-      - "/absolute/path/to/BAM"
-      - "/absolute/path/to/BAM"
+      - "/path/to/BAM"
 
 ```
 
