@@ -44,7 +44,7 @@ nextflow run path/to/main.nf -config path/to/sample-specific.config -params-file
 
 * For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/6.0.0/main.nf`
 * `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config)
-* `path/to/input.yaml` is the path to where you saved your project-specific copy of [input-sSV.yaml](input/call-sSV-input.yaml)
+* `path/to/input.yaml` is the path to where you saved your sample-specific copy of [input-sSV.yaml](input/call-sSV-input.yaml)
 
 To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
 
