@@ -8,12 +8,12 @@
 
 - DNA A-mini
     - sample:    <!-- e.g. A-mini S2.T-1, A-mini S2.T-n1 -->
-    - input csv: <!-- path/to/input.csv -->
+    - input yaml: <!-- path/to/input.yaml -->
     - config:    <!-- path/to/xxx.config -->
     - output:    <!-- path/to/output -->
 - DNA A-full
     - sample:    <!-- e.g. A-full S2.T-1, A-full S2.T-n1 -->
-    - input csv: <!-- path/to/input.csv -->
+    - input yaml: <!-- path/to/input.yaml -->
     - config:    <!-- path/to/xxx.config -->
     - output:    <!-- path/to/output -->
 
@@ -36,4 +36,4 @@ already, or do not wish to be listed. (*This acknowledgement is optional.*)
 
 - [ ] I have updated the version number in the `metadata.yaml` and `manifest` block of the `nextflow.config` file following [semver](https://semver.org/), or the version number has already been updated. (*Leave it unchecked if you are unsure about new version number and discuss it with the infrastructure team in this PR.*)
 
-- [ ] I have tested the pipeline on at least one A-mini sample with `algorithm = ['delly', 'manta']`. The paths to the test config files and output directories are attached above. 
+- [ ] I have tested the pipeline on at least one A-mini sample with `algorithm = ['delly', 'manta']`. The paths to the test config files and output directories are attached above.
