@@ -16,7 +16,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - YAML input
 
 ### Changed
-- Update sub-module commit
+- Update to latest commit of `pipeline-Nextflow-config``
 - Update pipeline SVG
 - Update YAML input and tests in `README.md`
 - Update PipeVal to `v4.0.0-rc.2`
