@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+### Added
+- Add NFtest
+
 ### Changed
 - Update DELLY `v1.1.3` to `v1.2.6`
 - Update submodules
