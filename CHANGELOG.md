@@ -10,6 +10,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ---
+
+## [6.0.0] - 2024-02-21
+### Changed
+- Perform additional pipeline runs towards release `v6.0.0`
+
+---
 ## [6.0.0-rc.2] - 2024-02-06
 ### Added
 - Add NFTest
