@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [6.0.0] - 2024-02-21
+## [6.0.0] - 2024-02-22
 ### Changed
 - Perform additional pipeline runs towards release `v6.0.0`
 
