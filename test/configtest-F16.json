@@ -41,7 +41,7 @@
       "author": "Yu Pan, Ghouse Mohammed, Mohammed Faizal Eeman Mootor",
       "description": "A pipeline to call somatic SVs utilizing Delly and Manta",
       "name": "call-sSV",
-      "version": "6.0.0"
+      "version": "6.1.0"
     },
     "params": {
       "algorithm": [
