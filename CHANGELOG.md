@@ -8,6 +8,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+
+---
+
+## [6.1.0] - 2024-03-12
 ### Removed
 - Local versions of modularized functions
 ### Added
