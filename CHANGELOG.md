@@ -14,9 +14,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Add PlantUML diagram
 
-### Removed
-- Remove
-
 ---
 
 ## [6.1.0] - 2024-03-12
