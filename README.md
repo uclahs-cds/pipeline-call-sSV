@@ -19,6 +19,9 @@ This pipeline is developed using Nextflow, docker and can run either on a single
 
 ## How to Run:
 
+### Requirements
+Currently supported Nextflow versions: `v23.04.2`
+
 Below is a summary of how to run the pipeline.  See [here](https://uclahs-cds.atlassian.net/wiki/spaces/BOUTROSLAB/pages/3197004/How+to+run+a+nextflow+pipeline) for full instructions.
 
 Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource allocation and Nextflow errors could cause the pipeline to fail.
