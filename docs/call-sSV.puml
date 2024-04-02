@@ -12,17 +12,21 @@ Validate the input BAMs and corresponding index files;
 
 split
 partition "DELLY" {
-    :==call sSV DELLY
+    :==DELLY sSV
     ---
     Call sSVs using DELLY;
+    :==Query Sample Name
+    ---
+    Query Tumor/Normal sample names
+    using BCFtools;
     :==Filter sSV
     ---
-    Filter out germline SVs;
+    Filter out germline SVs using DELLY;
     }
 
 split again
 partition "Manta" {
-    :==call sSV Manta
+    :==Manta sSV
     ---
     Call SVs using Manta;
     }
