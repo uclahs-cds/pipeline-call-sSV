@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Update PlantUML action to `v1.0.1`
 
 ### Added
-- Add PlantUML diagram of the pipeline
+- Add PlantUML diagram
 
 ---
 
