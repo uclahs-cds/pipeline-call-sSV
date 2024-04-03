@@ -19,7 +19,7 @@ This pipeline is developed using Nextflow, docker and can run either on a single
 
 ## How to Run:
 
-### Requirements
+### Requirement
 Currently supported Nextflow versions: `v23.04.2`
 
 ### Run steps
