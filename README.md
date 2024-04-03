@@ -68,7 +68,7 @@ In the above command, the partition type can be changed based on the size of the
 
 ## Flow Diagram:
 
-![call-sSV flow diagram](call-sSV-workflow.svg?raw=true)
+![call-sSV flow diagram](docs/call-sSV.svg)
 
 ## Pipeline Steps:
 
