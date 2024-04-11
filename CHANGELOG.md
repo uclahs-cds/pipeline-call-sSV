@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+### Added
+- Add supported Nextflow version to `README.md`
+
 ### Changed
 - Update PlantUML action to `v1.0.1`
 
