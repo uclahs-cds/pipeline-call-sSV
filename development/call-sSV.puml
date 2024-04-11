@@ -1,0 +1,35 @@
+@startuml
+skinparam SwimlaneTitleFontStyle bold
+
+start
+
+:==Input
+---
+Input Matched Tumor/Normal BAMs;
+:==Input Validation
+---
+Validate the input BAMs and corresponding index files;
+
+split
+partition "DELLY" {
+    :==DELLY sSV
+    ---
+    Call sSVs using DELLY;
+    :==Query Sample Name
+    ---
+    Query Tumor/Normal sample names
+    using BCFtools;
+    :==Filter sSV
+    ---
+    Filter out germline SVs using DELLY;
+    }
+
+split again
+partition "Manta" {
+    :==Manta sSV
+    ---
+    Call SVs using Manta;
+    }
+end split
+stop
+@enduml
