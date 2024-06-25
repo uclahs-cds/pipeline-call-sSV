@@ -8,14 +8,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
-### Added
-- Add supported Nextflow version to `README.md`
-
 ### Changed
+- Increase CPU allocation for Manta
 - Update PlantUML action to `v1.0.1`
 - Update memory allocations in `M64.config`
 
 ### Added
+- Add supported Nextflow version to `README.md`
 - Add PlantUML diagram
 
 ---
