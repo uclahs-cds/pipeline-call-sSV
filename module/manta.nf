@@ -36,7 +36,7 @@ process call_sSV_Manta {
         path "${output_filename}_*Stats*"
         path ".command.*"
         val tumor_id, emit: tumor_id
-    
+
     script:
         output_filename = generate_standard_filename(
             "Manta-${params.manta_version}",
@@ -51,7 +51,7 @@ process call_sSV_Manta {
             --tumorBam "${tumor_bam}" \
             --referenceFasta "${reference_fasta}" \
             --runDir MantaWorkflow
-        MantaWorkflow/runWorkflow.py
+        MantaWorkflow/runWorkflow.py -j ${task.cpus}
 
         # re-name Manta outputs based on output file name standardization - `output_filename`
         for variant_file in `ls MantaWorkflow/results/variants/*`
@@ -59,12 +59,12 @@ process call_sSV_Manta {
                 variant_file_base_name=`basename \${variant_file}`
                 mv \${variant_file} ./${output_filename}_\${variant_file_base_name}
             done
-        
+
         for stats_file in `ls MantaWorkflow/results/stats/*`
             do
                 stats_file_base_name=`basename \${stats_file}`
                 mv \${stats_file} ./${output_filename}_\${stats_file_base_name}
             done
-        
+
         """
     }
