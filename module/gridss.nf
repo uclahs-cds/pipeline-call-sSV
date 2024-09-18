@@ -8,18 +8,17 @@ Docker Images:
 - docker_image_gridss: ${params.docker_image_gridss}
 """
 
-include { generate_standard_filename } from '../external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
+include { generate_standard_filename; sanitize_string } from '../external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
 
 process preprocess_BAM_GRIDSS {
     container params.docker_image_gridss
 
-    publishDir "${params.workflow_output_dir}/output",
-        pattern: "*vcf.gz*",
-        mode: "copy"
-
-    publishDir "${params.workflow_output_dir}/QC",
-        pattern: "*Stats*",
-        mode: "copy"
+    publishDir "${params.workflow_output_dir}/intermediate",
+        pattern: "${bam_name}.gridss.working/*",
+        mode: "copy",
+        saveAs: {
+            "${output_filename}.${sanitize_string(file(it).getName().replace("${bam_name}.", ""))}"
+            }
 
     publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
@@ -27,30 +26,31 @@ process preprocess_BAM_GRIDSS {
         saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
 
     input:
-        tuple(val(sample_id), path(sample_bam), path(sample_bai))
-        path reference_fasta
-        path reference_fasta_fai
-        path gridss_jar
+        tuple(val(sample_id), path(sample_bam), path(sample_index))
+        path(gridss_reference_fasta)
+        path(gridss_reference_files)
 
     output:
-        path "*.bam", emit: gridss_preprocess_bam
+        path "${bam_name}.gridss.working/*", emit: gridss_preprocess
         path ".command.*"
-        val sample_id, emit: sample_id
 
     script:
+        gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
+        bam_name = file(sample_bam).getName()
         output_filename = generate_standard_filename(
             "GRIDSS2-${params.gridss_version}",
             params.dataset_id,
-            tumor_id,
+            sample_id,
             [:]
             )
+
         """
         set -euo pipefail
         gridss \
-            -r ${reference_fasta}
-            -j ${gridss_jar}
+            -r ${gridss_reference_fasta} \
+            -j ${gridss_jar} \
             -s preprocess \
             -t ${task.cpus} \
-            ${bam}
+            ${sample_bam}
         """
     }
