@@ -8,6 +8,11 @@ reference_fasta:
   mode: 'r'
   required: true
   help: 'Absolute path to a reference FASTA file'
+gridss_reference_dir:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to GRIDSS2 reference dir'
 exclusion_file:
   type: 'Path'
   mode: 'r'
