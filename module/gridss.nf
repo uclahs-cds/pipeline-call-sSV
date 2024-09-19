@@ -35,6 +35,7 @@ process preprocess_BAM_GRIDSS {
         path ".command.*"
 
     script:
+        gridss_mem = "${task.memory.toGiga()}g"
         gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
         bam_name = file(sample_bam).getName()
         output_filename = generate_standard_filename(
@@ -51,6 +52,7 @@ process preprocess_BAM_GRIDSS {
             -j ${gridss_jar} \
             -s preprocess \
             -t ${task.cpus} \
+            --jvmheap ${gridss_mem} \
             ${sample_bam}
         """
     }
