@@ -20,9 +20,11 @@ algorithm:
   default:
     - delly
     - manta
+    - gridss2
   choices:
     - delly
     - manta
+    - gridss2
 output_dir:
   type: 'Path'
   mode: 'w'
