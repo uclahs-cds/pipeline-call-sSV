@@ -13,11 +13,11 @@ include { generate_standard_filename; sanitize_string } from '../external/pipeli
 process preprocess_BAM_GRIDSS {
     container params.docker_image_gridss
 
-    publishDir "${params.workflow_output_dir}/intermediate",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         pattern: "${bam_name}.gridss.working/*",
         mode: "copy",
         saveAs: {
-            "${output_filename}.${sanitize_string(file(it).getName().replace("${bam_name}.", ""))}"
+            "${output_filename}.gridss.working/${output_filename}.${sanitize_string(file(it).getName().replace("${bam_name}.", ""))}"
             }
 
     publishDir "${params.log_output_dir}/process-log",
