@@ -106,7 +106,7 @@ if (params.verbose){
 reference_fasta_index = "${params.reference_fasta}.fai"
 
 // Collect GRIDSS reference files
-gridss_reference_files = Channel.fromPath( "${params.ref_fasta}.*", checkIfExists: true ).collect()
+gridss_reference_files = Channel.fromPath( "${params.gridss_reference_fasta}.*", checkIfExists: true ).collect()
 
 workflow {
     /**
