@@ -9,14 +9,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+- Add GRIDSS2 preprocessing
 - Add supported Nextflow version to `README.md`
+- Add PlantUML diagram
 
 ### Changed
 - Update PlantUML action to `v1.0.1`
 - Update memory allocations in `M64.config`
-
-### Added
-- Add PlantUML diagram
 
 ---
 
