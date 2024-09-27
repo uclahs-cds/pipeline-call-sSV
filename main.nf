@@ -106,9 +106,7 @@ if (params.verbose){
 reference_fasta_index = "${params.reference_fasta}.fai"
 
 // Collect GRIDSS reference files
-gridss_reference = Channel.fromPath( "${params.gridss_reference_dir}/*", checkIfExists: true )
-gridss_reference_fasta = gridss_reference.filter { it.name.endsWith(".fasta") }.collect()
-gridss_reference_files = gridss_reference.filter { !it.name.endsWith(".fasta") }.collect()
+gridss_reference_files = Channel.fromPath( "${params.ref_fasta}.*", checkIfExists: true ).collect()
 
 workflow {
     /**
@@ -203,7 +201,7 @@ workflow {
     if ('gridss2' in params.algorithm) {
         preprocess_BAM_GRIDSS(
             gridss_ch,
-            gridss_reference_fasta,
+            params.gridss_reference_fasta,
             gridss_reference_files
             )
         }
