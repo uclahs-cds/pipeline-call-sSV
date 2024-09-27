@@ -23,7 +23,7 @@ process preprocess_BAM_GRIDSS {
     publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
         mode: "copy",
-        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
+        saveAs: { "${task.process.replace(':', '/')}/${task.process}-${task.index}/log${file(it).getName()}" }
 
     input:
         tuple(val(sample_id), path(sample_bam), path(sample_index))
