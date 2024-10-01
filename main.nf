@@ -34,6 +34,7 @@ Current Configuration:
     DELLY: ${params.delly_version}
     BCFtools: ${params.bcftools_version}
     Manta: ${params.manta_version}
+    GRIDSS2: ${params.gridss_version}
     PipeVal: ${params.pipeval_version}
 
 ------------------------------------
@@ -53,6 +54,9 @@ include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
     )
 include { call_sSV_Manta } from './module/manta' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
+    )
+include { preprocess_BAM_GRIDSS } from './module/gridss' addParams(
+    workflow_output_dir: "${params.output_dir_base}/GRIDSS-${params.gridss_version}"
     )
 include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
     workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
@@ -74,10 +78,15 @@ Channel.from(params.samples_to_process)
     .map{ sample -> ['index': indexFile(sample.path)] + sample }
     .set{ input_ch_samples_with_index }
 
+Channel.from(params.samples_to_process)
+    .map{ sample -> [sample.id, sample.path, indexFile(sample.path)] }
+    .set{ gridss_ch }
+
 input_ch_samples_with_index
     .map{ sample -> [sample.path, sample.index] }
     .flatten()
     .set{ input_validation }
+
 if (params.verbose){
     input_validation.view()
     }
@@ -96,6 +105,9 @@ if (params.verbose){
 
 reference_fasta_index = "${params.reference_fasta}.fai"
 
+// Collect GRIDSS reference files
+gridss_reference_files = Channel.fromPath( "${params.gridss_reference_fasta}.*", checkIfExists: true ).collect()
+
 workflow {
     /**
     * Validate the input bams
@@ -106,7 +118,6 @@ workflow {
         name: 'input_validation.txt',
         storeDir: "${params.output_dir_base}/validation/run_validate_PipeVal"
         )
-
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam normal1.bam" per paired (tumor sample, normal sample)
     * The sv are stored in call_sSV_Delly.out.nt_call_bcf
@@ -158,7 +169,6 @@ workflow {
             call_sSV_Delly.out.nt_call_bcf_csi,
             call_sSV_Delly.out.tumor_id
             )
-
         /**
         * Filter the output bcf from filter_sSV_Delly.
         * The default filter_condition is "FILTER=='PASS'", which filters out NonPass calls.
@@ -168,7 +178,6 @@ workflow {
             params.filter_condition,
             call_sSV_Delly.out.tumor_id
             )
-
         /**
         * Generate one sha512 checksum for DELLY's output files.
         */
@@ -189,4 +198,12 @@ workflow {
             call_sSV_Manta.out.manta_vcfs.flatten()
             )
         }
+    if ('gridss2' in params.algorithm) {
+        preprocess_BAM_GRIDSS(
+            gridss_ch,
+            params.gridss_reference_fasta,
+            gridss_reference_files
+            )
+        }
+
     }

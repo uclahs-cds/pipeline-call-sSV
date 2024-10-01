@@ -8,6 +8,11 @@ reference_fasta:
   mode: 'r'
   required: true
   help: 'Absolute path to a reference FASTA file'
+gridss_reference_fasta:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to GRIDSS2 reference FASTA file'
 exclusion_file:
   type: 'Path'
   mode: 'r'
@@ -20,9 +25,11 @@ algorithm:
   default:
     - delly
     - manta
+    - gridss2
   choices:
     - delly
     - manta
+    - gridss2
 output_dir:
   type: 'Path'
   mode: 'w'
