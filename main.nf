@@ -55,7 +55,7 @@ include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
 include { call_sSV_Manta } from './module/manta' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
-include { run_assembly_GRIDSS } from './module/gridss' addParams(
+include { preprocess_BAM_GRIDSS; run_assembly_GRIDSS } from './module/gridss' addParams(
     workflow_output_dir: "${params.output_dir_base}/GRIDSS-${params.gridss_version}"
     )
 include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
@@ -106,9 +106,7 @@ if (params.verbose){
 reference_fasta_index = "${params.reference_fasta}.fai"
 
 // Collect GRIDSS reference files
-gridss_reference = Channel.fromPath( "${params.gridss_reference_dir}/*", checkIfExists: true )
-gridss_reference_fasta = gridss_reference.filter { it.name.endsWith(".fasta") }.collect()
-gridss_reference_files = gridss_reference.filter { !it.name.endsWith(".fasta") && !it.name.endsWith(".bed") }.collect()
+gridss_reference_files = Channel.fromPath( "${params.gridss_reference_fasta}.*", checkIfExists: true ).collect()
 
 workflow {
     /**
