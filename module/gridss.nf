@@ -31,7 +31,7 @@ process preprocess_BAM_GRIDSS {
         path(gridss_reference_files)
 
     output:
-        path "${bam_name}.gridss.working/*", emit: gridss_preprocess
+        path "${bam_name}.gridss.working", emit: gridss_preprocess
         path ".command.*"
 
     script:
@@ -81,6 +81,7 @@ process run_assembly_GRIDSS {
 
     input:
         tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
+        path(gridss_preprocess_files)
         path(gridss_reference_fasta)
         path(gridss_reference_files)
         path(gridss_blacklist)
@@ -91,9 +92,7 @@ process run_assembly_GRIDSS {
         path ".command.*"
 
     script:
-        gridss_command_mem_diff = 2.GB
-        gridss_mem = "${(task.memory - gridss_command_mem_diff).toGiga()}g"
-        //gridss_mem = "${task.memory.toGiga()}g"
+        gridss_mem = "${task.memory.toGiga()}g"
         gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
         output_filename = generate_standard_filename(
             "GRIDSS2-${params.gridss_version}",
@@ -101,7 +100,7 @@ process run_assembly_GRIDSS {
             tumor_id,
             [:]
             )
-        //--jvmheap ${gridss_mem} \
+
         """
         set -euo pipefail
         gridss \
