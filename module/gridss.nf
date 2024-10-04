@@ -67,7 +67,7 @@ process run_assembly_GRIDSS {
             "${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
             }
 
-    publishDir "${params.workflow_output_dir}/intermediate",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         pattern: "${tumor_id}.assembly.bam.gridss.working/*",
         mode: "copy",
         saveAs: {
