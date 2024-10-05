@@ -112,12 +112,12 @@ workflow {
     /**
     * Validate the input bams
     */
-    // run_validate_PipeVal(input_validation)
+    run_validate_PipeVal(input_validation)
     // Collect and store input validation output
-    // run_validate_PipeVal.out.validation_result.collectFile(
-    //     name: 'input_validation.txt',
-    //     storeDir: "${params.output_dir_base}/validation/run_validate_PipeVal"
-    //     )
+    run_validate_PipeVal.out.validation_result.collectFile(
+        name: 'input_validation.txt',
+        storeDir: "${params.output_dir_base}/validation/run_validate_PipeVal"
+        )
     /**
     * Call "delly call -x hg19.excl -o t1.bcf -g hg19.fa tumor1.bam normal1.bam" per paired (tumor sample, normal sample)
     * The sv are stored in call_sSV_Delly.out.nt_call_bcf
