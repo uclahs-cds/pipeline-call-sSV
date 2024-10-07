@@ -13,6 +13,11 @@ gridss_reference_fasta:
   mode: 'r'
   required: true
   help: 'Absolute path to GRIDSS2 reference FASTA file'
+gridss_blacklist:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to GRIDSS2 blacklist BED file'
 exclusion_file:
   type: 'Path'
   mode: 'r'
