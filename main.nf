@@ -204,9 +204,16 @@ workflow {
             params.gridss_reference_fasta,
             gridss_reference_files
             )
+        gridss_preprocess_dir = preprocess_BAM_GRIDSS.out.gridss_preprocess
+            .collect()
+            .flatten()
+            .map { parentdir -> parentdir.getParent() }
+            .unique()
+            .collect()
+        gridss_preprocess_dir.view()
         run_assembly_GRIDSS(
             input_paired_bams_ch,
-            preprocess_BAM_GRIDSS.out.gridss_preprocess.collect(),
+            gridss_preprocess_dir,
             params.gridss_reference_fasta,
             gridss_reference_files,
             params.gridss_blacklist

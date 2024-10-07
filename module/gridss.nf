@@ -31,7 +31,7 @@ process preprocess_BAM_GRIDSS {
         path(gridss_reference_files)
 
     output:
-        path "${bam_name}.gridss.working", emit: gridss_preprocess
+        path "${bam_name}.gridss.working/*", emit: gridss_preprocess
         path ".command.*"
 
     script:
@@ -81,7 +81,7 @@ process run_assembly_GRIDSS {
 
     input:
         tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
-        path(gridss_preprocess_files)
+        path(gridss_preprocess_dir)
         path(gridss_reference_fasta)
         path(gridss_reference_files)
         path(gridss_blacklist)
