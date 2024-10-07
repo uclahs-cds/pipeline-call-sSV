@@ -210,7 +210,7 @@ workflow {
             .map { parentdir -> parentdir.getParent() }
             .unique()
             .collect()
-        gridss_preprocess_dir.view()
+
         run_assembly_GRIDSS(
             input_paired_bams_ch,
             gridss_preprocess_dir,
