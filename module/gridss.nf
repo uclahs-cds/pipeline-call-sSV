@@ -92,7 +92,9 @@ process run_assembly_GRIDSS {
         path ".command.*"
 
     script:
-        gridss_mem = "${task.memory.toGiga()}g"
+        otherjvmheap = 4.GB
+        gridss_otherjvmheap = "${otherjvmheap.toGiga()}g"
+        gridss_jvmheap = "${(task.memory - gridss_otherjvmheap).toGiga()}g"
         gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
         output_filename = generate_standard_filename(
             "GRIDSS2-${params.gridss_version}",
@@ -108,7 +110,8 @@ process run_assembly_GRIDSS {
             -j ${gridss_jar} \
             -s assemble \
             -t ${task.cpus} \
-            --jvmheap ${gridss_mem} \
+            --jvmheap ${gridss_jvmheap} \
+            --otherjvmheap ${gridss_otherjvmheap} \
             -b ${gridss_blacklist} \
             -a ${tumor_id}.assembly.bam \
             ${normal_bam} \
