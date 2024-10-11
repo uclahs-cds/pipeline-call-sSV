@@ -205,7 +205,6 @@ workflow {
             gridss_reference_files
             )
         gridss_preprocess_dir = preprocess_BAM_GRIDSS.out.gridss_preprocess
-            .collect()
             .flatten()
             .map { parentdir -> parentdir.getParent() }
             .unique()
