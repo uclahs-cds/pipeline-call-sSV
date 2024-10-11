@@ -94,7 +94,7 @@ process run_assembly_GRIDSS {
     script:
         otherjvmheap = 4.GB
         gridss_otherjvmheap = "${otherjvmheap.toGiga()}g"
-        gridss_jvmheap = "${(task.memory - gridss_otherjvmheap).toGiga()}g"
+        gridss_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
         gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
         output_filename = generate_standard_filename(
             "GRIDSS2-${params.gridss_version}",
