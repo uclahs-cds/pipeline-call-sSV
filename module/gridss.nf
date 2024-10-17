@@ -60,7 +60,7 @@ process preprocess_BAM_GRIDSS {
 process run_assembly_GRIDSS {
     container params.docker_image_gridss
 
-    publishDir "${params.workflow_output_dir}/output",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         pattern: "${tumor_id}.assembly.bam",
         mode: "copy",
         saveAs: {
@@ -71,7 +71,7 @@ process run_assembly_GRIDSS {
         pattern: "${tumor_id}.assembly.bam.gridss.working/*",
         mode: "copy",
         saveAs: {
-            "${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
+            "${output_filename}.assembly.bam.gridss.working/${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
             }
 
     publishDir "${params.log_output_dir}/process-log",
