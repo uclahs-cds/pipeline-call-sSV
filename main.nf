@@ -55,7 +55,7 @@ include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
 include { call_sSV_Manta } from './module/manta' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
-include { preprocess_BAM_GRIDSS } from './module/gridss' addParams(
+include { preprocess_BAM_GRIDSS; run_assembly_GRIDSS } from './module/gridss' addParams(
     workflow_output_dir: "${params.output_dir_base}/GRIDSS-${params.gridss_version}"
     )
 include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
@@ -203,6 +203,19 @@ workflow {
             gridss_ch,
             params.gridss_reference_fasta,
             gridss_reference_files
+            )
+        gridss_preprocess_dir = preprocess_BAM_GRIDSS.out.gridss_preprocess
+            .flatten()
+            .map { parentdir -> parentdir.getParent() }
+            .unique()
+            .collect()
+
+        run_assembly_GRIDSS(
+            input_paired_bams_ch,
+            gridss_preprocess_dir,
+            params.gridss_reference_fasta,
+            gridss_reference_files,
+            params.gridss_blacklist
             )
         }
 
