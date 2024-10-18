@@ -1,5 +1,7 @@
 # Call-sSV Pipeline
 
+[![GitHub release](https://img.shields.io/github/v/release/uclahs-cds/pipeline-call-sSV)](https://github.com/uclahs-cds/pipeline-call-sSV/actions/workflows/prepare-release.yaml)
+
 * [Overview](#Overview)
 * [How To Run](#How-To-Run)
 * [Flow Diagram](#flow-diagram)
