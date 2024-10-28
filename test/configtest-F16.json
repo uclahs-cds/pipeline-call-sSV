@@ -68,7 +68,7 @@
       "docker_image_delly": "ghcr.io/uclahs-cds/delly:1.2.6",
       "docker_image_manta": "ghcr.io/uclahs-cds/manta:1.6.0",
       "docker_image_validate": "ghcr.io/uclahs-cds/pipeval:4.0.0-rc.2",
-      "exclusion_file": "/hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
+      "exclusion_file": "/hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
       "filter_condition": "FILTER=\\='PASS'",
       "input": {
         "BAM": {
@@ -138,7 +138,7 @@
           "memory": "1 GB"
         }
       },
-      "reference_fasta": "/hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
+      "reference_fasta": "/hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
       "sample": "610093",
       "sample_id": "TWGSAMIN000001",
       "samples_to_process": [
