@@ -137,8 +137,8 @@ input:
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`. List can contain a single caller of choice.  |
-| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/ref/reference/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/ref/reference/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
-| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/ref/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/ref/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/resource/reference-genome/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
+| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
 | map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
 | min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
