@@ -118,3 +118,69 @@ process run_assembly_GRIDSS {
             ${tumor_bam}
         """
     }
+
+process call_sSV_GRIDSS {
+    container params.docker_image_gridss
+
+    publishDir "${params.workflow_output_dir}/output/",
+        pattern: "${tumor_id}.{vcf, vcf.idx}",
+        mode: "copy",
+        saveAs: {
+            "${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
+            }
+
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
+        pattern: "${tumor_id}.vcf.gridss.working/*",
+        mode: "copy",
+        saveAs: {
+            "${output_filename}.vcf.gridss.working/${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
+            }
+
+    publishDir "${params.log_output_dir}/process-log",
+        pattern: ".command.*",
+        mode: "copy",
+        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
+
+    input:
+        tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
+        path(gridss_preprocess_dir)
+        path(gridss_assembly_dir)
+        path(gridss_assembly_bam)
+        path(gridss_reference_fasta)
+        path(gridss_reference_files)
+        path(gridss_blacklist)
+
+    output:
+        path "${tumor_id}.vcf", emit: gridss_vcf
+        path "${tumor_id}.vcf.idx", emit: gridss_vcf_idx
+        path "${tumor_id}.vcf.gridss.working/*", emit: gridss_vcf_dir
+        path ".command.*"
+
+    script:
+        otherjvmheap = 4.GB
+        gridss_otherjvmheap = "${otherjvmheap.toGiga()}g"
+        gridss_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
+        gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
+        output_filename = generate_standard_filename(
+            "GRIDSS2-${params.gridss_version}",
+            params.dataset_id,
+            tumor_id,
+            [:]
+            )
+
+        """
+        set -euo pipefail
+        gridss \
+            -r ${gridss_reference_fasta} \
+            -j ${gridss_jar} \
+            -s call \
+            -t ${task.cpus} \
+            --jvmheap ${gridss_jvmheap} \
+            --otherjvmheap ${gridss_otherjvmheap} \
+            -b ${gridss_blacklist} \
+            -a ${gridss_assembly_bam} \
+            --output ${tumor_id}.vcf \
+            ${normal_bam} \
+            ${tumor_bam}
+        """
+    }
