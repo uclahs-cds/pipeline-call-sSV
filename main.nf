@@ -217,6 +217,12 @@ workflow {
             gridss_reference_files,
             params.gridss_blacklist
             )
+
+        gridss_assembly_dir = preprocess_BAM_GRIDSS.out.gridss_assembly
+            .flatten()
+            .map { parentdir -> parentdir.getParent() }
+            .unique()
+            .collect()
         }
 
     }
