@@ -225,4 +225,13 @@ workflow {
             .collect()
         }
 
+        call_sSV_GRIDSS(
+            input_paired_bams_ch,
+            gridss_assembly_dir,
+            run_assembly_GRIDSS.out.gridss_assembly_bam,
+            params.gridss_reference_fasta,
+            gridss_reference_files,
+            params.gridss_blacklist
+            )
+
     }
