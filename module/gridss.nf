@@ -88,7 +88,7 @@ process run_assembly_GRIDSS {
 
     output:
         path "${tumor_id}.assembly.bam", emit: gridss_assembly_bam
-        path "${tumor_id}.assembly.bam.gridss.working/*"
+        path "${tumor_id}.assembly.bam.gridss.working/*", emit: gridss_assembly
         path ".command.*"
 
     script:
