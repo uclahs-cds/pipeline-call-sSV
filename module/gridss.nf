@@ -123,17 +123,17 @@ process call_sSV_GRIDSS {
     container params.docker_image_gridss
 
     publishDir "${params.workflow_output_dir}/output/",
-        pattern: "${tumor_id}.{vcf, vcf.idx}",
+        pattern: "${tumor_id}.{vcf,vcf.idx}",
         mode: "copy",
         saveAs: {
-            "${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
+            "${output_filename}.${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
             }
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         pattern: "${tumor_id}.vcf.gridss.working/*",
         mode: "copy",
         saveAs: {
-            "${output_filename}.vcf.gridss.working/${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
+            "${output_filename}.vcf.gridss.working/${output_filename}.${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
             }
 
     publishDir "${params.log_output_dir}/process-log",
