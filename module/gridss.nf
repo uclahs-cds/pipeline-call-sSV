@@ -14,6 +14,7 @@ process preprocess_BAM_GRIDSS {
     container params.docker_image_gridss
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
+        enabled: params.save_intermediate_files,
         pattern: "${bam_name}.gridss.working/*",
         mode: "copy",
         saveAs: {
@@ -61,6 +62,7 @@ process run_assembly_GRIDSS {
     container params.docker_image_gridss
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
+        enabled: params.save_intermediate_files,
         pattern: "${tumor_id}.assembly.bam",
         mode: "copy",
         saveAs: {
@@ -68,6 +70,7 @@ process run_assembly_GRIDSS {
             }
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
+        enabled: params.save_intermediate_files,
         pattern: "${tumor_id}.assembly.bam.gridss.working/*",
         mode: "copy",
         saveAs: {
@@ -130,6 +133,7 @@ process call_sSV_GRIDSS {
             }
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
+        enabled: params.save_intermediate_files,
         pattern: "${tumor_id}.vcf.gridss.working/*",
         mode: "copy",
         saveAs: {
