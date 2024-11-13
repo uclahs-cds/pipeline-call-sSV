@@ -157,7 +157,7 @@ process call_sSV_GRIDSS {
         path ".command.*"
 
     script:
-        otherjvmheap = 4.GB
+        otherjvmheap = params.other_jvm_heap
         gridss_otherjvmheap = "${otherjvmheap.toGiga()}g"
         gridss_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
         gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
