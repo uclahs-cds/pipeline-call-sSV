@@ -18,6 +18,11 @@ gridss_blacklist:
   mode: 'r'
   required: true
   help: 'Absolute path to GRIDSS2 blacklist BED file'
+gridss_pon_dir:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to directory containing Panel Of Normals BED and BEDPE files'
 exclusion_file:
   type: 'Path'
   mode: 'r'
