@@ -188,3 +188,45 @@ process call_sSV_GRIDSS {
             ${tumor_bam}
         """
     }
+
+process filter_sSV_GRIDSS {
+    container params.docker_image_gridss
+
+    publishDir "${params.workflow_output_dir}/output/",
+        pattern: "*.vcf.bgz*",
+        mode: "copy"
+
+    publishDir "${params.log_output_dir}/process-log",
+        pattern: ".command.*",
+        mode: "copy",
+        saveAs: { "${task.process.replace(':', '/')}/log${file(it).getName()}" }
+
+    input:
+        val(tumor_id)
+        path(gridss_vcf)
+        path(gridss_pon_dir)
+
+    output:
+        path "*vcf.bgz*", emit: gridss_filter_vcf_files
+        path ".command.*"
+
+    script:
+        output_filename = generate_standard_filename(
+            "GRIDSS2-${params.gridss_version}",
+            params.dataset_id,
+            tumor_id,
+            [:]
+            )
+
+        """
+        set -euo pipefail
+        /usr/local/share/gridss-2.13.2-1/gridss_somatic_filter \
+            --pondir ${gridss_pon_dir} \
+            --scriptdir /usr/local/share/gridss-2.13.2-1/ \
+            --input ${gridss_vcf} \
+            --output ${output_filename}_high-confidence-somatic.vcf \
+            --fulloutput ${output_filename}_high-low-confidence-somatic.vcf \
+            --normalordinal 1 \
+            --tumourordinal 2
+        """
+    }
