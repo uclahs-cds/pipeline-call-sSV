@@ -54,11 +54,11 @@ source(paste0(script.source, '/circos-plot-setup.R'));
 
 #### SPECIFY COLOR PALLETTE#########################################################################
 sv.colors <- c('#008080', '#5d1f80', '#5d1f80', 'orangered1');
+sv.colors.legend <- c('#008080', '#5d1f80', 'orangered1');
 names(sv.colors) <- c('INV', 'BND', 'TRA', 'INS');
 
 cna.3.colors <- c('red', 'blue','white');
 names(cna.3.colors) <- c('gain', 'loss','neutral');
-
 
 ### INPUT ##########################################################################################
 # read in input.vcf
@@ -138,7 +138,7 @@ if (output.type == 'png') {
                 tiff(file = output.filename, width = 6, height = 9.5, units = 'in', res = 800)
                 }
 
-layout(matrix(c(1, 2), nrow = 2), heights = c(3, 0.3));
+layout(matrix(c(1, 2), nrow = 2), heights = c(3, 0.4));
 
 # Plot circos plot
 par(mar = c(0, 1, 1, 1));
@@ -156,8 +156,8 @@ plot.new();
 
 legend(
     x = 'top',
-    legend = c('Inversion','Breakend','Translocation','Insertion'),
-    fill = sv.colors,
+    legend = c('Inversion','Breakend\nTranslocation','Insertion'),
+    fill = sv.colors.legend,
     bty = 'n',
     border = NA,
     text.font = 1,
