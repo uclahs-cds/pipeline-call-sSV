@@ -39,8 +39,8 @@ convert.manta.BND.to.circlize <- function(vcf, sample.id) {
     start <- getPOS(vcf);
     # For BNDs, set end chromosome and position to those indicated in 'ALT'
     alt <- getALT(vcf);
-    chr.end <- gsub("^.*?(chr\\w+).*", "\\1", alt); # nolint: single_quotes_linter
-    end <- gsub("^.*:(\\d+).*$", "\\1", alt); # nolint: single_quotes_linter
+    chr.end <- gsub("^.*?(chr\\w+).*", "\\1", alt); # nolint
+    end <- gsub("^.*:(\\d+).*$", "\\1", alt); # nolint
 
     # Save extracted data in df
     sv.data.manta <- data.frame(
