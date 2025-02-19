@@ -134,13 +134,13 @@ CIRCLIZE.CHROMOSOME.LAYOUT <- function() {
             chr <- gsub('chr', '', chrchr)
             xlim <- CELL_META$xlim
             ylim <- CELL_META$ylim
-            # circos.rect(
-            #     xlim[1],
-            #     0,
-            #     xlim[2],
-            #     1,
-            #     col = force.colour.scheme(chr, 'chromosome')
-            #     );
+            circos.rect(
+                xlim[1],
+                0,
+                xlim[2],
+                1,
+                col = force.colour.scheme(chr, 'chromosome')
+                );
             circos.text(
                 mean(xlim),
                 1.2,
