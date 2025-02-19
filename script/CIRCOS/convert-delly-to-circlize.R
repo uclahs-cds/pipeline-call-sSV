@@ -5,7 +5,7 @@
 # Authors: Raag Agrawal (2023-04-03), Selina Wu (2023-05-08)
 
 ### NOTES ##########################################################################################
-# The input VCF file should have been generated using Delly for structural variants detection. 
+# The input VCF file should have been generated using Delly for structural variants detection.
 
 
 ### PREAMBLE #######################################################################################
@@ -39,7 +39,7 @@ convert.delly.BND.circlize <- function(vcf, sample) {
     start <- getPOS(vcf);
     # For BND, the ending chromosome and position will be data stored in 'CHR2' and position in 'POS2', respectively
     end <- s.info$POS2;
-    chr.end <- s.info$CHR2; 
+    chr.end <- s.info$CHR2;
 
     alt <- getALT(vcf);
 

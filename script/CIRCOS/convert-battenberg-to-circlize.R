@@ -7,8 +7,8 @@
 
 ### NOTES ##########################################################################################
 
-# The input file is originally from the <SAMPLE>_subclones.tsv from the battenberg output directory. 
-# You should preprocess this file by filtering the results to either only include the trunk or the 
+# The input file is originally from the <SAMPLE>_subclones.tsv from the battenberg output directory.
+# You should preprocess this file by filtering the results to either only include the trunk or the
 # branch, and output both a total CN and subclonal/clobal_cna_status column.
 
 # The clonal_cna_status column should consist of either 0, 1, or -1 (0 is neutral, 1 is gain, and -1 is loss).

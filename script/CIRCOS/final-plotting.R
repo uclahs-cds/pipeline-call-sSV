@@ -127,7 +127,7 @@ circos.clear();
 # Set up the output filetype
 if (output.type == 'png') {
     png(file = output.filename, width = 6, height = 6.5, units = 'in', res = 800)
-    } 
+    }
     if (output.type == 'pdf') {
         pdf(file = output.filename, width = 6, height = 9.5, units = 'in', res = 800)
         }
@@ -164,7 +164,7 @@ legend(
     cex = 0.9,
     title.font = 2,
     title.cex = 1.2,
-    horiz=TRUE
+    horiz = TRUE
     );
 
 dev.off()

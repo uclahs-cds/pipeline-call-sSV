@@ -7,8 +7,8 @@
 
 ### FUNCTIONS ######################################################################################
 ## Function: get.InsInvBnd.df ----------------------------------------------------------------------
-# Description: This function takes in a BED data frame with 'INV', 'BND', and 'INS' SV types and 
-    # returns a list containing two modified BED data frames, insinvbnd.bed1 and insinvbnd.bed2, 
+# Description: This function takes in a BED data frame with 'INV', 'BND', and 'INS' SV types and
+    # returns a list containing two modified BED data frames, insinvbnd.bed1 and insinvbnd.bed2,
     # using the 'chr.start', 'start', 'chr.end', and 'end' columns from the input dataframe.
 # Input: sample.sv.df (dataframe) - dataframe of SVs processed from Delly/Manta VCF output
 # Output:
@@ -110,7 +110,7 @@ CIRCLIZE.INSINVBND <- function(insinvbnd.list) {
     }
 
 ## Function: CIRCLIZE.SETUP ------------------------------------------------------------------------
-# Description: Initializes the circos plot. 
+# Description: Initializes the circos plot.
     # The commented out line can be uncommented to create an ideogram for each chromosome
 # Input: species (character) - specify the specifies
 

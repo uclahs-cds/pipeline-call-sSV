@@ -5,7 +5,7 @@
 # Authors: Raag Agrawal (2023-04-03), Selina Wu (2023-05-08)
 
 ### NOTES ##########################################################################################
-# The input VCF file should have been generated using Manta for structural variants detection. 
+# The input VCF file should have been generated using Manta for structural variants detection.
 
 
 ### PREAMBLE #######################################################################################
@@ -39,8 +39,8 @@ convert.manta.BND.to.circlize <- function(vcf, sample.id) {
     start <- getPOS(vcf);
     # For BNDs, set end chromosome and position to those indicated in 'ALT'
     alt <- getALT(vcf);
-    chr.end <- gsub("^.*?(chr\\w+).*", "\\1", alt);
-    end <- gsub("^.*:(\\d+).*$", "\\1", alt);
+    chr.end <- gsub("^.*?(chr\\w+).*", "\\1", alt); # nolint: single_quotes_linter
+    end <- gsub("^.*:(\\d+).*$", "\\1", alt); # nolint: single_quotes_linter
 
     # Save extracted data in df
     sv.data.manta <- data.frame(
