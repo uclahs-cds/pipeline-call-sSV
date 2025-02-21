@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Add supported Nextflow version to `README.md`
 - Add PlantUML diagram
 - Add call to `store_object_as_json` to store parameters
+- CIRCOS plotting for Manta
 
 ### Changed
 - Update PlantUML action to `v1.0.1`
