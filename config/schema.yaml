@@ -35,6 +35,13 @@ algorithm:
     - delly
     - manta
     - gridss2
+genome_build:
+  type: 'String'
+  required: true
+  help: 'Genome build'
+  choices:
+    - hg19
+    - hg38
 output_dir:
   type: 'Path'
   mode: 'w'
