@@ -201,7 +201,6 @@ workflow {
             .map{ it.toString() }
             .filter{ it.endsWith("candidateSV.vcf.gz") }
             .map{ ['Manta', it] }
-            .view{ "HERE: $it" }
             .set{ input_ch_plot_manta }
 
         plot_MantaSV_circlize(
