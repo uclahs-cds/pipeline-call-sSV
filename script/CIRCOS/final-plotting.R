@@ -114,12 +114,12 @@ if (nrow(bnd.df) > 0) {
             bnd.df$end[i] <- endpos;
 
             # Extract text between bracket and colon
-            match <- regexec("[][\\[](.*?):", chr.end)
+            match <- regexec("[][\\[](.*?):", chr.end); # nolint
             chr.num <- regmatches(chr.end, match)[[1]][2];
 
             # Apply chr prefix based on chr.start
             has.chr.prefix <- grepl('^chr', bnd.df$chr.start[i])
-            bnd.df$chr.end[i] <- if(has.chr.prefix) paste0('chr', chr.num) else chr.num
+            bnd.df$chr.end[i] <- if (has.chr.prefix) paste0('chr', chr.num) else chr.num
             }
         }
     }
