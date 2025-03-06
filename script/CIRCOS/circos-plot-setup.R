@@ -6,6 +6,29 @@
 
 
 ### FUNCTIONS ######################################################################################
+## Function: detect.and.fix.chr.format -------------------------------------------------------------
+# Description: Auto-detect and fix chromosome format differences
+# Input: df (dataframe) - dataframe with 'chr.start' and 'chr.end' columns
+# Output: df (dataframe) - dataframe with 'chr.start' and 'chr.end' columns adjusted to match circos format
+detect.and.fix.chr.format <- function(df) {
+    # Check if [first] chr in data is in an acceptable format
+    if (!is.character(df$chr.start[1]) || is.na(df$chr.start[1])) {
+        warning('Invalid chromosome names or class in data')
+        return(df);
+        }
+
+    # Check if chr formats are matching
+    has.chr.prefix.data <- grepl('^chr', df$chr.start[1]);
+
+    # Circos expects chr prefix
+    if (!has.chr.prefix.data) {
+        df$chr.start <- paste0('chr', df$chr.start);
+        df$chr.end <- paste0('chr', df$chr.end);
+        }
+
+    return(df)
+    }
+
 ## Function: get.InsInvBnd.df ----------------------------------------------------------------------
 # Description: This function takes in a BED data frame with 'INV', 'BND', and 'INS' SV types and
     # returns a list containing two modified BED data frames, insinvbnd.bed1 and insinvbnd.bed2,
@@ -46,16 +69,18 @@ get.InsInvBnd.df <- function(sample.sv.df) {
     ins.inv.bnd.lwd <- rep(2, nrow(ins.inv.bnd.df));
     ins.inv.bnd.lty <- rep(1, nrow(ins.inv.bnd.df));
 
-    return(
-        list(
-            ins.inv.bnd.bed1,
-            ins.inv.bnd.bed2,
-            ins.inv.bnd.col,
-            ins.inv.bnd.lwd,
-            ins.inv.bnd.lty
-            )
+    list.results <- list(
+        ins.inv.bnd.bed1,
+        ins.inv.bnd.bed2,
+        ins.inv.bnd.col,
+        ins.inv.bnd.lwd,
+        ins.inv.bnd.lty
         );
+
+    names(list.results) <- c('bed1','bed2','cols','lwds','ltys');
+    return(list.results);
     }
+
 
 
 ### CIRCOS FUNCTIONS ###############################################################################
@@ -118,10 +143,6 @@ CIRCLIZE.SETUP <- function(species = 'hg38') {
     circos.par('start.degree' = 90);
     circos.par('gap.degree' = rep(c(2), 24));
     circos.initializeWithIdeogram(plotType = NULL, species = species);
-    # circos.initializeWithIdeogram(
-    #     species = 'hg38',
-    #     chromosome.index = paste0('chr', c(1:22, 'X', 'Y'))
-    #     );
     }
 
 ## Function: CIRCLIZE.CHROMOSOME.LAYOUT ------------------------------------------------------------

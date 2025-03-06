@@ -73,6 +73,7 @@
       "docker_image_validate": "ghcr.io/uclahs-cds/pipeval:4.0.0-rc.2",
       "exclusion_file": "/hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
       "filter_condition": "FILTER=\\='PASS'",
+      "genome_build": "hg38",
       "gridss_blacklist": "/hot/resource/tool-specific-input/GRIDSS-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed",
       "gridss_reference_fasta": "/hot/resource/tool-specific-input/GRIDSS-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
       "gridss_version": "2.13.2",

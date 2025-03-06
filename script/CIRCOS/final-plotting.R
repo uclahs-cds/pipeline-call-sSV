@@ -21,6 +21,7 @@ parser$add_argument('--sample.name', type = 'character', help = 'Sample name', r
 parser$add_argument('--script.source', type = 'character', help = 'Path to directory containing helper scripts', required = TRUE);
 parser$add_argument('--sv.caller', type = 'character', help = 'Either Delly, Manta, or SURVIVOR verbatim', default = 'Delly');
 parser$add_argument('--plot.title', type = 'logical', help = 'print a title? TRUE or FALSE', default = TRUE);
+parser$add_argument('--genome.build', type = 'character', help = 'Genome build (e.g. hg38, hg19)', default = 'hg38');
 
 # Parse the command-line arguments
 args <- parser$parse_args();
@@ -35,6 +36,7 @@ cna.caller <- args$cna.caller;
 output.type <- args$output.type;
 plot.title <- args$plot.title;
 script.source <- args$script.source;
+genome.build <- args$genome.build;
 
 # Print the values of the variables
 cat('Input SV file:', input.vcf, '\n');
@@ -45,6 +47,7 @@ cat('Output Filename:', output.filename, '\n');
 cat('SV caller:', sv.caller, '\n');
 cat('CNA caller:', cna.caller, '\n');
 cat('Plot title:', plot.title, '\n');
+cat('Genome build:', genome.build, '\n');
 
 source(paste0(script.source, '/convert-manta-to-circlize.R'));
 source(paste0(script.source, '/convert-delly-to-circlize.R'));
@@ -100,10 +103,31 @@ ins.df <- otherSV.df[otherSV.df$type == 'INS', ];
 trans.df <- otherSV.df[otherSV.df$type == 'TRA',];
 bnd.df <- bnd.df.unfiltered[bnd.df.unfiltered$type == 'BND', ];
 
+# Fix BND chromosome formats
+if (nrow(bnd.df) > 0) {
+    for (i in 1:nrow(bnd.df)) {
+        chr.end <- bnd.df$chr.end[i];
+
+        if (grepl(':', chr.end)) {
+            # Extract position after the colon
+            endpos <- as.numeric(sub('.*:(\\d+).*', '\\1', chr.end));
+            bnd.df$end[i] <- endpos;
+
+            # Extract text between bracket and colon
+            match <- regexec("[][\\[](.*?):", chr.end); # nolint
+            chr.num <- regmatches(chr.end, match)[[1]][2];
+
+            # Apply chr prefix based on chr.start
+            has.chr.prefix <- grepl('^chr', bnd.df$chr.start[i])
+            bnd.df$chr.end[i] <- if (has.chr.prefix) paste0('chr', chr.num) else chr.num
+            }
+        }
+    }
+
 # To distinguish INV and BND from Manta, if chr.start == chr.end, this is INV
 bnd.df$type[bnd.df$chr.start == bnd.df$chr.end] <- 'INV';
 
-# rbind() dataframes so the data for otherSV and BNDs are combined
+# Combine all SVs (BNDs and other SVs)
 sample.df <- rbind(
     dup.df,
     del.df,
@@ -113,9 +137,9 @@ sample.df <- rbind(
     bnd.df
     );
 
-# Remove SVs that have 'random' or 'decoy' in the chromosome name
-sample.df <- subset(sample.df, !grepl('random|decoy|alt|Un', chr.start));
-sample.df <- subset(sample.df, !grepl('random|decoy|alt|Un', chr.end));
+# Filter for standard chromosomes, but keep BNDs
+sample.df <- sample.df[grepl('^(chr|)[0-9XY]+$', sample.df$chr.start), ];
+sample.df <- sample.df[grepl('^(chr|)[0-9XY]+$', sample.df$chr.end), ];
 
 print('Successfully processed SV file')
 
@@ -142,8 +166,12 @@ layout(matrix(c(1, 2), nrow = 2), heights = c(3, 0.4));
 
 # Plot circos plot
 par(mar = c(0, 1, 1, 1));
-CIRCLIZE.SETUP();
+CIRCLIZE.SETUP(species = genome.build);
 CIRCLIZE.CHROMOSOME.LAYOUT();
+
+# Check and fix chromosome format for consistent chr naming
+sample.df <- detect.and.fix.chr.format(sample.df);
+
 list.of.InsInvBnd <- get.InsInvBnd.df(sample.df);
 CIRCLIZE.INSINVBND(insinvbnd.list = list.of.InsInvBnd);
 
