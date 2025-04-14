@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+- Add Resource Handler
 - Add GRIDSS2 variant calling
 - Add GRIDSS2 assembly
 - Add GRIDSS2 preprocessing
