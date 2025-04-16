@@ -40,6 +40,13 @@ algorithm:
     - delly
     - manta
     - gridss2
+genome_build:
+  type: 'String'
+  required: true
+  help: 'Genome build'
+  choices:
+    - hg19
+    - hg38
 output_dir:
   type: 'Path'
   mode: 'w'
@@ -65,6 +72,19 @@ filter_condition:
   type: 'String'
   required: true
   default: "FILTER=='PASS'"
+base_resource_update:
+  type: 'ResourceUpdateNamespace'
+  required: false
+  help: 'User-defined modifications for adjusting base resource allocations for processes'
+  elements:
+    memory:
+      type: 'ResourceUpdateList'
+      required: false
+      help: 'List of memory updates'
+    cpus:
+      type: 'ResourceUpdateList'
+      required: false
+      help: 'List of CPU updates'
 input:
   type: 'InputNamespace'
   required: true

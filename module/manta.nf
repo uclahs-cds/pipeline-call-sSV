@@ -65,6 +65,5 @@ process call_sSV_Manta {
                 stats_file_base_name=`basename \${stats_file}`
                 mv \${stats_file} ./${output_filename}_\${stats_file_base_name}
             done
-        
         """
     }

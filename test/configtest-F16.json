@@ -56,20 +56,65 @@
         "delly",
         "manta"
       ],
+      "base_allocations": {
+        "call_sSV_Delly": {
+          "cpus": "1",
+          "memory": "16 GB"
+        },
+        "call_sSV_GRIDSS": {
+          "cpus": "8",
+          "memory": "15 GB"
+        },
+        "call_sSV_Manta": {
+          "cpus": "1",
+          "memory": "16 GB"
+        },
+        "filter_sSV_Delly": {
+          "cpus": "1",
+          "memory": "3 GB"
+        },
+        "plot_MantaSV_circlize": {
+          "cpus": "1",
+          "memory": "3 GB"
+        },
+        "preprocess_BAM_GRIDSS": {
+          "cpus": "4",
+          "memory": "10 GB"
+        },
+        "query_SampleName_BCFtools": {
+          "cpus": "1",
+          "memory": "3 GB"
+        },
+        "run_assembly_GRIDSS": {
+          "cpus": "8",
+          "memory": "15 GB"
+        },
+        "run_validate_PipeVal": {
+          "cpus": "1",
+          "memory": "1 GB"
+        }
+      },
       "bcftools_version": "1.15.1",
       "blcds_registered_dataset": false,
       "cache_intermediate_pipeline_steps": false,
+      "circlize_version": "0.4.16_vcfR-1.15.0_BoutrosLab.plotting.general-7.1.0",
       "dataset_id": "TWGSAMIN000001",
       "dataset_registry_prefix": "/hot/data",
       "date": "19970704T165655Z",
       "delly_version": "1.2.6",
       "docker_container_registry": "ghcr.io/uclahs-cds",
       "docker_image_bcftools": "ghcr.io/uclahs-cds/bcftools:1.15.1",
+      "docker_image_circlize": "ghcr.io/uclahs-cds/circlize:0.4.16_vcfR-1.15.0_BoutrosLab.plotting.general-7.1.0",
       "docker_image_delly": "ghcr.io/uclahs-cds/delly:1.2.6",
+      "docker_image_gridss": "ghcr.io/uclahs-cds/gridss:2.13.2",
       "docker_image_manta": "ghcr.io/uclahs-cds/manta:1.6.0",
       "docker_image_validate": "ghcr.io/uclahs-cds/pipeval:4.0.0-rc.2",
       "exclusion_file": "/hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
       "filter_condition": "FILTER=\\='PASS'",
+      "genome_build": "hg38",
+      "gridss_blacklist": "/hot/resource/tool-specific-input/GRIDSS-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed",
+      "gridss_reference_fasta": "/hot/resource/tool-specific-input/GRIDSS-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
+      "gridss_version": "2.13.2",
       "input": {
         "BAM": {
           "normal": [
@@ -86,59 +131,66 @@
       "map_qual": "20",
       "max_cpus": "16",
       "max_memory": "31 GB",
+      "max_time": "24d 20h 31m 24s",
       "min_clique_size": "5",
       "min_cpus": "1",
       "min_memory": "1 MB",
+      "min_time": "1s",
+      "other_jvm_heap": "4 GB",
       "output_dir": "/tmp/outputs",
       "output_dir_base": "/tmp/outputs/call-sSV-VER.SI.ON/610093",
       "pipeval_version": "4.0.0-rc.2",
-      "proc_resource_params": {
+      "reference_fasta": "/hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
+      "retry_information": {
         "call_sSV_Delly": {
-          "cpus": "1",
-          "memory": "16 GB",
-          "retry_strategy": {
-            "memory": {
-              "operand": "2",
-              "strategy": "exponential"
-            }
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
+          }
+        },
+        "call_sSV_GRIDSS": {
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
           }
         },
         "call_sSV_Manta": {
-          "cpus": "1",
-          "memory": "16 GB",
-          "retry_strategy": {
-            "memory": {
-              "operand": "2",
-              "strategy": "exponential"
-            }
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
           }
         },
         "filter_sSV_Delly": {
-          "cpus": "1",
-          "memory": "3 GB",
-          "retry_strategy": {
-            "memory": {
-              "operand": "2",
-              "strategy": "exponential"
-            }
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
+          }
+        },
+        "plot_MantaSV_circlize": {
+          "memory": {
+            "operand": "5 GB",
+            "strategy": "add"
+          }
+        },
+        "preprocess_BAM_GRIDSS": {
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
           }
         },
         "query_SampleName_BCFtools": {
-          "cpus": "1",
-          "memory": "3 GB",
-          "retry_strategy": {
-            "memory": {
-              "operand": "2",
-              "strategy": "exponential"
-            }
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
           }
         },
-        "run_validate_PipeVal": {
-          "cpus": "1",
-          "memory": "1 GB"
+        "run_assembly_GRIDSS": {
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
+          }
         }
       },
-      "reference_fasta": "/hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
       "sample": "610093",
       "sample_id": "TWGSAMIN000001",
       "samples_to_process": [
@@ -242,6 +294,15 @@
           "closure": "retry_updater(16 GB, exponential, 2, $task.attempt, memory)"
         }
       },
+      "withName:call_sSV_GRIDSS": {
+        "cpus": "8",
+        "memory": {
+          "1": "15 GB",
+          "2": "30 GB",
+          "3": "31 GB",
+          "closure": "retry_updater(15 GB, exponential, 2, $task.attempt, memory)"
+        }
+      },
       "withName:call_sSV_Manta": {
         "cpus": "1",
         "memory": {
@@ -260,6 +321,24 @@
           "closure": "retry_updater(3 GB, exponential, 2, $task.attempt, memory)"
         }
       },
+      "withName:plot_MantaSV_circlize": {
+        "cpus": "1",
+        "memory": {
+          "1": "3 GB",
+          "2": "8 GB",
+          "3": "13 GB",
+          "closure": "retry_updater(3 GB, add, 5 GB, $task.attempt, memory)"
+        }
+      },
+      "withName:preprocess_BAM_GRIDSS": {
+        "cpus": "4",
+        "memory": {
+          "1": "10 GB",
+          "2": "20 GB",
+          "3": "31 GB",
+          "closure": "retry_updater(10 GB, exponential, 2, $task.attempt, memory)"
+        }
+      },
       "withName:query_SampleName_BCFtools": {
         "cpus": "1",
         "memory": {
@@ -267,6 +346,15 @@
           "2": "6 GB",
           "3": "12 GB",
           "closure": "retry_updater(3 GB, exponential, 2, $task.attempt, memory)"
+        }
+      },
+      "withName:run_assembly_GRIDSS": {
+        "cpus": "8",
+        "memory": {
+          "1": "15 GB",
+          "2": "30 GB",
+          "3": "31 GB",
+          "closure": "retry_updater(15 GB, exponential, 2, $task.attempt, memory)"
         }
       },
       "withName:run_validate_PipeVal": {
@@ -277,6 +365,12 @@
     "report": {
       "enabled": true,
       "file": "/tmp/outputs/call-sSV-VER.SI.ON/610093/log-call-sSV-VER.SI.ON-19970704T165655Z/nextflow-log/report.html"
+    },
+    "resource_handler": {
+      "handle_resources": "closure()",
+      "set_resource_limit_params": "closure()",
+      "set_retry": "closure()",
+      "setup_retry": "closure()"
     },
     "sample": [
       "610093"

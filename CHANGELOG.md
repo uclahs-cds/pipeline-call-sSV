@@ -9,15 +9,23 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
+- Add Resource Handler
 - Add GRIDSS2 variant calling
 - Add GRIDSS2 assembly
 - Add GRIDSS2 preprocessing
 - Add supported Nextflow version to `README.md`
 - Add PlantUML diagram
+- Add call to `store_object_as_json` to store parameters
+- CIRCOS plotting for Manta
 
 ### Changed
 - Update PlantUML action to `v1.0.1`
 - Update memory allocations in `M64.config`
+- Re-enable configuration testing workflows
+
+### Fixed
+- Fix NFTest cases after GRIDSS2 additions
+- Fix configuration tests after GRIDSS2 additions
 
 ---
 
