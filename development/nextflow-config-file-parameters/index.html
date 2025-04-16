@@ -63,6 +63,8 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">Nextflow Config File Parameters</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#base-resource-allocation-updaters">Base resource allocation updaters</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -102,7 +104,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Nextflow Config File Parameters</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/68d3ea29a5823a57d4a6fb14e12c5914ca5ae192/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/4126a4fc6a6844a96e1406b1f9f7b81d27a5f078/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -201,7 +203,55 @@
 </tr>
 </tbody>
 </table>
-<p>An example of the NextFlow Input Parameters Config file can be found <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/68d3ea29a5823a57d4a6fb14e12c5914ca5ae192/config/template.config">here</a>.</p>
+<p>An example of the NextFlow Input Parameters Config file can be found <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/4126a4fc6a6844a96e1406b1f9f7b81d27a5f078/config/template.config">here</a>.</p>
+<h3 id="base-resource-allocation-updaters">Base resource allocation updaters</h3>
+<p>To optionally update the base resource (cpus or memory) allocations for processes, use the following structure and add the necessary parts to the <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/4126a4fc6a6844a96e1406b1f9f7b81d27a5f078/config/template.config">input.config</a> file. The default allocations can be found in the <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/4126a4fc6a6844a96e1406b1f9f7b81d27a5f078/config">node-specific config files</a></p>
+<pre><code class="language-Nextflow">base_resource_update {
+    memory = [
+        [['process_name', 'process_name2'], &lt;multiplier for resource&gt;],
+        [['process_name3', 'process_name4'], &lt;different multiplier for resource&gt;]
+    ]
+    cpus = [
+        [['process_name', 'process_name2'], &lt;multiplier for resource&gt;],
+        [['process_name3', 'process_name4'], &lt;different multiplier for resource&gt;]
+    ]
+}
+</code></pre>
+<blockquote>
+<p><strong>Note</strong> Resource updates will be applied in the order they're provided so if a process is included twice in the memory list, it will be updated twice in the order it's given.
+Examples:</p>
+</blockquote>
+<ul>
+<li>To double memory of all processes:</li>
+</ul>
+<pre><code class="language-Nextflow">base_resource_update {
+    memory = [
+        [[], 2]
+    ]
+}
+</code></pre>
+<ul>
+<li>To double memory for <code>call_sSV_Delly</code> and triple memory for <code>run_validate_PipeVal</code> and <code>call_sSV_Manta</code>:</li>
+</ul>
+<pre><code class="language-Nextflow">base_resource_update {
+    memory = [
+        ['call_sSV_Delly', 2],
+        [['run_validate_PipeVal', 'call_sSV_Manta'], 3]
+    ]
+}
+</code></pre>
+<ul>
+<li>To double CPUs and memory for <code>call_sSV_Manta</code> and double memory for <code>run_validate_PipeVal</code>:</li>
+</ul>
+<pre><code class="language-Nextflow">base_resource_update {
+    cpus = [
+        ['call_sSV_Manta', 2]
+    ]
+    memory = [
+        [['call_sSV_Manta', 'run_validate_PipeVal'], 2]
+    ]
+}
+</code></pre>
               
             </div>
           </div><footer>
