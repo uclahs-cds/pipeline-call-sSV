@@ -170,6 +170,24 @@
                 }
             }
         },
+        "filter_sSV_GRIDSS": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.1,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
         "call_sSV_Delly": {
             "cpus": {
                 "min": 1,
@@ -320,6 +338,24 @@
                 "min": "30 GB",
                 "fraction": 0.49,
                 "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "6 GB",
+                "fraction": 0.1,
+                "max": "6 GB"
             },
             "retry_strategy": {
                 "memory": {
@@ -486,6 +522,24 @@
                 }
             }
         },
+        "filter_sSV_GRIDSS": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "12 GB",
+                "fraction": 0.09,
+                "max": "12 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
         "call_sSV_Delly": {
             "cpus": {
                 "min": 1,
@@ -644,6 +698,24 @@
                 }
             }
         },
+        "filter_sSV_GRIDSS": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "20 GB",
+                "fraction": 0.02,
+                "max": "20 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
         "call_sSV_Delly": {
             "cpus": {
                 "min": 1,
@@ -794,6 +866,24 @@
                 "min": "30 GB",
                 "fraction": 0.22,
                 "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "12 GB",
+                "fraction": 0.09,
+                "max": "12 GB"
             },
             "retry_strategy": {
                 "memory": {
