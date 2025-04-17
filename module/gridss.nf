@@ -155,7 +155,8 @@ process call_sSV_GRIDSS {
         path(gridss_blacklist)
 
     output:
-        path "${tumor_id}.vcf*", emit: gridss_vcf_files
+        path "${tumor_id}.vcf", emit: gridss_vcf
+        path "${tumor_id}.vcf.idx", emit: gridss_vcf_idx
         path "${tumor_id}.vcf.gridss.working/*", emit: gridss_vcf_dir
         path ".command.*"
 
@@ -202,7 +203,7 @@ process filter_sSV_GRIDSS {
 
     input:
         val(tumor_id)
-        tuple path(gridss_vcf), path(gridss_vcf_idx)
+        path(gridss_vcf)
         path(gridss_pon_dir)
 
     output:
