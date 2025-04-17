@@ -126,19 +126,13 @@ process call_sSV_GRIDSS {
     container params.docker_image_gridss
 
     publishDir "${params.workflow_output_dir}/output/",
-        pattern: "${tumor_id}.{vcf,vcf.idx}",
-        mode: "copy",
-        saveAs: {
-            "${output_filename}.${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
-            }
+        pattern: "${output_filename}.{vcf,vcf.idx}",
+        mode: "copy"
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
-        pattern: "${tumor_id}.vcf.gridss.working/*",
-        mode: "copy",
-        saveAs: {
-            "${output_filename}.vcf.gridss.working/${output_filename}.${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
-            }
+        pattern: "${output_filename}.vcf.gridss.working/*",
+        mode: "copy"
 
     publishDir "${params.log_output_dir}/process-log",
         pattern: ".command.*",
@@ -155,9 +149,9 @@ process call_sSV_GRIDSS {
         path(gridss_blacklist)
 
     output:
-        path "${tumor_id}.vcf", emit: gridss_vcf
-        path "${tumor_id}.vcf.idx", emit: gridss_vcf_idx
-        path "${tumor_id}.vcf.gridss.working/*", emit: gridss_vcf_dir
+        path "${output_filename}.vcf", emit: gridss_vcf
+        path "${output_filename}.vcf.idx", emit: gridss_vcf_idx
+        path "${output_filename}.vcf.gridss.working/*", emit: gridss_vcf_dir
         path ".command.*"
 
     script:
@@ -183,7 +177,7 @@ process call_sSV_GRIDSS {
             --otherjvmheap ${gridss_otherjvmheap} \
             -b ${gridss_blacklist} \
             -a ${gridss_assembly_bam} \
-            --output ${tumor_id}.vcf \
+            --output ${output_filename}.vcf \
             ${normal_bam} \
             ${tumor_bam}
         """
