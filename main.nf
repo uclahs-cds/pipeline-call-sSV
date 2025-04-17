@@ -67,6 +67,9 @@ include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' a
 include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
+include { generate_sha512 as generate_sha512_GRIDSS } from './module/sha512' addParams(
+    workflow_output_dir: "${params.output_dir_base}/GRIDSS-${params.gridss_version}"
+    )
 
 // Returns the index file for the given bam
 def indexFile(bam) {
@@ -254,6 +257,11 @@ workflow {
             params.sample,
             call_sSV_GRIDSS.out.gridss_vcf,
             params.gridss_pon_dir
+            )
+
+        generate_sha512_GRIDSS(
+            call_sSV_GRIDSS.out.gridss_vcf_files.flatten()
+            .mix(filter_sSV_GRIDSS.out.gridss_filter_vcf_files.flatten())
             )
         }
     }
