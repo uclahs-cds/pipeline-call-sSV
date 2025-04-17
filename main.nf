@@ -58,7 +58,7 @@ include { call_sSV_Manta } from './module/manta' addParams(
 include { plot_SV_circlize as plot_MantaSV_circlize } from './module/circos-plot.nf' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
 )
-include { preprocess_BAM_GRIDSS; run_assembly_GRIDSS; call_sSV_GRIDSS } from './module/gridss' addParams(
+include { preprocess_BAM_GRIDSS; run_assembly_GRIDSS; call_sSV_GRIDSS; filter_sSV_GRIDSS } from './module/gridss' addParams(
     workflow_output_dir: "${params.output_dir_base}/GRIDSS-${params.gridss_version}"
     )
 include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
