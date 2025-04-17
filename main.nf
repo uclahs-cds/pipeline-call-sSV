@@ -260,7 +260,8 @@ workflow {
             )
 
         generate_sha512_GRIDSS(
-            call_sSV_GRIDSS.out.gridss_vcf_files.flatten()
+            call_sSV_GRIDSS.out.gridss_vcf
+            .mix(call_sSV_GRIDSS.out.gridss_vcf_idx)
             .mix(filter_sSV_GRIDSS.out.gridss_filter_vcf_files.flatten())
             )
         }
