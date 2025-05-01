@@ -54,14 +54,15 @@
     "params": {
       "algorithm": [
         "delly",
-        "manta"
+        "manta",
+        "gridss2"
       ],
       "base_allocations": {
         "call_sSV_Delly": {
           "cpus": "1",
           "memory": "16 GB"
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
           "cpus": "8",
           "memory": "15 GB"
         },
@@ -73,11 +74,15 @@
           "cpus": "1",
           "memory": "3 GB"
         },
+        "filter_sSV_GRIDSS2": {
+          "cpus": "1",
+          "memory": "3 GB"
+        },
         "plot_MantaSV_circlize": {
           "cpus": "1",
           "memory": "3 GB"
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
           "cpus": "4",
           "memory": "10 GB"
         },
@@ -85,7 +90,7 @@
           "cpus": "1",
           "memory": "3 GB"
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
           "cpus": "8",
           "memory": "15 GB"
         },
@@ -106,15 +111,16 @@
       "docker_image_bcftools": "ghcr.io/uclahs-cds/bcftools:1.15.1",
       "docker_image_circlize": "ghcr.io/uclahs-cds/circlize:0.4.16_vcfR-1.15.0_BoutrosLab.plotting.general-7.1.0",
       "docker_image_delly": "ghcr.io/uclahs-cds/delly:1.2.6",
-      "docker_image_gridss": "ghcr.io/uclahs-cds/gridss:2.13.2",
+      "docker_image_gridss2": "ghcr.io/uclahs-cds/gridss:2.13.2",
       "docker_image_manta": "ghcr.io/uclahs-cds/manta:1.6.0",
       "docker_image_validate": "ghcr.io/uclahs-cds/pipeval:4.0.0-rc.2",
       "exclusion_file": "/hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
       "filter_condition": "FILTER=\\='PASS'",
       "genome_build": "hg38",
-      "gridss_blacklist": "/hot/resource/tool-specific-input/GRIDSS-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed",
-      "gridss_reference_fasta": "/hot/resource/tool-specific-input/GRIDSS-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
-      "gridss_version": "2.13.2",
+      "gridss2_blacklist": "/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed",
+      "gridss2_pon_dir": "/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/",
+      "gridss2_reference_fasta": "/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
+      "gridss2_version": "2.13.2",
       "input": {
         "BAM": {
           "normal": [
@@ -148,7 +154,7 @@
             "strategy": "exponential"
           }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
           "memory": {
             "operand": "2",
             "strategy": "exponential"
@@ -166,13 +172,19 @@
             "strategy": "exponential"
           }
         },
+        "filter_sSV_GRIDSS2": {
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
+          }
+        },
         "plot_MantaSV_circlize": {
           "memory": {
             "operand": "5 GB",
             "strategy": "add"
           }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
           "memory": {
             "operand": "2",
             "strategy": "exponential"
@@ -184,7 +196,7 @@
             "strategy": "exponential"
           }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
           "memory": {
             "operand": "2",
             "strategy": "exponential"
@@ -294,7 +306,7 @@
           "closure": "retry_updater(16 GB, exponential, 2, $task.attempt, memory)"
         }
       },
-      "withName:call_sSV_GRIDSS": {
+      "withName:call_sSV_GRIDSS2": {
         "cpus": "8",
         "memory": {
           "1": "15 GB",
@@ -321,6 +333,15 @@
           "closure": "retry_updater(3 GB, exponential, 2, $task.attempt, memory)"
         }
       },
+      "withName:filter_sSV_GRIDSS2": {
+        "cpus": "1",
+        "memory": {
+          "1": "3 GB",
+          "2": "6 GB",
+          "3": "12 GB",
+          "closure": "retry_updater(3 GB, exponential, 2, $task.attempt, memory)"
+        }
+      },
       "withName:plot_MantaSV_circlize": {
         "cpus": "1",
         "memory": {
@@ -330,7 +351,7 @@
           "closure": "retry_updater(3 GB, add, 5 GB, $task.attempt, memory)"
         }
       },
-      "withName:preprocess_BAM_GRIDSS": {
+      "withName:preprocess_BAM_GRIDSS2": {
         "cpus": "4",
         "memory": {
           "1": "10 GB",
@@ -348,7 +369,7 @@
           "closure": "retry_updater(3 GB, exponential, 2, $task.attempt, memory)"
         }
       },
-      "withName:run_assembly_GRIDSS": {
+      "withName:run_assembly_GRIDSS2": {
         "cpus": "8",
         "memory": {
           "1": "15 GB",
