@@ -116,7 +116,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.25,
@@ -134,7 +134,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.5,
@@ -152,7 +152,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.5,
@@ -162,6 +162,24 @@
                 "min": "15 GB",
                 "fraction": 0.49,
                 "max": "15 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.1,
+                "max": "3 GB"
             },
             "retry_strategy": {
                 "memory": {
@@ -274,7 +292,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.13,
@@ -292,7 +310,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.25,
@@ -310,7 +328,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.25,
@@ -320,6 +338,24 @@
                 "min": "30 GB",
                 "fraction": 0.49,
                 "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "6 GB",
+                "fraction": 0.1,
+                "max": "6 GB"
             },
             "retry_strategy": {
                 "memory": {
@@ -432,7 +468,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.06,
@@ -450,7 +486,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -468,7 +504,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -478,6 +514,24 @@
                 "min": "30 GB",
                 "fraction": 0.22,
                 "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "12 GB",
+                "fraction": 0.09,
+                "max": "12 GB"
             },
             "retry_strategy": {
                 "memory": {
@@ -590,7 +644,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.06,
@@ -608,7 +662,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.13,
@@ -626,7 +680,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.13,
@@ -636,6 +690,24 @@
                 "min": "120 GB",
                 "fraction": 0.12,
                 "max": "120 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "20 GB",
+                "fraction": 0.02,
+                "max": "20 GB"
             },
             "retry_strategy": {
                 "memory": {
@@ -748,7 +820,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.06,
@@ -766,7 +838,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -784,7 +856,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -794,6 +866,24 @@
                 "min": "30 GB",
                 "fraction": 0.22,
                 "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "12 GB",
+                "fraction": 0.09,
+                "max": "12 GB"
             },
             "retry_strategy": {
                 "memory": {
