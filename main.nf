@@ -34,7 +34,7 @@ Current Configuration:
     DELLY: ${params.delly_version}
     BCFtools: ${params.bcftools_version}
     Manta: ${params.manta_version}
-    GRIDSS2: ${params.gridss_version}
+    GRIDSS2: ${params.gridss2_version}
     PipeVal: ${params.pipeval_version}
 
 ------------------------------------
@@ -58,8 +58,8 @@ include { call_sSV_Manta } from './module/manta' addParams(
 include { plot_SV_circlize as plot_MantaSV_circlize } from './module/circos-plot.nf' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
 )
-include { preprocess_BAM_GRIDSS; run_assembly_GRIDSS; call_sSV_GRIDSS; filter_sSV_GRIDSS } from './module/gridss' addParams(
-    workflow_output_dir: "${params.output_dir_base}/GRIDSS2-${params.gridss_version}"
+include { preprocess_BAM_GRIDSS2; run_assembly_GRIDSS2; call_sSV_GRIDSS2; filter_sSV_GRIDSS2 } from './module/gridss2' addParams(
+    workflow_output_dir: "${params.output_dir_base}/GRIDSS2-${params.gridss2_version}"
     )
 include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' addParams(
     workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
@@ -67,8 +67,8 @@ include { generate_sha512 as generate_sha512_BCFtools } from './module/sha512' a
 include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
-include { generate_sha512 as generate_sha512_GRIDSS } from './module/sha512' addParams(
-    workflow_output_dir: "${params.output_dir_base}/GRIDSS-${params.gridss_version}"
+include { generate_sha512 as generate_sha512_GRIDSS2 } from './module/sha512' addParams(
+    workflow_output_dir: "${params.output_dir_base}/GRIDSS2-${params.gridss2_version}"
     )
 
 // Returns the index file for the given bam
@@ -86,7 +86,7 @@ Channel.from(params.samples_to_process)
 
 Channel.from(params.samples_to_process)
     .map{ sample -> [sample.id, sample.path, indexFile(sample.path)] }
-    .set{ gridss_ch }
+    .set{ gridss2_ch }
 
 input_ch_samples_with_index
     .map{ sample -> [sample.path, sample.index] }
@@ -111,8 +111,8 @@ if (params.verbose){
 
 reference_fasta_index = "${params.reference_fasta}.fai"
 
-// Collect GRIDSS reference files
-gridss_reference_files = Channel.fromPath( "${params.gridss_reference_fasta}.*", checkIfExists: true ).collect()
+// Collect GRIDSS2 reference files
+gridss2_reference_files = Channel.fromPath( "${params.gridss2_reference_fasta}.*", checkIfExists: true ).collect()
 
 workflow {
     /**
@@ -218,51 +218,51 @@ workflow {
             )
         }
     if ('gridss2' in params.algorithm) {
-        preprocess_BAM_GRIDSS(
-            gridss_ch,
-            params.gridss_reference_fasta,
-            gridss_reference_files
+        preprocess_BAM_GRIDSS2(
+            gridss2_ch,
+            params.gridss2_reference_fasta,
+            gridss2_reference_files
             )
-        gridss_preprocess_dir = preprocess_BAM_GRIDSS.out.gridss_preprocess
+        gridss2_preprocess_dir = preprocess_BAM_GRIDSS2.out.gridss2_preprocess
             .flatten()
             .map { parentdir -> parentdir.getParent() }
             .unique()
             .collect()
 
-        run_assembly_GRIDSS(
+        run_assembly_GRIDSS2(
             input_paired_bams_ch,
-            gridss_preprocess_dir,
-            params.gridss_reference_fasta,
-            gridss_reference_files,
-            params.gridss_blacklist
+            gridss2_preprocess_dir,
+            params.gridss2_reference_fasta,
+            gridss2_reference_files,
+            params.gridss2_blacklist
             )
 
-        gridss_assembly_dir = run_assembly_GRIDSS.out.gridss_assembly
+        gridss2_assembly_dir = run_assembly_GRIDSS2.out.gridss2_assembly
             .flatten()
             .map { parentdir -> parentdir.getParent() }
             .unique()
             .collect()
 
-        call_sSV_GRIDSS(
+        call_sSV_GRIDSS2(
             input_paired_bams_ch,
-            gridss_preprocess_dir,
-            gridss_assembly_dir,
-            run_assembly_GRIDSS.out.gridss_assembly_bam,
-            params.gridss_reference_fasta,
-            gridss_reference_files,
-            params.gridss_blacklist
+            gridss2_preprocess_dir,
+            gridss2_assembly_dir,
+            run_assembly_GRIDSS2.out.gridss2_assembly_bam,
+            params.gridss2_reference_fasta,
+            gridss2_reference_files,
+            params.gridss2_blacklist
             )
 
-        filter_sSV_GRIDSS(
+        filter_sSV_GRIDSS2(
             params.sample,
-            call_sSV_GRIDSS.out.gridss_vcf,
-            params.gridss_pon_dir
+            call_sSV_GRIDSS2.out.gridss2_vcf,
+            params.gridss2_pon_dir
             )
 
-        generate_sha512_GRIDSS(
-            call_sSV_GRIDSS.out.gridss_vcf
-            .mix(call_sSV_GRIDSS.out.gridss_vcf_idx)
-            .mix(filter_sSV_GRIDSS.out.gridss_filter_vcf_files.flatten())
+        generate_sha512_GRIDSS2(
+            call_sSV_GRIDSS2.out.gridss2_vcf
+            .mix(call_sSV_GRIDSS2.out.gridss2_vcf_idx)
+            .mix(filter_sSV_GRIDSS2.out.gridss2_filter_vcf_files.flatten())
             )
         }
     }

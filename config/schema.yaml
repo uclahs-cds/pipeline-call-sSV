@@ -8,17 +8,17 @@ reference_fasta:
   mode: 'r'
   required: true
   help: 'Absolute path to a reference FASTA file'
-gridss_reference_fasta:
+gridss2_reference_fasta:
   type: 'Path'
   mode: 'r'
   required: true
   help: 'Absolute path to GRIDSS2 reference FASTA file'
-gridss_blacklist:
+gridss2_blacklist:
   type: 'Path'
   mode: 'r'
   required: true
   help: 'Absolute path to GRIDSS2 blacklist BED file'
-gridss_pon_dir:
+gridss2_pon_dir:
   type: 'Path'
   mode: 'r'
   required: true

@@ -5,20 +5,20 @@ log.info """\
              G R I D S S 2
 ------------------------------------
 Docker Images:
-- docker_image_gridss: ${params.docker_image_gridss}
+- docker_image_gridss2: ${params.docker_image_gridss2}
 """
 
 include { generate_standard_filename; sanitize_string } from '../external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
 
-process preprocess_BAM_GRIDSS {
-    container params.docker_image_gridss
+process preprocess_BAM_GRIDSS2 {
+    container params.docker_image_gridss2
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
-        pattern: "${bam_name}.gridss.working/*",
+        pattern: "${bam_name}.gridss2.working/*",
         mode: "copy",
         saveAs: {
-            "${output_filename}.gridss.working/${output_filename}.${sanitize_string(file(it).getName().replace("${bam_name}.", ""))}"
+            "${output_filename}.gridss2.working/${output_filename}.${sanitize_string(file(it).getName().replace("${bam_name}.", ""))}"
             }
 
     publishDir "${params.log_output_dir}/process-log",
@@ -28,19 +28,19 @@ process preprocess_BAM_GRIDSS {
 
     input:
         tuple(val(sample_id), path(sample_bam), path(sample_index))
-        path(gridss_reference_fasta)
-        path(gridss_reference_files)
+        path(gridss2_reference_fasta)
+        path(gridss2_reference_files)
 
     output:
-        path "${bam_name}.gridss.working/*", emit: gridss_preprocess
+        path "${bam_name}.gridss2.working/*", emit: gridss2_preprocess
         path ".command.*"
 
     script:
-        gridss_mem = "${task.memory.toGiga()}g"
-        gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
+        gridss2_mem = "${task.memory.toGiga()}g"
+        gridss2_jar = "/usr/local/share/gridss2-${params.gridss2_version}-1/gridss2.jar"
         bam_name = file(sample_bam).getName()
         output_filename = generate_standard_filename(
-            "GRIDSS2-${params.gridss_version}",
+            "GRIDSS22-${params.gridss2_version}",
             params.dataset_id,
             sample_id,
             [:]
@@ -48,18 +48,18 @@ process preprocess_BAM_GRIDSS {
 
         """
         set -euo pipefail
-        gridss \
-            -r ${gridss_reference_fasta} \
-            -j ${gridss_jar} \
+        gridss2 \
+            -r ${gridss2_reference_fasta} \
+            -j ${gridss2_jar} \
             -s preprocess \
             -t ${task.cpus} \
-            --jvmheap ${gridss_mem} \
+            --jvmheap ${gridss2_mem} \
             ${sample_bam}
         """
     }
 
-process run_assembly_GRIDSS {
-    container params.docker_image_gridss
+process run_assembly_GRIDSS2 {
+    container params.docker_image_gridss2
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
@@ -71,10 +71,10 @@ process run_assembly_GRIDSS {
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
-        pattern: "${tumor_id}.assembly.bam.gridss.working/*",
+        pattern: "${tumor_id}.assembly.bam.gridss2.working/*",
         mode: "copy",
         saveAs: {
-            "${output_filename}.assembly.bam.gridss.working/${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
+            "${output_filename}.assembly.bam.gridss2.working/${output_filename}_${sanitize_string(file(it).getName().replace("${tumor_id}.", ""))}"
             }
 
     publishDir "${params.log_output_dir}/process-log",
@@ -84,23 +84,23 @@ process run_assembly_GRIDSS {
 
     input:
         tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
-        path(gridss_preprocess_dir)
-        path(gridss_reference_fasta)
-        path(gridss_reference_files)
-        path(gridss_blacklist)
+        path(gridss2_preprocess_dir)
+        path(gridss2_reference_fasta)
+        path(gridss2_reference_files)
+        path(gridss2_blacklist)
 
     output:
-        path "${tumor_id}.assembly.bam", emit: gridss_assembly_bam
-        path "${tumor_id}.assembly.bam.gridss.working/*", emit: gridss_assembly
+        path "${tumor_id}.assembly.bam", emit: gridss2_assembly_bam
+        path "${tumor_id}.assembly.bam.gridss2.working/*", emit: gridss2_assembly
         path ".command.*"
 
     script:
         otherjvmheap = params.other_jvm_heap
-        gridss_otherjvmheap = "${otherjvmheap.toGiga()}g"
-        gridss_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
-        gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
+        gridss2_otherjvmheap = "${otherjvmheap.toGiga()}g"
+        gridss2_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
+        gridss2_jar = "/usr/local/share/gridss2-${params.gridss2_version}-1/gridss2.jar"
         output_filename = generate_standard_filename(
-            "GRIDSS2-${params.gridss_version}",
+            "GRIDSS22-${params.gridss2_version}",
             params.dataset_id,
             tumor_id,
             [:]
@@ -108,22 +108,22 @@ process run_assembly_GRIDSS {
 
         """
         set -euo pipefail
-        gridss \
-            -r ${gridss_reference_fasta} \
-            -j ${gridss_jar} \
+        gridss2 \
+            -r ${gridss2_reference_fasta} \
+            -j ${gridss2_jar} \
             -s assemble \
             -t ${task.cpus} \
-            --jvmheap ${gridss_jvmheap} \
-            --otherjvmheap ${gridss_otherjvmheap} \
-            -b ${gridss_blacklist} \
+            --jvmheap ${gridss2_jvmheap} \
+            --otherjvmheap ${gridss2_otherjvmheap} \
+            -b ${gridss2_blacklist} \
             -a ${tumor_id}.assembly.bam \
             ${normal_bam} \
             ${tumor_bam}
         """
     }
 
-process call_sSV_GRIDSS {
-    container params.docker_image_gridss
+process call_sSV_GRIDSS2 {
+    container params.docker_image_gridss2
 
     publishDir "${params.workflow_output_dir}/output/",
         pattern: "${output_filename}.{vcf,vcf.idx}",
@@ -131,7 +131,7 @@ process call_sSV_GRIDSS {
 
     publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
         enabled: params.save_intermediate_files,
-        pattern: "${output_filename}.vcf.gridss.working/*",
+        pattern: "${output_filename}.vcf.gridss2.working/*",
         mode: "copy"
 
     publishDir "${params.log_output_dir}/process-log",
@@ -141,26 +141,26 @@ process call_sSV_GRIDSS {
 
     input:
         tuple(val(tumor_id), path(tumor_bam), path(tumor_bai), path(normal_bam), path(normal_bai))
-        path(gridss_preprocess_dir)
-        path(gridss_assembly_dir)
-        path(gridss_assembly_bam)
-        path(gridss_reference_fasta)
-        path(gridss_reference_files)
-        path(gridss_blacklist)
+        path(gridss2_preprocess_dir)
+        path(gridss2_assembly_dir)
+        path(gridss2_assembly_bam)
+        path(gridss2_reference_fasta)
+        path(gridss2_reference_files)
+        path(gridss2_blacklist)
 
     output:
-        path "${output_filename}.vcf", emit: gridss_vcf
-        path "${output_filename}.vcf.idx", emit: gridss_vcf_idx
-        path "${output_filename}.vcf.gridss.working/*", emit: gridss_vcf_dir
+        path "${output_filename}.vcf", emit: gridss2_vcf
+        path "${output_filename}.vcf.idx", emit: gridss2_vcf_idx
+        path "${output_filename}.vcf.gridss2.working/*", emit: gridss2_vcf_dir
         path ".command.*"
 
     script:
         otherjvmheap = params.other_jvm_heap
-        gridss_otherjvmheap = "${otherjvmheap.toGiga()}g"
-        gridss_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
-        gridss_jar = "/usr/local/share/gridss-${params.gridss_version}-1/gridss.jar"
+        gridss2_otherjvmheap = "${otherjvmheap.toGiga()}g"
+        gridss2_jvmheap = "${(task.memory - otherjvmheap).toGiga()}g"
+        gridss2_jar = "/usr/local/share/gridss2-${params.gridss2_version}-1/gridss2.jar"
         output_filename = generate_standard_filename(
-            "GRIDSS2-${params.gridss_version}",
+            "GRIDSS22-${params.gridss2_version}",
             params.dataset_id,
             tumor_id,
             [:]
@@ -168,23 +168,23 @@ process call_sSV_GRIDSS {
 
         """
         set -euo pipefail
-        gridss \
-            -r ${gridss_reference_fasta} \
-            -j ${gridss_jar} \
+        gridss2 \
+            -r ${gridss2_reference_fasta} \
+            -j ${gridss2_jar} \
             -s call \
             -t ${task.cpus} \
-            --jvmheap ${gridss_jvmheap} \
-            --otherjvmheap ${gridss_otherjvmheap} \
-            -b ${gridss_blacklist} \
-            -a ${gridss_assembly_bam} \
+            --jvmheap ${gridss2_jvmheap} \
+            --otherjvmheap ${gridss2_otherjvmheap} \
+            -b ${gridss2_blacklist} \
+            -a ${gridss2_assembly_bam} \
             --output ${output_filename}.vcf \
             ${normal_bam} \
             ${tumor_bam}
         """
     }
 
-process filter_sSV_GRIDSS {
-    container params.docker_image_gridss
+process filter_sSV_GRIDSS2 {
+    container params.docker_image_gridss2
 
     publishDir "${params.workflow_output_dir}/output/",
         pattern: "*.vcf.bgz*",
@@ -197,16 +197,16 @@ process filter_sSV_GRIDSS {
 
     input:
         val(tumor_id)
-        path(gridss_vcf)
-        path(gridss_pon_dir)
+        path(gridss2_vcf)
+        path(gridss2_pon_dir)
 
     output:
-        path "*vcf.bgz*", emit: gridss_filter_vcf_files
+        path "*vcf.bgz*", emit: gridss2_filter_vcf_files
         path ".command.*"
 
     script:
         output_filename = generate_standard_filename(
-            "GRIDSS2-${params.gridss_version}",
+            "GRIDSS22-${params.gridss2_version}",
             params.dataset_id,
             tumor_id,
             [:]
@@ -214,10 +214,10 @@ process filter_sSV_GRIDSS {
 
         """
         set -euo pipefail
-        /usr/local/share/gridss-2.13.2-1/gridss_somatic_filter \
-            --pondir ${gridss_pon_dir} \
-            --scriptdir /usr/local/share/gridss-2.13.2-1/ \
-            --input ${gridss_vcf} \
+        /usr/local/share/gridss2-2.13.2-1/gridss2_somatic_filter \
+            --pondir ${gridss2_pon_dir} \
+            --scriptdir /usr/local/share/gridss2-2.13.2-1/ \
+            --input ${gridss2_vcf} \
             --output ${output_filename}_high-confidence-somatic.vcf \
             --fulloutput ${output_filename}_high-low-confidence-somatic.vcf \
             --normalordinal 1 \

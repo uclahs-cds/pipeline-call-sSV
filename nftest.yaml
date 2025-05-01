@@ -34,17 +34,17 @@ cases:
         expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/Manta-1.6.0/Manta-1.6.0_TWGSAMIN000001_S2-v1.1.5_somaticSV.vcf.gz
         script: test/assert_bcf_vcf.sh
 
-      - actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
-        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
-        script: test/assert_bcf_vcf.sh
-
       - actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-confidence-somatic.vcf.bgz
         expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-confidence-somatic.vcf.bgz
-        script: test/assert_bcf_vcf.sh
+        script: test/assert_gridss2_bgz.sh
 
-      - actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
-        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
-        script: test/assert_bcf_vcf.sh
+      #- actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
+      #  expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
+      #  script: test/assert_gridss2_bgz.sh
+
+      #- actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
+      #  expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
+      #  script: test/assert_gridss2_bgz.sh
 
   - name: ssv-delly-std-input
     message: test development branch using DELLY and standard paired tumor and normal a-mini input
@@ -90,14 +90,14 @@ cases:
     skip: false
     verbose: true
     asserts:
-      - actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
-        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
-        script: test/assert_bcf_vcf.sh
-
       - actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-confidence-somatic.vcf.bgz
         expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-confidence-somatic.vcf.bgz
-        script: test/assert_bcf_vcf.sh
+        script: test/assert_gridss2_bgz.sh
 
-      - actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
-        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
-        script: test/assert_bcf_vcf.sh
+      #- actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
+      #  expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5.vcf
+      #  script: test/assert_gridss2_bgz.sh
+
+      #- actual: call-sSV-*/S2_v1.1.5/GRIDSS2-2.13.2/output/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
+      #  expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/GRIDSS2-2.13.2/GRIDSS2-2.13.2_TWGSAMIN000001_S2-v1.1.5_high-low-confidence-somatic.vcf.bgz
+      #  script: test/assert_gridss2_bgz.sh

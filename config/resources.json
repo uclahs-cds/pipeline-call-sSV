@@ -116,7 +116,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.25,
@@ -134,7 +134,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.5,
@@ -152,7 +152,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.5,
@@ -170,7 +170,7 @@
                 }
             }
         },
-        "filter_sSV_GRIDSS": {
+        "filter_sSV_GRIDSS2": {
             "cpus": {
                 "min": 1,
                 "fraction": 0.06,
@@ -292,7 +292,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.13,
@@ -310,7 +310,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.25,
@@ -328,7 +328,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.25,
@@ -346,7 +346,7 @@
                 }
             }
         },
-        "filter_sSV_GRIDSS": {
+        "filter_sSV_GRIDSS2": {
             "cpus": {
                 "min": 1,
                 "fraction": 0.03,
@@ -468,7 +468,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.06,
@@ -486,7 +486,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -504,7 +504,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -522,7 +522,7 @@
                 }
             }
         },
-        "filter_sSV_GRIDSS": {
+        "filter_sSV_GRIDSS2": {
             "cpus": {
                 "min": 1,
                 "fraction": 0.01,
@@ -644,7 +644,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.06,
@@ -662,7 +662,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.13,
@@ -680,7 +680,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.13,
@@ -698,7 +698,7 @@
                 }
             }
         },
-        "filter_sSV_GRIDSS": {
+        "filter_sSV_GRIDSS2": {
             "cpus": {
                 "min": 1,
                 "fraction": 0.02,
@@ -820,7 +820,7 @@
                 "max": "1 GB"
             }
         },
-        "preprocess_BAM_GRIDSS": {
+        "preprocess_BAM_GRIDSS2": {
             "cpus": {
                 "min": 4,
                 "fraction": 0.06,
@@ -838,7 +838,7 @@
                 }
             }
         },
-        "run_assembly_GRIDSS": {
+        "run_assembly_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -856,7 +856,7 @@
                 }
             }
         },
-        "call_sSV_GRIDSS": {
+        "call_sSV_GRIDSS2": {
             "cpus": {
                 "min": 8,
                 "fraction": 0.11,
@@ -874,7 +874,7 @@
                 }
             }
         },
-        "filter_sSV_GRIDSS": {
+        "filter_sSV_GRIDSS2": {
             "cpus": {
                 "min": 1,
                 "fraction": 0.01,
