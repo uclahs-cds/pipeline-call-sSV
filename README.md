@@ -108,7 +108,7 @@ MantaWorkflow/runWorkflow.py
 ```
 This step performs somatic variant calling using Manta.
 
-### Call Somatic Structural Variants - Manta workflow:
+### Call Somatic Structural Variants - GRIDSS2 workflow:
 
 #### 1. Preprocess input BAMs
 ```script
@@ -173,6 +173,22 @@ input:
 
 An example of the NextFlow Input Parameters Config file can be found [here](config/template.config).
 
+### DELLY Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
+| map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
+| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
+| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
+
+### GRIDSS2 Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| gridss2_blacklist | yes | path | Path to GRIDSS2 blacklist BED file. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/ENCFF001TDO.bed` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed` |
+| gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/hs37d5.fa` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta` |
+| gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/` |
+| other_jvm_heap | no | string | Update `other_jvm_heap` if GRIDSS2 errors OutOfMemory. Default is `4.GB` |
+
 ### Base resource allocation updaters
 To optionally update the base resource (cpus or memory) allocations for processes, use the following structure and add the necessary parts to the [input.config](config/template.config) file. The default allocations can be found in the [node-specific config files](./config/)
 
@@ -219,27 +235,6 @@ base_resource_update {
     ]
 }
 ```
-
-### DELLY Specific Parameters
-| Field |	Required |	Type |	Description |
-| ------- |   --------- | ------ | -------------|
-| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
-| map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
-| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
-| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
-
-### GRIDSS2 Specific Parameters
-| Field |	Required |	Type |	Description |
-| ------- |   --------- | ------ | -------------|
-| gridss2_blacklist | yes | path | Path to GRIDSS2 blacklist BED file |
-| gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file |
-| gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory |
-| other_jvm_heap | no | string | Update `other_jvm_heap` if GRIDSS2 errors OutOfMemory. Default is `4.GB` |
-
-See [template.config](config/template.config) for parameter paths.
-
-GRIDSS2 GRCh37 reference path: `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/`
-GRIDSS2 GRCh38 reference path: `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/`
 
 ## Outputs
 
