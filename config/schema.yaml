@@ -8,16 +8,21 @@ reference_fasta:
   mode: 'r'
   required: true
   help: 'Absolute path to a reference FASTA file'
-gridss_reference_fasta:
+gridss2_reference_fasta:
   type: 'Path'
   mode: 'r'
   required: true
   help: 'Absolute path to GRIDSS2 reference FASTA file'
-gridss_blacklist:
+gridss2_blacklist:
   type: 'Path'
   mode: 'r'
   required: true
   help: 'Absolute path to GRIDSS2 blacklist BED file'
+gridss2_pon_dir:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to directory containing Panel Of Normals BED and BEDPE files'
 exclusion_file:
   type: 'Path'
   mode: 'r'
@@ -67,6 +72,19 @@ filter_condition:
   type: 'String'
   required: true
   default: "FILTER=='PASS'"
+base_resource_update:
+  type: 'ResourceUpdateNamespace'
+  required: false
+  help: 'User-defined modifications for adjusting base resource allocations for processes'
+  elements:
+    memory:
+      type: 'ResourceUpdateList'
+      required: false
+      help: 'List of memory updates'
+    cpus:
+      type: 'ResourceUpdateList'
+      required: false
+      help: 'List of CPU updates'
 input:
   type: 'InputNamespace'
   required: true

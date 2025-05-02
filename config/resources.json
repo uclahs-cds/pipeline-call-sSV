@@ -1,0 +1,986 @@
+{
+    "f2": {
+        "run_validate_PipeVal": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.5,
+                "max": 1
+            },
+            "memory": {
+                "min": "1 GB",
+                "fraction": 0.26,
+                "max": "1 GB"
+            }
+        },
+        "call_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.5,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.79,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "1 GB"
+                }
+            }
+        },
+        "filter_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.5,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.79,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "1 GB"
+                }
+            }
+        },
+        "query_SampleName_BCFtools": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.5,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.79,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "1 GB"
+                }
+            }
+        },
+        "call_sSV_Manta": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.5,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.79,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "1 GB"
+                }
+            }
+        },
+        "plot_MantaSV_circlize": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.5,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.79,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "1 GB"
+                }
+            }
+        }
+    },
+    "f16": {
+        "run_validate_PipeVal": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "1 GB",
+                "fraction": 0.03,
+                "max": "1 GB"
+            }
+        },
+        "preprocess_BAM_GRIDSS2": {
+            "cpus": {
+                "min": 4,
+                "fraction": 0.25,
+                "max": 4
+            },
+            "memory": {
+                "min": "10 GB",
+                "fraction": 0.33,
+                "max": "10 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "run_assembly_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.5,
+                "max": 8
+            },
+            "memory": {
+                "min": "15 GB",
+                "fraction": 0.49,
+                "max": "15 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.5,
+                "max": 8
+            },
+            "memory": {
+                "min": "15 GB",
+                "fraction": 0.49,
+                "max": "15 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.1,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "16 GB",
+                "fraction": 0.53,
+                "max": "16 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.10,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "query_SampleName_BCFtools": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.10,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Manta": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "16 GB",
+                "fraction": 0.53,
+                "max": "16 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "plot_MantaSV_circlize": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.06,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.10,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "5 GB"
+                }
+            }
+        }
+    },
+    "f32": {
+        "run_validate_PipeVal": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "1 GB",
+                "fraction": 0.02,
+                "max": "1 GB"
+            }
+        },
+        "preprocess_BAM_GRIDSS2": {
+            "cpus": {
+                "min": 4,
+                "fraction": 0.13,
+                "max": 4
+            },
+            "memory": {
+                "min": "10 GB",
+                "fraction": 0.16,
+                "max": "10 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "run_assembly_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.25,
+                "max": 8
+            },
+            "memory": {
+                "min": "25 GB",
+                "fraction": 0.41,
+                "max": "25 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.25,
+                "max": 8
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.49,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "6 GB",
+                "fraction": 0.1,
+                "max": "6 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.49,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.49,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "query_SampleName_BCFtools": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.49,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Manta": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.49,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "plot_MantaSV_circlize": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.03,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.05,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "5 GB"
+                }
+            }
+        }
+    },
+    "f72": {
+        "run_validate_PipeVal": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "1 GB",
+                "fraction": 0.01,
+                "max": "1 GB"
+            }
+        },
+        "preprocess_BAM_GRIDSS2": {
+            "cpus": {
+                "min": 4,
+                "fraction": 0.06,
+                "max": 4
+            },
+            "memory": {
+                "min": "15 GB",
+                "fraction": 0.11,
+                "max": "15 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "run_assembly_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.11,
+                "max": 8
+            },
+            "memory": {
+                "min": "35 GB",
+                "fraction": 0.26,
+                "max": "35 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.11,
+                "max": 8
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "12 GB",
+                "fraction": 0.09,
+                "max": "12 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "query_SampleName_BCFtools": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Manta": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "plot_MantaSV_circlize": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.02,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "5 GB"
+                }
+            }
+        }
+    },
+    "m64": {
+        "run_validate_PipeVal": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "1 GB",
+                "fraction": 0.00,
+                "max": "1 GB"
+            }
+        },
+        "preprocess_BAM_GRIDSS2": {
+            "cpus": {
+                "min": 4,
+                "fraction": 0.06,
+                "max": 4
+            },
+            "memory": {
+                "min": "100 GB",
+                "fraction": 0.10,
+                "max": "100 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "run_assembly_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.13,
+                "max": 8
+            },
+            "memory": {
+                "min": "120 GB",
+                "fraction": 0.12,
+                "max": "120 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.13,
+                "max": 8
+            },
+            "memory": {
+                "min": "120 GB",
+                "fraction": 0.12,
+                "max": "120 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "20 GB",
+                "fraction": 0.02,
+                "max": "20 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "120 GB",
+                "fraction": 0.12,
+                "max": "120 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "2 GB",
+                "fraction": 0.00,
+                "max": "2 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "query_SampleName_BCFtools": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.03,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Manta": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.03,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "plot_MantaSV_circlize": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.02,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.00,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "5 GB"
+                }
+            }
+        }
+    },
+    "default": {
+        "run_validate_PipeVal": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "1 GB",
+                "fraction": 0.01,
+                "max": "1 GB"
+            }
+        },
+        "preprocess_BAM_GRIDSS2": {
+            "cpus": {
+                "min": 4,
+                "fraction": 0.06,
+                "max": 4
+            },
+            "memory": {
+                "min": "15 GB",
+                "fraction": 0.11,
+                "max": "15 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "run_assembly_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.11,
+                "max": 8
+            },
+            "memory": {
+                "min": "35 GB",
+                "fraction": 0.26,
+                "max": "35 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 8,
+                "fraction": 0.11,
+                "max": 8
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_GRIDSS2": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "12 GB",
+                "fraction": 0.09,
+                "max": "12 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "filter_sSV_Delly": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "query_SampleName_BCFtools": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "call_sSV_Manta": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "30 GB",
+                "fraction": 0.22,
+                "max": "30 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "exponential",
+                    "operand": 2
+                }
+            }
+        },
+        "plot_MantaSV_circlize": {
+            "cpus": {
+                "min": 1,
+                "fraction": 0.01,
+                "max": 1
+            },
+            "memory": {
+                "min": "3 GB",
+                "fraction": 0.02,
+                "max": "3 GB"
+            },
+            "retry_strategy": {
+                "memory": {
+                    "strategy": "add",
+                    "operand": "5 GB"
+                }
+            }
+        }
+    }
+}
