@@ -143,7 +143,7 @@ This step performs somatic filtering to retain only somatic SVs in the filtered 
 |:------|:-----|:------------|
 | sample_id | string | Tumor ID |
 | normal | path | Set to absolute path to normal BAM |
-| tumor | path | Set to absolute path to tumour BAM |
+| tumor | path | Set to absolute path to tumor BAM |
 
 ```
 ---
@@ -165,10 +165,6 @@ input:
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`, `gridss2`. List can contain a single caller of choice.  |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/resource/reference-genome/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
-| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
-| map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
-| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
-| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is `false`. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With `ucla_cds`, the default is `/scratch` and should only be changed for testing/development. Changing this directory to `/hot` or `/tmp` can lead to high server latency and potential disk space limitations, respectively. |
@@ -224,6 +220,27 @@ base_resource_update {
 }
 ```
 
+### DELLY Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
+| map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
+| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
+| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
+
+### GRIDSS2 Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| gridss2_blacklist | yes | path | Path to GRIDSS2 blacklist BED file |
+| gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file |
+| gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory |
+| other_jvm_heap | no | string | Update `other_jvm_heap` if GRIDSS2 errors OutOfMemory. Default is `4.GB` |
+
+See [template.config](config/template.config) for parameter paths.
+
+GRIDSS2 GRCh37 reference path: `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/`
+GRIDSS2 GRCh38 reference path: `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/`
+
 ## Outputs
 
 | Output |	Description |
@@ -232,10 +249,21 @@ base_resource_update {
 | .bcf.csi | CSI-format index for BCF files from DELLY. |
 | .vcf.gz | zipped VCF output format from Manta with somatic structural variants if found. |
 | .vcf.gz.tbi | TBI-format index for zipped VCF files from Manta. |
+| .vcf | Uncompressed VCF output from GRIDSS2 |
+| .vcf.idx | Index file for GRIDSS2 VCF |
+| .vcf.bgz | Block compressed gzip VCF outputs from GRIDSS2 somatic filtering |
+| .vcf.bgz.tbi | Index files for GRIDSS2 somatic filtered outputs |
 | report.html, timeline.html and trace.txt | A Nextflow report, timeline and trace files. |
 | \*.log.command.* | Process and sample specific logging files created by nextflow. |
 | *.sha512 | Generates SHA-512 hash to validate file integrity. |
 
+## Intermediates
+| Output |	Description |
+| ---- | -------- |
+| *assembly.bam | Breakend assembly BAM from GRIDSS2 |
+| *assembly.bam.gridss.working | Directory containing BAM metrics from GRIDSS2 breakend assembly |
+| *<normal_sample>.gridss.working | Directory containing BAM metrics from GRIDSS2 preprocessing of normal BAM |
+| *<tumor_sample>.gridss.working | Directory containing BAM metrics from GRIDSS2 preprocessing of tumor BAM |
 
 ## Testing and Validation
 
