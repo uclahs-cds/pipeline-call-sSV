@@ -203,8 +203,8 @@ base_resource_update {
 | ---- | -------- |
 | .bcf | Binary VCF output format from DELLY with somatic structural variants if found. |
 | .bcf.csi | CSI-format index for BCF files from DELLY. |
-| .vcf.gz | zipped VCF output format from Manta with somatic structural variants if found. |
-| .vcf.gz.tbi | TBI-format index for zipped VCF files from Manta. |
+| .vcf.gz | Compressed VCF output format with somatic structural variants if found. |
+| .vcf.gz.tbi | TBI-format index for compressed VCF files. |
 | report.html, timeline.html and trace.txt | A Nextflow report, timeline and trace files. |
 | \*.log.command.* | Process and sample specific logging files created by nextflow. |
 | *.sha512 | Generates SHA-512 hash to validate file integrity. |
