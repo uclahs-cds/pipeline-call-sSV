@@ -20,28 +20,35 @@ workflow convert_BCF2VCF {
     sample_name
     variant_file
     variant_file_index
-    sv_caller
 
     main:
-    caller = sv_caller.collect()
-    if ('gridss2' in caller) {
-        index_channel = sample_name.combine(variant_file)
-        compress_index_VCF(index_channel)
-        }
 
-    if ('delly' in sv_caller) {
-        bcf2vcf_channel = sample_name
-            .combine(variant_file)
-            .combine(variant_file_index)
+    bcf2vcf_channel = sample_name
+        .combine(variant_file)
+        .combine(variant_file_index)
 
-        convert_BCF2VCF_BCFtools(bcf2vcf_channel)
+    convert_BCF2VCF_BCFtools(bcf2vcf_channel)
 
-        index_channel = sample_name.combine(convert_BCF2VCF_BCFtools.out.vcf)
+    index_channel = sample_name.combine(convert_BCF2VCF_BCFtools.out.vcf)
 
-        compress_index_VCF(index_channel)
-        }
+    compress_index_VCF(index_channel)
 
     emit:
     gzvcf = compress_index_VCF.out.index_out.map{ it -> ["${it[1]}"] }
     idx = compress_index_VCF.out.index_out.map{ it -> ["${it[2]}"] }
 }
+
+workflow compress_VCF {
+    take:
+    sample_name
+    variant_file
+
+    main:
+
+    index_channel = sample_name.combine(variant_file)
+    compress_index_VCF(index_channel)
+
+    emit:
+    gzvcf = compress_index_VCF.out.index_out.map{ it -> ["${it[1]}"] }
+    idx = compress_index_VCF.out.index_out.map{ it -> ["${it[2]}"] }
+    }
