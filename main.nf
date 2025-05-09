@@ -61,7 +61,7 @@ include { plot_SV_circlize as plot_MantaSV_circlize } from './module/circos-plot
 include { preprocess_BAM_GRIDSS2; run_assembly_GRIDSS2; call_sSV_GRIDSS2; filter_sSV_GRIDSS2 } from './module/gridss2' addParams(
     workflow_output_dir: "${params.output_dir_base}/GRIDSS2-${params.gridss2_version}"
     )
-include { convert_BCF2VCF as compress_VCF_GRIDSS2 } from './module/workflow-convert_BCF2VCF' addParams(
+include { compress_VCF as compress_VCF_GRIDSS2 } from './module/workflow-convert_BCF2VCF' addParams(
     workflow_output_dir: "${params.output_dir_base}/GRIDSS2-${params.gridss2_version}"
     )
 include { convert_BCF2VCF as convert_BCF2VCF_Delly } from './module/workflow-convert_BCF2VCF' addParams(
@@ -193,10 +193,9 @@ workflow {
             )
         // Convert Delly BCF to compressed VCF
         convert_BCF2VCF_Delly(
-            params.sample,
+            Channel.of(params.sample),
             filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf,
-            filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf_csi,
-            Channel.value("delly")
+            filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf_csi
             )
 
         /**
@@ -205,6 +204,8 @@ workflow {
         generate_sha512_BCFtools(
             filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf
             .mix(filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf_csi)
+            .mix(convert_BCF2VCF_Delly.out.gzvcf)
+            .mix(convert_BCF2VCF_Delly.out.idx)
             )
         }
     if ('manta' in params.algorithm) {
@@ -276,9 +277,7 @@ workflow {
 
         compress_VCF_GRIDSS2(
             Channel.of(params.sample),
-            call_sSV_GRIDSS2.out.gridss2_vcf,
-            call_sSV_GRIDSS2.out.gridss2_vcf_idx,
-            Channel.value("gridss2")
+            call_sSV_GRIDSS2.out.gridss2_vcf
             )
 
         generate_sha512_GRIDSS2(
