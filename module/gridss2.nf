@@ -125,7 +125,8 @@ process run_assembly_GRIDSS2 {
 process call_sSV_GRIDSS2 {
     container params.docker_image_gridss2
 
-    publishDir "${params.workflow_output_dir}/output/",
+    publishDir "${params.workflow_output_dir}/intermediate/${task.process.replace(':', '/')}",
+        enabled: params.save_intermediate_files,
         pattern: "${output_filename}.{vcf,vcf.idx}",
         mode: "copy"
 
