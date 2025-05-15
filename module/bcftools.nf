@@ -69,7 +69,8 @@ process filter_BCF_BCFtools {
 
     output:
         path ".command.*"
-        path "${output_filename}.bcf*", emit: nonPassCallsFiltered_and_csi
+        path "${output_filename}.bcf", emit: nonPassCallsFiltered_bcf
+        path "${output_filename}.bcf.csi", emit: nonPassCallsFiltered_bcf_csi
 
     script:
         output_filename = generate_standard_filename(
@@ -82,7 +83,7 @@ process filter_BCF_BCFtools {
         set -euo pipefail
 
         bcftools view -i "${filter_condition}" -O b -o "${output_filename}.bcf" ${input_bcf}
-        
+
         bcftools index "${output_filename}.bcf"
         """
     }
