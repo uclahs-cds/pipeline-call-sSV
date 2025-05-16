@@ -136,6 +136,7 @@ input:
 | ------- |   --------- | ------ | -------------|
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
+| `genome_build` | no | string | Genome build for circos plot, `hg19` or `hg38`. Default is set to `hg38` |
 | algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`. List can contain a single caller of choice.  |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/resource/reference-genome/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
 | exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
@@ -205,6 +206,7 @@ base_resource_update {
 | .bcf.csi | CSI-format index for BCF files from DELLY. |
 | .vcf.gz | Compressed VCF output format with somatic structural variants if found. |
 | .vcf.gz.tbi | TBI-format index for compressed VCF files. |
+| .png | SV Circos plot for individual SV callers (DELLY and Manta) as QC output. |
 | report.html, timeline.html and trace.txt | A Nextflow report, timeline and trace files. |
 | \*.log.command.* | Process and sample specific logging files created by nextflow. |
 | *.sha512 | Generates SHA-512 hash to validate file integrity. |

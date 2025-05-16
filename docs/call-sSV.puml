@@ -22,6 +22,10 @@ partition "DELLY" {
     :==Filter sSV
     ---
     Filter out germline SVs using DELLY;
+    :==CIRCOS plot
+    ---
+    Plot CIRCOS for DELLY gSV
+    (PNG);
     }
 
 split again
@@ -29,6 +33,10 @@ partition "Manta" {
     :==Manta sSV
     ---
     Call SVs using Manta;
+    :==CIRCOS plot
+    ---
+    Plot CIRCOS for Manta gSV
+    (PNG);
     }
 end split
 stop
