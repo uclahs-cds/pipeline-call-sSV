@@ -55,6 +55,9 @@ include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
 include { call_sSV_Manta } from './module/manta' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
+include { plot_SV_circlize as plot_DellySV_circlize } from './module/circos-plot.nf' addParams(
+    workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
+)
 include { plot_SV_circlize as plot_MantaSV_circlize } from './module/circos-plot.nf' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
 )
@@ -196,6 +199,15 @@ workflow {
             Channel.of(params.sample),
             filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf,
             filter_BCF_BCFtools.out.nonPassCallsFiltered_bcf_csi
+            )
+
+        // Plot circos for DELLY somatic SVs
+        convert_BCF2VCF_Delly.out.gzvcf
+            .map{ ['DELLY', it] }
+            .set{ input_ch_plot_delly }
+
+        plot_DellySV_circlize(
+            input_ch_plot_delly
             )
 
         /**
