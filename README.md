@@ -16,7 +16,7 @@
 * [License](#license)
 
 ## Overview:
-The call-sSV pipeline calls somatic structural variants utilizing [DELLY](https://github.com/dellytools/delly) and [Manta](https://github.com/Illumina/manta). This pipeline requires at least one tumor sample and a matched normal sample.
+The call-sSV pipeline calls somatic structural variants utilizing [DELLY](https://github.com/dellytools/delly), [Manta](https://github.com/Illumina/manta) and [GRIDSS2](https://github.com/PapenfussLab/gridss). This pipeline requires at least one tumor sample and a matched normal sample.
 This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC Slurm cluster.
 
 ## How to Run:
@@ -81,7 +81,7 @@ In the above command, the partition type can be changed based on the size of the
 ```script
 delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam normal1.bam
 ```
-This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with DELLY.
+This step performs somatic variant calling using DELLY.
 The stringent filters (`--map-qual 20` `--min-clique-size 5` `--mad-cutoff 15`) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters [config file](config/template.config). If need be, these stringent filters can be adjusted in the config file.
 
 #### 2. Query the generated bcfs to get the sample names, which will be used in step 3.
@@ -106,7 +106,34 @@ Note: cohort based false positive filtering is compuationally heavy and not impl
 configManta.py --normalBam "${normal_bam}" --tumorBam "${tumor_bam}" --referenceFasta "${reference_fasta}" --runDir MantaWorkflow
 MantaWorkflow/runWorkflow.py
 ```
-This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with Manta.
+This step performs somatic variant calling using Manta.
+
+### Call Somatic Structural Variants - GRIDSS2 workflow:
+
+#### 1. Preprocess input BAMs
+```script
+gridss -r gridss2_reference.fasta -j gridss.jar -s preprocess input.bam
+```
+This step preprocesses input tumor/normal BAMs.
+
+#### 2. Breakend Assembly
+```script
+gridss -r gridss2_reference.fasta -j gridss.jar -s assemble -b gridss2_blacklist.bed -a tumor_breakend_assembly.bam normal.bam tumor.bam
+```
+This step performs GRIDSS2 breakend assembly to produce a `tumor_breakend_assembly.bam`.
+The preprocessed input tumor/normal BAMs need to be in the same directory while running breakend assembly, although the preprocced BAMs are not explicitly defined as input arguments here.
+
+#### 3. Calling Single Sample Somatic Structural Variants
+```script
+gridss -r gridss2_reference.fasta -j gridss2.jar -s call -b gridss_blacklist.bed -a tumor_breakend_assembly.bam --output gridss2_tumor.vcf normal.bam tumor.bam
+```
+This step performs GRIDSS2 somatic variant calling.
+
+#### 4. Somatic Filtering
+```script
+gridss_somatic_filter --pondir gridss2_pon_dir/ --scriptdir gridss_script_dir/ --input gridss2_tumor.vcf --output gridss2_high-confidence-somatic.vcf --fulloutput gridss2_high-low-confidence-somatic.vcf --normalordinal 1 --tumourordinal 2
+```
+This step performs somatic filtering to retain only somatic SVs in the filtered outputs, `gridss2_high-confidence-somatic.vcf` and `gridss2_high-low-confidence-somatic.vcf`.
 
 ## Inputs
 
@@ -116,7 +143,7 @@ This step requires an aligned and sorted tumor sample BAM file and a matched nor
 |:------|:-----|:------------|
 | sample_id | string | Tumor ID |
 | normal | path | Set to absolute path to normal BAM |
-| tumor | path | Set to absolute path to tumour BAM |
+| tumor | path | Set to absolute path to tumor BAM |
 
 ```
 ---
@@ -137,12 +164,8 @@ input:
 | dataset_id |	yes	| string |	Boutros Lab dataset id |
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | `genome_build` | no | string | Genome build for circos plot, `hg19` or `hg38`. Default is set to `hg38` |
-| algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`. List can contain a single caller of choice.  |
+| algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`, `gridss2`. List can contain a single caller of choice.  |
 | reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /hot/resource/reference-genome/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
-| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
-| map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
-| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
-| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is `false`. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
 | work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With `ucla_cds`, the default is `/scratch` and should only be changed for testing/development. Changing this directory to `/hot` or `/tmp` can lead to high server latency and potential disk space limitations, respectively. |
@@ -150,6 +173,22 @@ input:
 | `docker_container_registry` | optional | string | Registry containing tool Docker images. Default: `ghcr.io/uclahs-cds` |
 
 An example of the NextFlow Input Parameters Config file can be found [here](config/template.config).
+
+### DELLY Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv |
+| map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
+| min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
+| mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
+
+### GRIDSS2 Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| gridss2_blacklist | yes | path | Path to GRIDSS2 blacklist BED file. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/ENCFF001TDO.bed` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed` |
+| gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/hs37d5.fa` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta` |
+| gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/` |
+| other_jvm_heap | no | string | Update `other_jvm_heap` if GRIDSS2 errors OutOfMemory. Default is `4.GB` |
 
 ### Base resource allocation updaters
 To optionally update the base resource (cpus or memory) allocations for processes, use the following structure and add the necessary parts to the [input.config](config/template.config) file. The default allocations can be found in the [node-specific config files](./config/)
@@ -204,6 +243,10 @@ base_resource_update {
 | ---- | -------- |
 | .bcf | Binary VCF output format from DELLY with somatic structural variants if found. |
 | .bcf.csi | CSI-format index for BCF files from DELLY. |
+| .vcf | Uncompressed VCF output from GRIDSS2 |
+| .vcf.idx | Index file for GRIDSS2 VCF |
+| .vcf.bgz | Block compressed gzip VCF outputs from GRIDSS2 somatic filtering |
+| .vcf.bgz.tbi | Index files for GRIDSS2 somatic filtered outputs |
 | .vcf.gz | Compressed VCF output format with somatic structural variants if found. |
 | .vcf.gz.tbi | TBI-format index for compressed VCF files. |
 | .png | SV Circos plot for individual SV callers (DELLY and Manta) as QC output. |
@@ -211,6 +254,13 @@ base_resource_update {
 | \*.log.command.* | Process and sample specific logging files created by nextflow. |
 | *.sha512 | Generates SHA-512 hash to validate file integrity. |
 
+## Intermediates
+| Output |	Description |
+| ---- | -------- |
+| *assembly.bam | Breakend assembly BAM from GRIDSS2 |
+| *assembly.bam.gridss.working | Directory containing BAM metrics from GRIDSS2 breakend assembly |
+| *<normal_sample>.gridss.working | Directory containing BAM metrics from GRIDSS2 preprocessing of normal BAM |
+| *<tumor_sample>.gridss.working | Directory containing BAM metrics from GRIDSS2 preprocessing of tumor BAM |
 
 ## Testing and Validation
 
@@ -238,6 +288,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 
 * [DELLY Structural Variant Caller](https://github.com/dellytools/delly)
 * [Manta Structural Variant Caller](https://github.com/Illumina/manta)
+* [GRIDSS2 Structural Variant Caller](https://github.com/PapenfussLab/gridss)
 
 
 ## License
@@ -246,9 +297,9 @@ Authors: Yu Pan (YuPan@mednet.ucla.edu), Ghouse Mohammed (GMohammed@mednet.ucla.
 
 `call-sSV` is licensed under the GNU General Public License version 2. See the file LICENSE for the terms of the GNU GPL license.
 
-`call-sSV` takes BAM files and utilizes DELLY and Manta to call somatic structural variants.
+`call-sSV` takes BAM files and utilizes DELLY, Manta and GRIDSS2 to call somatic structural variants.
 
-Copyright (C) 2021-2024 University of California Los Angeles ("Boutros Lab") All rights reserved.
+Copyright (C) 2021-2025 University of California Los Angeles ("Boutros Lab") All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 

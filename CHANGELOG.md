@@ -21,6 +21,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - CIRCOS plotting for Manta
 
 ### Changed
+- Update README to document GRIDSS2
+- Update pipeline DAG to include GRIDSS2
 - Enable CIRCOS plotting for DELLY
 - Update PlantUML action to `v1.0.1`
 - Update memory allocations in `M64.config`

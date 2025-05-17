@@ -47,7 +47,7 @@
     },
     "manifest": {
       "author": "Yu Pan, Ghouse Mohammed, Mohammed Faizal Eeman Mootor",
-      "description": "A pipeline to call somatic SVs utilizing Delly and Manta",
+      "description": "A pipeline to call somatic SVs utilizing DELLY, Manta and GRIDSS2",
       "name": "call-sSV",
       "version": "VER.SI.ON"
     },

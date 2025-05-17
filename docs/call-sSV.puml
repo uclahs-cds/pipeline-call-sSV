@@ -29,6 +29,22 @@ partition "DELLY" {
     }
 
 split again
+partition "GRIDSS2" {
+    :==Preprocess BAM
+    ---
+    Preprocess Tumor/Normal BAMs;
+    :==Breakend Assembly
+    ---
+    Perform GRIDSS breakend assembly;
+    :==GRIDSS2 sSV
+    ---
+    Call SVs using GRIDSS2;
+    :==Filter sSV
+    ---
+    Filter somatic SV calls;
+    }
+
+split again
 partition "Manta" {
     :==Manta sSV
     ---
