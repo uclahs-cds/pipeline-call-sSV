@@ -71,6 +71,18 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#call-somatic-structural-variants-gridss2-workflow">Call Somatic Structural Variants - GRIDSS2 workflow:</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-preprocess-input-bams">1. Preprocess input BAMs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-breakend-assembly">2. Breakend Assembly</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-calling-single-sample-somatic-structural-variants">3. Calling Single Sample Somatic Structural Variants</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-somatic-filtering">4. Somatic Filtering</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -84,6 +96,10 @@
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../outputs/">Outputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../intermediates/">Intermediates</a>
                 </li>
               </ul>
               <ul>
@@ -118,7 +134,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline Steps:</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/60934a396413487755e264c658676f298c78872e/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/2197f108ad1fd740d99d0fbccc8e71753ce89c4b/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -131,8 +147,8 @@
 <h4 id="1-calling-single-sample-somatic-structural-variants">1. Calling Single Sample Somatic Structural Variants</h4>
 <pre><code class="language-script">delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam normal1.bam
 </code></pre>
-<p>This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with DELLY.
-The stringent filters (<code>--map-qual 20</code> <code>--min-clique-size 5</code> <code>--mad-cutoff 15</code>) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/60934a396413487755e264c658676f298c78872e/config/template.config">config file</a>. If need be, these stringent filters can be adjusted in the config file.</p>
+<p>This step performs somatic variant calling using DELLY.
+The stringent filters (<code>--map-qual 20</code> <code>--min-clique-size 5</code> <code>--mad-cutoff 15</code>) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/2197f108ad1fd740d99d0fbccc8e71753ce89c4b/config/template.config">config file</a>. If need be, these stringent filters can be adjusted in the config file.</p>
 <h4 id="2-query-the-generated-bcfs-to-get-the-sample-names-which-will-be-used-in-step-3">2. Query the generated bcfs to get the sample names, which will be used in step 3.</h4>
 <pre><code class="language-script">echo -e &quot;tumor\ncontrol&quot; &gt; samples_type
 bcftools query -l t1.bcf &gt; samples_name
@@ -148,7 +164,25 @@ paste samples_name samples_type &gt; samples.tsv
 <pre><code class="language-script">configManta.py --normalBam &quot;${normal_bam}&quot; --tumorBam &quot;${tumor_bam}&quot; --referenceFasta &quot;${reference_fasta}&quot; --runDir MantaWorkflow
 MantaWorkflow/runWorkflow.py
 </code></pre>
-<p>This step requires an aligned and sorted tumor sample BAM file and a matched normal sample as an input for variant calling with Manta.</p>
+<p>This step performs somatic variant calling using Manta.</p>
+<h3 id="call-somatic-structural-variants-gridss2-workflow">Call Somatic Structural Variants - GRIDSS2 workflow:</h3>
+<h4 id="1-preprocess-input-bams">1. Preprocess input BAMs</h4>
+<pre><code class="language-script">gridss -r gridss2_reference.fasta -j gridss.jar -s preprocess input.bam
+</code></pre>
+<p>This step preprocesses input tumor/normal BAMs.</p>
+<h4 id="2-breakend-assembly">2. Breakend Assembly</h4>
+<pre><code class="language-script">gridss -r gridss2_reference.fasta -j gridss.jar -s assemble -b gridss2_blacklist.bed -a tumor_breakend_assembly.bam normal.bam tumor.bam
+</code></pre>
+<p>This step performs GRIDSS2 breakend assembly to produce a <code>tumor_breakend_assembly.bam</code>.
+The preprocessed input tumor/normal BAMs need to be in the same directory while running breakend assembly, although the preprocced BAMs are not explicitly defined as input arguments here.</p>
+<h4 id="3-calling-single-sample-somatic-structural-variants">3. Calling Single Sample Somatic Structural Variants</h4>
+<pre><code class="language-script">gridss -r gridss2_reference.fasta -j gridss2.jar -s call -b gridss_blacklist.bed -a tumor_breakend_assembly.bam --output gridss2_tumor.vcf normal.bam tumor.bam
+</code></pre>
+<p>This step performs GRIDSS2 somatic variant calling.</p>
+<h4 id="4-somatic-filtering">4. Somatic Filtering</h4>
+<pre><code class="language-script">gridss_somatic_filter --pondir gridss2_pon_dir/ --scriptdir gridss_script_dir/ --input gridss2_tumor.vcf --output gridss2_high-confidence-somatic.vcf --fulloutput gridss2_high-low-confidence-somatic.vcf --normalordinal 1 --tumourordinal 2
+</code></pre>
+<p>This step performs somatic filtering to retain only somatic SVs in the filtered outputs, <code>gridss2_high-confidence-somatic.vcf</code> and <code>gridss2_high-low-confidence-somatic.vcf</code>.</p>
               
             </div>
           </div><footer>
