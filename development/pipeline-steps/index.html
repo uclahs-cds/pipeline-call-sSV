@@ -134,7 +134,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline Steps:</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/67fb47143326cee5072f1f74a8041745838f41de/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/fdcaac8eb59d3ace3516c6c467ec5aa5f37b5b77/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -148,7 +148,7 @@
 <pre><code class="language-script">delly call --genome hg38.fa --exclude hg38.excl --map-qual 20 --min-clique-size 5 --mad-cutoff 15 --outfile t1.bcf tumor1.bam normal1.bam
 </code></pre>
 <p>This step performs somatic variant calling using DELLY.
-The stringent filters (<code>--map-qual 20</code> <code>--min-clique-size 5</code> <code>--mad-cutoff 15</code>) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/67fb47143326cee5072f1f74a8041745838f41de/config/template.config">config file</a>. If need be, these stringent filters can be adjusted in the config file.</p>
+The stringent filters (<code>--map-qual 20</code> <code>--min-clique-size 5</code> <code>--mad-cutoff 15</code>) are added, which can drastically reduce the runtime, especially when the input BAMs are big. In the pipeline, these filters are specified in the NextFlow input parameters <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/fdcaac8eb59d3ace3516c6c467ec5aa5f37b5b77/config/template.config">config file</a>. If need be, these stringent filters can be adjusted in the config file.</p>
 <h4 id="2-query-the-generated-bcfs-to-get-the-sample-names-which-will-be-used-in-step-3">2. Query the generated bcfs to get the sample names, which will be used in step 3.</h4>
 <pre><code class="language-script">echo -e &quot;tumor\ncontrol&quot; &gt; samples_type
 bcftools query -l t1.bcf &gt; samples_name
