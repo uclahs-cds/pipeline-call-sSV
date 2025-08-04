@@ -14,8 +14,8 @@ cases:
     skip: false
     verbose: true
     asserts:
-      - actual: call-sSV-*/S2_v1.1.5/DELLY-1.2.6/output/DELLY-1.2.6_TWGSAMIN000001_S2-v1.1.5.bcf
-        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/DELLY-1.2.6/DELLY-1.2.6_TWGSAMIN000001_S2-v1.1.5.bcf
+      - actual: call-sSV-*/S2_v1.1.5/DELLY-1.5.0/output/DELLY-1.5.0_TWGSAMIN000001_S2-v1.1.5.bcf
+        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/DELLY-1.5.0/DELLY-1.5.0_TWGSAMIN000001_S2-v1.1.5.bcf
         script: test/assert_bcf_vcf.sh
 
       - actual: call-sSV-*/S2_v1.1.5/Manta-1.6.0/output/Manta-1.6.0_TWGSAMIN000001_S2-v1.1.5_candidateSmallIndels.vcf.gz
@@ -54,8 +54,8 @@ cases:
     skip: false
     verbose: true
     asserts:
-      - actual: call-sSV-*/S2_v1.1.5/DELLY-1.2.6/output/DELLY-1.2.6_TWGSAMIN000001_S2-v1.1.5.bcf
-        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/DELLY-1.2.6/DELLY-1.2.6_TWGSAMIN000001_S2-v1.1.5.bcf
+      - actual: call-sSV-*/S2_v1.1.5/DELLY-1.5.0/output/DELLY-1.5.0_TWGSAMIN000001_S2-v1.1.5.bcf
+        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/DELLY-1.5.0/DELLY-1.5.0_TWGSAMIN000001_S2-v1.1.5.bcf
         script: test/assert_bcf_vcf.sh
 
   - name: ssv-manta-std-input
