@@ -122,7 +122,7 @@
             "/absolute/path/to/BAM"
           ],
           "tumor": [
-            "/abosolute/path/to/BAM"
+            "/absolute/path/to/BAM"
           ]
         }
       },
@@ -206,7 +206,7 @@
           "path": "/absolute/path/to/BAM",
           "sample_type": "normal"
         },
-        "{id=610093, path=/abosolute/path/to/BAM, sample_type=tumor}"
+        "{id=610093, path=/absolute/path/to/BAM, sample_type=tumor}"
       ],
       "save_intermediate_files": false,
       "ucla_cds": true,

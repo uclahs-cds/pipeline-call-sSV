@@ -5,4 +5,4 @@ input:
     normal:
       - "/absolute/path/to/BAM"
     tumor:
-      - "/abosolute/path/to/BAM"
+      - "/absolute/path/to/BAM"
