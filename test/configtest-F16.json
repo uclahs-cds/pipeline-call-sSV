@@ -1,10 +1,9 @@
 {
   "nextflow_version": "23.10.0",
   "config": [
-    "test/global.config",
-    "test/config/ssv-all-tools.config"
+    "config/template.config"
   ],
-  "params_file": "test/yaml/ssv_test-std-input.yaml",
+  "params_file": "input/call-sSV-input.yaml",
   "cpus": 16,
   "memory_gb": 31,
   "nf_params": {
