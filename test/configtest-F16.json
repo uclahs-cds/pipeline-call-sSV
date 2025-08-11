@@ -1,10 +1,9 @@
 {
   "nextflow_version": "23.10.0",
   "config": [
-    "test/global.config",
-    "test/config/ssv-all-tools.config"
+    "config/template.config"
   ],
-  "params_file": "test/yaml/ssv_test-std-input.yaml",
+  "params_file": "input/call-sSV-input.yaml",
   "cpus": 16,
   "memory_gb": 31,
   "nf_params": {
@@ -53,9 +52,7 @@
     },
     "params": {
       "algorithm": [
-        "delly",
-        "manta",
-        "gridss2"
+        "delly"
       ],
       "base_allocations": {
         "call_sSV_Delly": {
@@ -103,9 +100,7 @@
       "blcds_registered_dataset": false,
       "cache_intermediate_pipeline_steps": false,
       "circlize_version": "0.4.16_vcfR-1.15.0_BoutrosLab.plotting.general-7.1.0",
-      "dataset_id": "TWGSAMIN000001",
-      "dataset_registry_prefix": "/hot/data",
-      "date": "19970704T165655Z",
+      "dataset_id": "TEST",
       "delly_version": "1.5.0",
       "docker_container_registry": "ghcr.io/uclahs-cds",
       "docker_image_bcftools": "ghcr.io/uclahs-cds/bcftools:1.15.1",
@@ -114,20 +109,20 @@
       "docker_image_gridss2": "ghcr.io/uclahs-cds/gridss:2.13.2",
       "docker_image_manta": "ghcr.io/uclahs-cds/manta:1.6.0",
       "docker_image_validate": "ghcr.io/uclahs-cds/pipeval:4.0.0-rc.2",
-      "exclusion_file": "/hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
+      "exclusion_file": "/example/delly/excludeTemplates/human.hg38.excl.tsv",
       "filter_condition": "FILTER=\\='PASS'",
       "genome_build": "hg38",
-      "gridss2_blacklist": "/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/ENCFF356LFX.bed",
-      "gridss2_pon_dir": "/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/",
-      "gridss2_reference_fasta": "/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
+      "gridss2_blacklist": "/example/genome/GRCh38-BI-20160721/ENCFF356LFX.bed",
+      "gridss2_pon_dir": "/example/genome/GRCh38-BI-20160721",
+      "gridss2_reference_fasta": "/example/genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
       "gridss2_version": "2.13.2",
       "input": {
         "BAM": {
           "normal": [
-            "/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam"
+            "/absolute/path/to/BAM"
           ],
           "tumor": [
-            "/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam"
+            "/absolute/path/to/BAM"
           ]
         }
       },
@@ -146,7 +141,7 @@
       "output_dir": "/tmp/outputs",
       "output_dir_base": "/tmp/outputs/call-sSV-VER.SI.ON/610093",
       "pipeval_version": "4.0.0-rc.2",
-      "reference_fasta": "/hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
+      "reference_fasta": "/example/genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
       "retry_information": {
         "call_sSV_Delly": {
           "memory": {
@@ -204,14 +199,14 @@
         }
       },
       "sample": "610093",
-      "sample_id": "TWGSAMIN000001",
+      "sample_id": "sample_id",
       "samples_to_process": [
         {
           "id": "610093",
-          "path": "/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam",
+          "path": "/absolute/path/to/BAM",
           "sample_type": "normal"
         },
-        "{id=610093, path=/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam, sample_type=tumor}"
+        "{id=610093, path=/absolute/path/to/BAM, sample_type=tumor}"
       ],
       "save_intermediate_files": false,
       "ucla_cds": true,
@@ -404,7 +399,6 @@
       "enabled": true,
       "file": "/tmp/outputs/call-sSV-VER.SI.ON/610093/log-call-sSV-VER.SI.ON-19970704T165655Z/nextflow-log/trace.txt"
     },
-    "tz": "sun.util.calendar.ZoneInfo[id=\"UTC\",offset=0,dstSavings=0,useDaylight=false,transitions=0,lastRule=null]",
     "workDir": "/scratch/523557"
   }
 }

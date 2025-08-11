@@ -1,8 +1,0 @@
----
-sample_id: "TWGSAMIN000001"
-input:
-  BAM:
-    normal:
-      - "/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam"
-    tumor:
-      - "/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam"
