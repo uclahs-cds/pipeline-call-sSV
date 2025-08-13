@@ -58,6 +58,21 @@ cases:
         expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/DELLY-1.5.0/DELLY-1.5.0_TWGSAMIN000001_S2-v1.1.5.bcf
         script: test/assert_bcf_vcf.sh
 
+  - name: ssv-svision-std-input
+    message: test development branch using SVision and standard paired tumor and normal a-mini input
+    nf_script: ./main.nf
+    nf_config: ./test/config/ssv-svision.config
+    params_file: ./test/yaml/ssv_test-std-input.yaml
+    skip: false
+    verbose: true
+    asserts:
+      - actual: call-sSV-*/S2_v1.1.5/SVision-*/output/SVision-*HG002.N*.vcf.gz
+        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/SVision-1.4/output/HG002.N.svision.s5.vcf.gz
+        script: test/assert_bcf_vcf.sh
+      - actual: call-sSV-*/S2_v1.1.5/SVision-*/output/SVision-*S2-v1.1.5*.vcf.gz
+        expect: /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/test-output/ssv-all-tools-std-input/S2-v1.1.5/SVision-1.4/output/S2_v1.1.5.svision.s5.vcf.gz
+        script: test/assert_bcf_vcf.sh
+
   - name: ssv-manta-std-input
     message: test development branch using Manta and standard paired tumor and normal a-mini input
     nf_script: ./main.nf
