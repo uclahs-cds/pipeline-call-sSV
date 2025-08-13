@@ -16,7 +16,7 @@
 * [License](#license)
 
 ## Overview:
-The call-sSV pipeline calls somatic structural variants utilizing [DELLY](https://github.com/dellytools/delly), [Manta](https://github.com/Illumina/manta) and [GRIDSS2](https://github.com/PapenfussLab/gridss). This pipeline requires at least one tumor sample and a matched normal sample.
+The call-sSV pipeline calls somatic structural variants utilizing [DELLY](https://github.com/dellytools/delly), [Manta](https://github.com/Illumina/manta), [GRIDSS2](https://github.com/PapenfussLab/gridss), and [SVision](https://github.com/xjtu-omics/SVision). This pipeline requires at least one tumor sample and a matched normal sample.
 This pipeline is developed using Nextflow, docker and can run either on a single node linux machine or a multi-node HPC Slurm cluster.
 
 ## How to Run:
@@ -135,6 +135,11 @@ gridss_somatic_filter --pondir gridss2_pon_dir/ --scriptdir gridss_script_dir/ -
 ```
 This step performs somatic filtering to retain only somatic SVs in the filtered outputs, `gridss2_high-confidence-somatic.vcf` and `gridss2_high-low-confidence-somatic.vcf`.
 
+### Call Structural Variants - SVision workflow:
+
+#### 1. Call structural variants using SVision
+This step runs the SVision workflow to identify structural variants in a sample.
+
 ## Inputs
 
 ### Input YAML
@@ -189,6 +194,12 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 | gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/hs37d5.fa` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta` |
 | gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory. GRCh37 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh37-EBI-hs37d5/` and GRCh38 - `/hot/resource/tool-specific-input/GRIDSS2-2.13.2/GRCh38-BI-20160721/` |
 | other_jvm_heap | no | string | Update `other_jvm_heap` if GRIDSS2 errors OutOfMemory. Default is `4.GB` |
+
+### SVision Specific Parameters
+| Field |	Required |	Type |	Description |
+| ------- |   --------- | ------ | -------------|
+| svision_cnn_model | yes | path | Path to trained CNN SVision model. |
+| svision_min_mapq | yes | integer | Minimum mapping quality to consider for SVision. Default is 10.|
 
 ### Base resource allocation updaters
 To optionally update the base resource (cpus or memory) allocations for processes, use the following structure and add the necessary parts to the [input.config](config/template.config) file. The default allocations can be found in the [node-specific config files](./config/)
@@ -289,6 +300,7 @@ Testing was performed primarily in the Boutros Lab SLURM Development cluster. Me
 * [DELLY Structural Variant Caller](https://github.com/dellytools/delly)
 * [Manta Structural Variant Caller](https://github.com/Illumina/manta)
 * [GRIDSS2 Structural Variant Caller](https://github.com/PapenfussLab/gridss)
+* [SVision Structural Variant Caller](https://github.com/xjtu-omics/SVision)
 
 
 ## License
