@@ -28,6 +28,16 @@ exclusion_file:
   mode: 'r'
   required: true
   help: 'Absoulte path to an exclusion file'
+svision_min_mapq:
+  type: 'Integer'
+  required: true
+  default: 10
+  help: 'Min mapping quality to consider for SVision'
+svision_cnn_model:
+  type: 'ModelPath'
+  mode: 'r'
+  required: true
+  help: 'Absolute path to CNN model for SVision'
 algorithm:
   type: 'List'
   required: true
@@ -40,6 +50,7 @@ algorithm:
     - delly
     - manta
     - gridss2
+    - svision
 genome_build:
   type: 'String'
   required: true
