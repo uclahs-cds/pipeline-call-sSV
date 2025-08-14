@@ -57,6 +57,8 @@
         "manta",
         "gridss2"
       ],
+      "svision_cnn_model": "/tmp/model.ckpt",
+      "svision_min_mapq": "10",
       "base_allocations": {
         "call_sSV_Delly": {
           "cpus": "1",
