@@ -58,6 +58,10 @@
         "gridss2"
       ],
       "base_allocations": {
+        "call_SV_SVision": {
+          "cpus": "4",
+          "memory": "15 GB"
+        },
         "call_sSV_Delly": {
           "cpus": "1",
           "memory": "16 GB"
@@ -113,6 +117,7 @@
       "docker_image_delly": "ghcr.io/uclahs-cds/delly:1.5.0",
       "docker_image_gridss2": "ghcr.io/uclahs-cds/gridss:2.13.2",
       "docker_image_manta": "ghcr.io/uclahs-cds/manta:1.6.0",
+      "docker_image_svision": "ghcr.io/uclahs-cds/svision:1.4",
       "docker_image_validate": "ghcr.io/uclahs-cds/pipeval:4.0.0-rc.2",
       "exclusion_file": "/hot/resource/tool-specific-input/Delly/hg38/human.hg38.excl.tsv",
       "filter_condition": "FILTER=\\='PASS'",
@@ -148,6 +153,12 @@
       "pipeval_version": "4.0.0-rc.2",
       "reference_fasta": "/hot/resource/reference-genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta",
       "retry_information": {
+        "call_SV_SVision": {
+          "memory": {
+            "operand": "2",
+            "strategy": "exponential"
+          }
+        },
         "call_sSV_Delly": {
           "memory": {
             "operand": "2",
@@ -214,6 +225,9 @@
         "{id=610093, path=/hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam, sample_type=tumor}"
       ],
       "save_intermediate_files": false,
+      "svision_cnn_model": "/example/model.cpkt",
+      "svision_min_mapq": "10",
+      "svision_version": "1.4",
       "ucla_cds": true,
       "verbose": false,
       "work_dir": "/scratch/523557"
@@ -295,6 +309,15 @@
           "2": "31 GB",
           "3": "31 GB",
           "closure": "closure()"
+        }
+      },
+      "withName:call_SV_SVision": {
+        "cpus": "4",
+        "memory": {
+          "1": "15 GB",
+          "2": "30 GB",
+          "3": "31 GB",
+          "closure": "retry_updater(15 GB, exponential, 2, $task.attempt, memory)"
         }
       },
       "withName:call_sSV_Delly": {
