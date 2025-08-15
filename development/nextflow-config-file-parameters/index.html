@@ -67,6 +67,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#gridss2-specific-parameters">GRIDSS2 Specific Parameters</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#svision-specific-parameters">SVision Specific Parameters</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#base-resource-allocation-updaters">Base resource allocation updaters</a>
     </li>
     </ul>
@@ -112,7 +114,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Nextflow Config File Parameters</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/d033da01e1694fe368c5a3b592820492ba7297f3/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/adbc6684c0dd3ff3c75ae4c9ea78040b61631d83/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -193,7 +195,7 @@
 </tr>
 </tbody>
 </table>
-<p>An example of the NextFlow Input Parameters Config file can be found <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/d033da01e1694fe368c5a3b592820492ba7297f3/config/template.config">here</a>.</p>
+<p>An example of the NextFlow Input Parameters Config file can be found <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/adbc6684c0dd3ff3c75ae4c9ea78040b61631d83/config/template.config">here</a>.</p>
 <h3 id="delly-specific-parameters">DELLY Specific Parameters</h3>
 <table>
 <thead>
@@ -268,8 +270,33 @@
 </tr>
 </tbody>
 </table>
+<h3 id="svision-specific-parameters">SVision Specific Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svision_cnn_model</td>
+<td>yes</td>
+<td>path</td>
+<td>Path to trained CNN SVision model.</td>
+</tr>
+<tr>
+<td>svision_min_mapq</td>
+<td>yes</td>
+<td>integer</td>
+<td>Minimum mapping quality to consider for SVision. Default is 10.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="base-resource-allocation-updaters">Base resource allocation updaters</h3>
-<p>To optionally update the base resource (cpus or memory) allocations for processes, use the following structure and add the necessary parts to the <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/d033da01e1694fe368c5a3b592820492ba7297f3/config/template.config">input.config</a> file. The default allocations can be found in the <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/d033da01e1694fe368c5a3b592820492ba7297f3/config">node-specific config files</a></p>
+<p>To optionally update the base resource (cpus or memory) allocations for processes, use the following structure and add the necessary parts to the <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/adbc6684c0dd3ff3c75ae4c9ea78040b61631d83/config/template.config">input.config</a> file. The default allocations can be found in the <a href="https://github.com/uclahs-cds/pipeline-call-sSV/blob/adbc6684c0dd3ff3c75ae4c9ea78040b61631d83/config">node-specific config files</a></p>
 <pre><code class="language-Nextflow">base_resource_update {
     memory = [
         [['process_name', 'process_name2'], &lt;multiplier for resource&gt;],

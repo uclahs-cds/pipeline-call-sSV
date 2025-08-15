@@ -54,6 +54,13 @@ partition "Manta" {
     Plot CIRCOS for Manta gSV
     (PNG);
     }
+
+split again
+partition "SVision" {
+    :==SVision SV
+    ---
+    Call SVs using SVision;
+    }
 end split
 stop
 @enduml
