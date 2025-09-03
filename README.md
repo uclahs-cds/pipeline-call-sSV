@@ -29,28 +29,19 @@ Below is a summary of how to run the pipeline.  See [here](https://uclahs-cds.at
 
 Pipelines should be run **WITH A SINGLE SAMPLE AT A TIME**. Otherwise resource allocation and Nextflow errors could cause the pipeline to fail.
 
-1. The recommended way of running the pipeline is to directly use the source code located here: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/`, rather than cloning a copy of the pipeline.
-
-    * The source code should never be modified when running our pipelines
-
-2. Create a config file for input, output, and parameters. An example for a config file can be found [here](config/template.config). See [Nextflow Config File Parameters](#Nextflow-Config-File-Parameters) for the detailed description of each variable in the config file.
+1. Create a config file for input, output, and parameters. An example for a config file can be found [here](config/template.config). See [Nextflow Config File Parameters](#Nextflow-Config-File-Parameters) for the detailed description of each variable in the config file.
 
     * Do not directly modify the source `template.config`, but rather you should copy it from the pipeline release folder to your project-specific folder and modify it there
 
-3. Create the input YAML using the [template](input/call-sSV-input.yaml).See [Input YAML](#Input-YAML) for detailed description of each column.
+2. Create the input YAML using the [template](input/call-sSV-input.yaml).See [Input YAML](#Input-YAML) for detailed description.
 
    * Again, do not directly modify the source template input YAML file.  Instead, copy it from the pipeline release folder to your project-specific folder and modify it there.
 
-4. The pipeline can be executed locally using the command below:
+3. The pipeline can be executed locally using the command below:
 
-- YAML input
 ```bash
 nextflow run path/to/main.nf -config path/to/sample-specific.config -params-file path/to/input.yaml
 ```
-
-* For example, `path/to/main.nf` could be: `/hot/software/pipeline/pipeline-call-sSV/Nextflow/release/6.0.0-rc.1/main.nf`
-* `path/to/sample-specific.config` is the path to where you saved your project-specific copy of [template.config](config/template.config)
-* `path/to/input.yaml` is the path to where you saved your sample-specific copy of [input-sSV.yaml](input/call-sSV-input.yaml)
 
 To submit to UCLAHS-CDS's Azure cloud, use the submission script [here](https://github.com/uclahs-cds/tool-submit-nf) with the command below:
 
@@ -165,10 +156,10 @@ input:
 | blcds_registered_dataset	| yes |	boolean | Affirms if dataset should be registered in the Boutros Lab Data registry. Default value is `false`. |
 | `genome_build` | no | string | Genome build for circos plot, `hg19` or `hg38`. Default is set to `hg38` |
 | algorithm | yes | list | List containing a combination of SV callers `delly`, `manta`, `gridss2`. List can contain a single caller of choice.  |
-| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. GRCh37 - /example/genome/GRCh37-EBI-hs37d5/hs37d5.fa, GRCh38 - /example/genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta |
+| reference_fasta	| yes |	path	| Absolute path to the reference genome FASTA file. The reference genome is used by Delly for structural variant calling. |
 | save_intermediate_files |	yes	| boolean |	Optional parameter to indicate whether intermediate files will be saved. Default value is `false`. |
 | output_dir |	yes |	path |	Absolute path to the directory where the output files to be saved. |
-| work_dir	| no	| path |	Path of working directory for Nextflow. When included in the sample config file, Nextflow intermediate files and logs will be saved to this directory. With `ucla_cds`, the default is `/scratch` and should only be changed for testing/development. Changing this directory to `/hot` or `/tmp` can lead to high server latency and potential disk space limitations, respectively. |
+| work_dir	| no	| path | The path to a temporary working directory for Nextflow, storing intermediate files and logs. It is recommended to use fast, local storage with high I/O performance. |
 | verbose |	yes |	boolean	| If set to `true`, the values of input channels will be printed, can be used for debugging|
 | `docker_container_registry` | optional | string | Registry containing tool Docker images. Default: `ghcr.io/uclahs-cds` |
 
@@ -177,7 +168,7 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 ### DELLY Specific Parameters
 | Field |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
-| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. GRCh37 - /hot/resource/tool-specific-input/Delly/GRCh37-EBI-hs37d/human.hs37d5.excl.tsv, GRCh38 - /example/delly/excludeTemplates/human.hg38.excl.tsv |
+| exclusion_file |	yes	| path | Absolute path to the Delly reference genome exclusion file utilized to remove suggested regions for structural variant calling. |
 | map_qual | yes | integer | Minimum paired-end (PE) mapping quality (MAPQ) for Delly. Default set to 20.|
 | min_clique_size | yes | integer | Minimum number of supporting PE or split-read (SR) alignments required for a clique to be identified as a structural variant by Delly. Adjust this parameter to control the sensitivity and specificity of Delly variant calling. Default set to 5.|
 | mad_cutoff | yes | integer | Insert size cutoff, median+s*MAD (deletions only) for Delly. Default set to 15.|
@@ -185,9 +176,9 @@ An example of the NextFlow Input Parameters Config file can be found [here](conf
 ### GRIDSS2 Specific Parameters
 | Field |	Required |	Type |	Description |
 | ------- |   --------- | ------ | -------------|
-| gridss2_blacklist | yes | path | Path to GRIDSS2 blacklist BED file. GRCh37 - `/example/genome/GRCh37-EBI-hs37d5/ENCFF001TDO.bed` and GRCh38 - `/example/genome/GRCh38-BI-20160721/ENCFF356LFX.bed` |
-| gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file. GRCh37 - `/example/genome/GRCh37-EBI-hs37d5/hs37d5.fa` and GRCh38 - `/example/genome/GRCh38-BI-20160721/Homo_sapiens_assembly38.fasta` |
-| gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory. GRCh37 - `/example/genome/GRCh37-EBI-hs37d5` and GRCh38 - `/example/genome/GRCh38-BI-20160721` |
+| gridss2_blacklist | yes | path | Path to GRIDSS2 blacklist BED file. |
+| gridss2_reference_fasta | yes | path | Path to GRIDSS2 reference FASTA file. |
+| gridss2_pon_dir | yes | path | Path to GRIDSS2 Panel Of Normals (PON) directory. |
 | other_jvm_heap | no | string | Update `other_jvm_heap` if GRIDSS2 errors OutOfMemory. Default is `4.GB` |
 
 ### Base resource allocation updaters
@@ -266,11 +257,11 @@ base_resource_update {
 
 ### Test Data Set
 
-| Data Set | Run Configuration | YAML input | Output Dir | Normal Sample | Tumor Sample |
-| ------ | ------ | ------- | ------ | ------- | ------- |
-| A-mini TWGSAMIN000001-T003-S03-F | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/TWGSAMIN000001-T003-S03-F.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/yaml/call-sSV-input-TWGSAMIN000001-T003-S03-F.yaml | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/TWGSAMIN000001-T003-S03-F/  | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-N003-S03-F.bam | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/input/data/TWGSAMIN000001-T003-S03-F.bam |
-| ILHNLNEV000009 | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/ILHNLNEV000009-T002-L01-F_F32.config | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/ILHNLNEV000009-T002-L01-F_F32.yaml | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-replace-input-csv-with-yaml/ILHNLNEV000009-T002-L01-F/ | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-N001-B01-F_realigned_recalibrated_reheadered.bam | /hot/project/disease/HeadNeckTumor/HNSC-000084-LNMEvolution/pipelines/call-gSNP/2020-12-22/ILHNLNEV000009-T002-L01-F//gSNP/2021-01-22_11.01.06/ILHNLNEV000009/SAMtools-1.10_Picard-2.23.3/recalibrated_reheadered_bam_and_bai/ILHNLNEV000009-T002-L01-F_realigned_recalibrated_reheadered.bam |
-| DTB-266_WCDT | /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/5.0.0/mmootor-release-5-0-0-rc-1/config/DTB-266_WCDT_F72.config | - |  /hot/software/pipeline/pipeline-call-sSV/Nextflow/development/unreleased/mmootor-release-5-0-0-rc-1/DTB-266_WCDT/ | /hot/data/unregistered/Quigley-Gebo-PRAD-SVMW/processed/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_N_realigned_recalibrated_merged.bam | /hot/data/unregistered/Quigley-Gebo-PRAD-SVMW/processed/output_call-gSNP/call-gSNP-DSL2-0.0.1/DTB-266/GATK-4.1.9.0/output/DTB-266_DNA_T_realigned_recalibrated_merged.bam |
+| Data Set | Normal Sample | Tumor Sample |
+| ------ | ------- | ------- |
+| A-mini TWGSAMIN000001-T003-S03-F | TWGSAMIN000001-N003-S03-F | TWGSAMIN000001-T003-S03-F |
+| ILHNLNEV000009 | ILHNLNEV000009-N001-B01-F | ILHNLNEV000009-T002-L01-F |
+| DTB-266_WCDT | DTB-266_DNA_N | DTB-266_DNA_T |
 
 ## Performance Validation
 
