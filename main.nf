@@ -55,6 +55,9 @@ include { call_sSV_Delly; filter_sSV_Delly } from './module/delly' addParams(
 include { call_sSV_Manta } from './module/manta' addParams(
     workflow_output_dir: "${params.output_dir_base}/Manta-${params.manta_version}"
     )
+include { workflow_SVision } from './module/workflow-svision.nf' addParams(
+    workflow_output_dir: "${params.output_dir_base}/SVision-${params.svision_version}"
+    )
 include { plot_SV_circlize as plot_DellySV_circlize } from './module/circos-plot.nf' addParams(
     workflow_output_dir: "${params.output_dir_base}/DELLY-${params.delly_version}"
 )
@@ -79,6 +82,7 @@ include { generate_sha512 as generate_sha512_Manta } from './module/sha512' addP
 include { generate_sha512 as generate_sha512_GRIDSS2 } from './module/sha512' addParams(
     workflow_output_dir: "${params.output_dir_base}/GRIDSS2-${params.gridss2_version}"
     )
+
 
 // Returns the index file for the given bam
 def indexFile(bam) {
@@ -296,6 +300,12 @@ workflow {
             compress_VCF_GRIDSS2.out.gzvcf
             .mix(compress_VCF_GRIDSS2.out.idx)
             .mix(filter_sSV_GRIDSS2.out.gridss2_filter_vcf_files.flatten())
+            )
+        }
+
+    if ('svision' in params.algorithm) {
+        workflow_SVision(
+            input_ch_samples_with_index.map{ input_sample -> [input_sample.id, input_sample.path, input_sample.index] }
             )
         }
     }
