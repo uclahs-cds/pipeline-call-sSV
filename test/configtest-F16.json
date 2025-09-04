@@ -220,7 +220,7 @@
         "{id=610093, path=/absolute/path/to/BAM, sample_type=tumor}"
       ],
       "save_intermediate_files": false,
-      "svision_cnn_model": "/example/model.cpkt",
+      "svision_cnn_model": "/example/svision-cnn-model.ckpt",
       "svision_min_mapq": "10",
       "svision_version": "1.4",
       "ucla_cds": true,
